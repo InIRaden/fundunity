@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Landing Page Routes
+Route::get('/', [LandingController::class, 'index'])->name('home');
+Route::get('/about', [LandingController::class, 'about'])->name('about');
+Route::get('/allprograms', [LandingController::class, 'programs'])->name('programs');
+Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus-areas');
+Route::get('/moregallery', [LandingController::class, 'gallery'])->name('gallery');
+Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
+Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
+Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
+Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 require __DIR__.'/auth.php';
