@@ -14,6 +14,12 @@ Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
 Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
 Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
 
+// Newsletter & Legal Routes
+Route::post('/newsletter/subscribe', [LandingController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
+Route::get('/privacy', [LandingController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [LandingController::class, 'terms'])->name('terms');
+
+// Dashboard Route
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
