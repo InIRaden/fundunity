@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Program;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -18,7 +19,12 @@ class LandingController extends Controller
 
     public function programs()
     {
-        return view('landing.programs');
+        $programs = Program::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('landing.programs', compact('programs'));
     }
 
     public function focusAreas()
