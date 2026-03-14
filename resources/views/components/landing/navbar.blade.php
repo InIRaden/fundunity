@@ -26,7 +26,7 @@
                     </button>
                     <div class="absolute left-0 mt-2 w-48 bg-blue-900 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                         <a href="{{ route('about') }}" class="block px-4 py-2 text-sm hover:bg-blue-700 text-white">Tentang KRB</a>
-                        <a href="{{ route('contact') }}" class="block px-4 py-2 text-sm hover:bg-blue-700 text-white">Hubungi Kami</a>
+                        <a href="{{ route('contact') }}" class="block px-4 py-2 text-sm hover:bg-blue-700 text-white">Kontak</a>
                     </div>
                 </div>
 
