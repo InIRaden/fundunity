@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use App\Models\Program;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,9 @@ class LandingController extends Controller
 {
     public function index()
     {
-        return view('landing.home');
+        $page = Page::where('slug', 'home')->first();
+
+        return view('landing.home', compact('page'));
     }
 
     public function about()
