@@ -1,33 +1,33 @@
 @extends('layouts.landing')
 
-@section('title', 'Bersama Ciptakan Perubahan')
+@section('title', $page->meta_title ?? 'Bersama Ciptakan Perubahan')
 
 @section('content')
 
 <main class="p-8">
 {{-- Hero Section --}}
 <section class="relative min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
-    style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80') center/cover no-repeat;">
+    style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ $page->hero_image ?? 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80' }}') center/cover no-repeat;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="max-w-4xl">
             <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-lg mb-4 sm:mb-6 font-['Poppins']">
-                Bersama, Ciptakan Perubahan bersama Komunitas Ruang Berbagi
+                {{ $page->hero_title ?? 'Bersama, Ciptakan Perubahan bersama Komunitas Ruang Berbagi' }}
             </h1>
             <p class="text-base sm:text-lg md:text-xl text-blue-100 max-w-2xl drop-shadow mb-6 sm:mb-8 leading-relaxed">
-                Bergabunglah bersama kami untuk memberi dampak nyata bagi yang membutuhkan dan membangun masa depan yang lebih baik.
+                {{ $page->hero_subtitle ?? 'Bergabunglah bersama kami untuk memberi dampak nyata bagi yang membutuhkan dan membangun masa depan yang lebih baik.' }}
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <a
-                    href="{{ route('get-involved') }}"
+                    href="{{ $page->hero_btn_primary_url ?? route('get-involved') }}"
                     class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-blue-400 text-white font-semibold rounded-lg shadow-lg hover:brightness-110 transition transform hover:scale-105 text-sm sm:text-base text-center"
                 >
-                    Ayo Mulai Bergerak
+                    {{ $page->hero_btn_primary_text ?? 'Ayo Mulai Bergerak' }}
                 </a>
                 <a
-                    href="{{ route('get-involved') }}"
+                    href="{{ $page->hero_btn_secondary_url ?? route('get-involved') }}"
                     class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition transform hover:scale-105 text-sm sm:text-base text-center"
                 >
-                    Donasi Sekarang
+                    {{ $page->hero_btn_secondary_text ?? 'Donasi Sekarang' }}
                 </a>
             </div>
         </div>
