@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\ProgramController as AdminProgramController;
+use App\Http\Controllers\Admin\FocusAreaController as AdminFocusAreaController;
+use App\Http\Controllers\Admin\GalleryItemController as AdminGalleryItemController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,8 @@ Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get
 // Super Simple Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('programs', AdminProgramController::class)->except(['show']);
+    Route::resource('focus-areas', AdminFocusAreaController::class)->except(['show']);
+    Route::resource('gallery-items', AdminGalleryItemController::class)->except(['show']);
 });
 
 // Newsletter & Legal Routes

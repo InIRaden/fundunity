@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Database\Seeders\ProgramSeeder;
+use Database\Seeders\FocusAreaSeeder;
+use Database\Seeders\GalleryItemSeeder;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -25,6 +27,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ProgramSeeder::class,
+            FocusAreaSeeder::class,
+            GalleryItemSeeder::class,
         ]);
     }
 }

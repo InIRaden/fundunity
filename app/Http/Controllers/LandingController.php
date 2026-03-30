@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FocusArea;
+use App\Models\GalleryItem;
 use App\Models\Program;
 use Illuminate\Http\Request;
 
@@ -29,12 +31,22 @@ class LandingController extends Controller
 
     public function focusAreas()
     {
-        return view('landing.focus-areas');
+        $focusAreas = FocusArea::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('landing.focus-areas', compact('focusAreas'));
     }
 
     public function gallery()
     {
-        return view('landing.gallery');
+        $galleryItems = GalleryItem::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('landing.gallery', compact('galleryItems'));
     }
 
     public function partners()

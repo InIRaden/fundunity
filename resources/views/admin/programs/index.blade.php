@@ -14,6 +14,8 @@
             <div class="mt-3 flex gap-2">
                 <a href="{{ route('admin.programs.create') }}" class="bg-black text-white px-3 py-2 text-sm">+ Tambah Program</a>
                 <a href="{{ route('programs') }}" class="bg-gray-200 px-3 py-2 text-sm">Lihat Halaman /allprograms</a>
+                <a href="{{ route('admin.focus-areas.index') }}" class="bg-gray-200 px-3 py-2 text-sm">Admin Focus Areas</a>
+                <a href="{{ route('admin.gallery-items.index') }}" class="bg-gray-200 px-3 py-2 text-sm">Admin Gallery</a>
             </div>
         </div>
 
