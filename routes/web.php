@@ -19,6 +19,9 @@ Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get
 
 // Super Simple Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
     Route::resource('programs', AdminProgramController::class)->except(['show']);
     Route::resource('focus-areas', AdminFocusAreaController::class)->except(['show']);
     Route::resource('gallery-items', AdminGalleryItemController::class)->except(['show']);
