@@ -1,0 +1,85 @@
+<?php $__env->startSection('admin-content'); ?>
+<div class="space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold text-slate-900">Log Aktivitas</h2>
+    <p class="text-slate-600">Riwayat komprehensif audit sistem dan manipulasi data.</p>
+  </div>
+
+  <!-- Activity Log -->
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-xl overflow-hidden">
+    <div class="p-6 border-b border-slate-200">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-bold text-slate-900">Riwayat Aktivitas</h3>
+        <div class="flex gap-3">
+          <select onchange="filterByType(this.value)" class="px-3 py-2 border border-slate-200 rounded-xl text-sm">
+            <option value="">Semua Tipe</option>
+            <option value="login">Login</option>
+            <option value="donation">Donasi</option>
+            <option value="campaign">Campaign</option>
+            <option value="user">User</option>
+          </select>
+          <input type="date" onchange="filterByDate(this.value)" class="px-3 py-2 border border-slate-200 rounded-xl text-sm">
+        </div>
+      </div>
+    </div>
+
+    <div class="divide-y divide-slate-200">
+      <?php $__currentLoopData = $activities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $activity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="p-6 hover:bg-slate-50 transition-colors">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+              <i class="<?php echo e($activity['icon']); ?> text-lg"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-semibold text-slate-900"><?php echo e($activity['title']); ?></h4>
+                  <p class="text-sm text-slate-600 mt-1"><?php echo e($activity['description']); ?></p>
+                </div>
+                <span class="text-xs text-slate-500"><?php echo e(\Carbon\Carbon::parse($activity['timestamp'])->diffForHumans()); ?></span>
+              </div>
+              <div class="flex items-center gap-4 mt-2 text-xs text-slate-500">
+                <span>Tipe: <?php echo e($activity['type']); ?></span>
+                <span>User: <?php echo e($activity['user']); ?></span>
+                <span>IP: <?php echo e($activity['ip']); ?></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </div>
+  </div>
+
+  <!-- Activity Stats -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl text-center">
+      <div class="text-2xl font-bold text-slate-900"><?php echo e($stats['total_activities']); ?></div>
+      <div class="text-sm text-slate-600">Total Aktivitas</div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl text-center">
+      <div class="text-2xl font-bold text-emerald-600"><?php echo e($stats['today_activities']); ?></div>
+      <div class="text-sm text-slate-600">Aktivitas Hari Ini</div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl text-center">
+      <div class="text-2xl font-bold text-blue-600"><?php echo e($stats['unique_users']); ?></div>
+      <div class="text-sm text-slate-600">User Aktif</div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl text-center">
+      <div class="text-2xl font-bold text-amber-600"><?php echo e($stats['failed_attempts']); ?></div>
+      <div class="text-sm text-slate-600">Percobaan Gagal</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function filterByType(type) {
+    // Filter activities by type
+  }
+
+  function filterByDate(date) {
+    // Filter activities by date
+  }
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/admin/notifications.blade.php ENDPATH**/ ?>
