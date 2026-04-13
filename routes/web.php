@@ -2,7 +2,12 @@
 
 use App\Http\Controllers\Admin\ProgramController as AdminProgramController;
 use App\Http\Controllers\Admin\FocusAreaController as AdminFocusAreaController;
+use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\GalleryItemController as AdminGalleryItemController;
+use App\Http\Controllers\Admin\CampaignController as AdminCampaignController;
+use App\Http\Controllers\Admin\MessageController as AdminMessageController;
+use App\Http\Controllers\Admin\AboutUsController as AdminAboutUsController;
+use App\Http\Controllers\Admin\ImageSliderController as AdminImageSliderController;
 use App\Http\Controllers\Admin\AdminUiController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -76,18 +81,42 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     // Converted admin pages from React app flow
     Route::get('/campaign', [AdminUiController::class, 'campaign'])->name('campaign');
+    Route::post('/campaign', [AdminCampaignController::class, 'store'])->name('campaign.store');
+    Route::put('/campaign/{campaign}', [AdminCampaignController::class, 'update'])->name('campaign.update');
+    Route::delete('/campaign/{campaign}', [AdminCampaignController::class, 'destroy'])->name('campaign.destroy');
+
     Route::get('/keuangantransparansi', [AdminUiController::class, 'keuanganTransparansi'])->name('keuangantransparansi');
     Route::get('/databasestakeholder', [AdminUiController::class, 'databaseStakeholder'])->name('databasestakeholder');
+
     Route::get('/messages', [AdminUiController::class, 'messages'])->name('messages');
+    Route::post('/messages', [AdminMessageController::class, 'store'])->name('messages.store');
+    Route::put('/messages/{message}', [AdminMessageController::class, 'update'])->name('messages.update');
+    Route::delete('/messages/{message}', [AdminMessageController::class, 'destroy'])->name('messages.destroy');
+
     Route::get('/notifications', [AdminUiController::class, 'notifications'])->name('notifications');
 
     Route::get('/aboutus', [AdminUiController::class, 'aboutUs'])->name('aboutus');
+    Route::post('/aboutus', [AdminAboutUsController::class, 'store'])->name('aboutus.store');
+    Route::put('/aboutus/{aboutUsItem}', [AdminAboutUsController::class, 'update'])->name('aboutus.update');
+    Route::delete('/aboutus/{aboutUsItem}', [AdminAboutUsController::class, 'destroy'])->name('aboutus.destroy');
+
     Route::get('/focusareas', [AdminUiController::class, 'focusAreas'])->name('focusareas');
+    Route::post('/focusareas', [AdminFocusAreaController::class, 'storeFromAdminPage'])->name('focusareas.store');
+    Route::put('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'updateFromAdminPage'])->name('focusareas.update');
+    Route::delete('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'destroyFromAdminPage'])->name('focusareas.destroy');
+
     Route::get('/faqs', [AdminUiController::class, 'faqs'])->name('faqs');
     Route::get('/partners', [AdminUiController::class, 'partners'])->name('partners');
     Route::get('/gallery', [AdminUiController::class, 'gallery'])->name('gallery');
+    Route::post('/gallery', [AdminGalleryController::class, 'store'])->name('gallery.store');
+    Route::put('/gallery/{galleryItem}', [AdminGalleryController::class, 'update'])->name('gallery.update');
+    Route::delete('/gallery/{galleryItem}', [AdminGalleryController::class, 'destroy'])->name('gallery.destroy');
 
     Route::get('/imageslider', [AdminUiController::class, 'imageSlider'])->name('imageslider');
+    Route::post('/imageslider', [AdminImageSliderController::class, 'store'])->name('imageslider.store');
+    Route::put('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'update'])->name('imageslider.update');
+    Route::delete('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
+
     Route::get('/identity', [AdminUiController::class, 'websiteIdentity'])->name('identity');
     Route::get('/landing-manager', [AdminUiController::class, 'landingManager'])->name('landing-manager');
 

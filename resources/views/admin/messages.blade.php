@@ -73,21 +73,57 @@
 </div>
 
 <script>
+  const messageBaseUrl = @json(url('/admin/messages'));
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+  function normalizeMessage(m) {
+    return {
+      id: Number(m.id),
+      name: m.name || m.sender_name || 'Pengirim',
+      email: m.email || m.sender_email || '-',
+      message: m.message || '',
+      isRead: Boolean(m.isRead ?? m.is_read),
+      date: m.date || '-',
+      created_at: m.created_at || null,
+    };
+  }
+
   const ms = {
     filter: 'all',
     search: '',
     selected: null,
-    messages: @json($messages),
+    messages: (@json($messages) || []).map(normalizeMessage),
   };
 
-  ms.messages = ms.messages.map((m) => ({
-    id: m.id,
-    name: m.name || m.sender_name || 'Pengirim',
-    email: m.email || m.sender_email || '-',
-    message: m.message,
-    isRead: Boolean(m.isRead ?? m.is_read),
-    date: m.date || m.created_at,
-  }));
+  async function requestMessage(url, method, payload = {}) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const firstError = json.errors ? Object.values(json.errors)[0]?.[0] : null;
+      throw new Error(firstError || json.message || 'Terjadi kesalahan saat memproses pesan.');
+    }
+
+    return json;
+  }
+
+  function upsertMessage(rawMessage) {
+    const normalized = normalizeMessage(rawMessage);
+    ms.messages = ms.messages.map((message) => message.id === normalized.id ? normalized : message);
+
+    if (ms.selected && ms.selected.id === normalized.id) {
+      ms.selected = normalized;
+    }
+  }
 
   function getFiltered() {
     return ms.messages.filter((msg) => {
@@ -117,23 +153,84 @@
     badge.style.display = count > 0 ? 'inline-flex' : 'none';
   }
 
-  function toggleRead(id) {
-    ms.messages = ms.messages.map((m) => m.id === id ? { ...m, isRead: !m.isRead } : m);
-    renderAll();
+  async function toggleRead(id, button) {
+    const current = ms.messages.find((m) => m.id === id);
+    if (!current) return;
+
+    const originalHtml = button?.innerHTML;
+    if (button) {
+      button.disabled = true;
+      button.classList.add('opacity-70', 'cursor-not-allowed');
+      button.innerHTML = '<i class="ph ph-spinner-gap animate-spin text-[20px]"></i>';
+    }
+
+    try {
+      const result = await requestMessage(`${messageBaseUrl}/${id}`, 'PUT', { is_read: !current.isRead });
+      upsertMessage(result.data || { ...current, is_read: !current.isRead });
+      renderAll();
+    } catch (error) {
+      window.alert(error.message);
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.classList.remove('opacity-70', 'cursor-not-allowed');
+        button.innerHTML = originalHtml || button.innerHTML;
+      }
+    }
   }
 
-  function deleteMsg(id) {
-    if (window.confirm('Apakah Anda yakin ingin menghapus pesan ini secara permanen?')) {
-      ms.messages = ms.messages.filter((m) => m.id !== id);
-      if (ms.selected && ms.selected.id === id) closeModal();
+  async function markReadSilently(id) {
+    const current = ms.messages.find((m) => m.id === id);
+    if (!current || current.isRead) {
+      return;
+    }
+
+    current.isRead = true;
+    renderAll();
+
+    try {
+      const result = await requestMessage(`${messageBaseUrl}/${id}`, 'PUT', { is_read: true });
+      upsertMessage(result.data || current);
       renderAll();
+    } catch (error) {
+      current.isRead = false;
+      renderAll();
+    }
+  }
+
+  async function deleteMsg(id, button) {
+    if (window.confirm('Apakah Anda yakin ingin menghapus pesan ini secara permanen?')) {
+      const originalHtml = button?.innerHTML;
+
+      if (button) {
+        button.disabled = true;
+        button.classList.add('opacity-70', 'cursor-not-allowed');
+        button.innerHTML = '<i class="ph ph-spinner-gap animate-spin text-base"></i>';
+      }
+
+      try {
+        await requestMessage(`${messageBaseUrl}/${id}`, 'DELETE', {});
+        ms.messages = ms.messages.filter((m) => m.id !== id);
+        if (ms.selected && ms.selected.id === id) closeModal();
+        renderAll();
+      } catch (error) {
+        window.alert(error.message);
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.classList.remove('opacity-70', 'cursor-not-allowed');
+          button.innerHTML = originalHtml || button.innerHTML;
+        }
+      }
     }
   }
 
   function openModal(id) {
     const msg = ms.messages.find((m) => m.id === id);
     if (!msg) return;
-    if (!msg.isRead) msg.isRead = true;
+    if (!msg.isRead) {
+      markReadSilently(msg.id);
+    }
     ms.selected = msg;
     document.getElementById('modalInitial').textContent = msg.name.charAt(0);
     document.getElementById('modalName').textContent = msg.name;
@@ -174,14 +271,14 @@
     tbody.innerHTML = filtered.map((msg) => `
       <tr class="group cursor-pointer transition-colors ${!msg.isRead ? 'bg-emerald-50/30 hover:bg-emerald-50/70' : 'hover:bg-slate-50/70'}" onclick="openModal(${msg.id})">
         <td class="px-6 py-5 align-top">
-          <button onclick="event.stopPropagation(); toggleRead(${msg.id})" class="p-1.5 rounded-md transition-colors ${!msg.isRead ? 'text-emerald-500 hover:bg-emerald-100' : 'text-slate-300 hover:text-slate-500 hover:bg-slate-100'}">
+          <button onclick="event.stopPropagation(); toggleRead(${msg.id}, this)" class="p-1.5 rounded-md transition-colors ${!msg.isRead ? 'text-emerald-500 hover:bg-emerald-100' : 'text-slate-300 hover:text-slate-500 hover:bg-slate-100'}">
             <i class="ph ${!msg.isRead ? 'ph-envelope' : 'ph-envelope-open'} text-[20px]"></i>
           </button>
         </td>
         <td class="px-6 py-5 align-top"><p class="text-sm ${!msg.isRead ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}">${msg.name}</p><p class="text-xs text-slate-500 mt-1">${msg.email}</p></td>
         <td class="px-6 py-5 align-top max-w-sm"><p class="text-sm line-clamp-2 leading-relaxed ${!msg.isRead ? 'font-bold text-slate-800' : 'text-slate-600'}">${msg.message}</p></td>
         <td class="px-6 py-5 align-top text-right whitespace-nowrap"><div class="flex items-center justify-end gap-1.5 text-xs text-slate-500"><i class="ph ph-calendar-blank"></i>${msg.date}</div></td>
-        <td class="px-6 py-5 align-top"><div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="event.stopPropagation(); openModal(${msg.id})" class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors">Baca</button><button onclick="event.stopPropagation(); deleteMsg(${msg.id})" class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
+        <td class="px-6 py-5 align-top"><div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="event.stopPropagation(); openModal(${msg.id})" class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors">Baca</button><button onclick="event.stopPropagation(); deleteMsg(${msg.id}, this)" class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
       </tr>
     `).join('');
     document.getElementById('messageFooterText').textContent = 'Menampilkan ' + filtered.length + ' pesan';

@@ -63,13 +63,61 @@
 </style>
 
 <script>
+  const focusAreaStoreUrl = @json(route('admin.focusareas.store'));
+  const focusAreaBaseUrl = @json(url('/admin/focusareas'));
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+  function normalizeArea(raw) {
+    return {
+      id: Number(raw.id),
+      title: raw.title || '',
+      description: raw.description || '',
+      icon: raw.icon || 'ph ph-target',
+    };
+  }
+
   const fsState = {
-    areas: @json($focusAreas),
+    areas: (@json($focusAreas) || []).map(normalizeArea),
     search: '',
     editingId: null,
+    isSubmitting: false,
   };
 
+  async function requestFocusArea(url, method, payload) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const firstError = json.errors ? Object.values(json.errors)[0]?.[0] : null;
+      throw new Error(firstError || json.message || 'Terjadi kesalahan saat memproses fokus area.');
+    }
+
+    return json;
+  }
+
+  function setAreaSubmitLoading(loading) {
+    const button = document.getElementById('submitAreaModal');
+    if (!button) return;
+
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+    button.innerHTML = loading
+      ? '<i class="ph ph-spinner-gap animate-spin text-sm"></i> Menyimpan...'
+      : (fsState.editingId ? 'Konfirmasi Update' : 'Tambahkan');
+  }
+
   function iconFor(name) {
+    if (String(name).startsWith('ph ')) return name;
     if (name === 'PiGraduationCap') return 'ph ph-graduation-cap';
     if (name === 'PiHeartbeat') return 'ph ph-heartbeat';
     if (name === 'PiTree') return 'ph ph-tree';
@@ -86,9 +134,9 @@
     const data = filteredAreas();
     document.getElementById('areaRows').innerHTML = data.length ? data.map((a) => `
       <tr class="hover:bg-slate-50/50 transition-colors group">
-        <td class="py-5 px-6"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i class="${iconFor(a.iconName)} text-[24px]"></i></div><div class="flex flex-col"><span class="text-sm font-semibold text-slate-900">${a.title}</span><span class="text-[10px] text-emerald-500 font-semibold mt-1">Aktif Berjalan</span></div></div></td>
+        <td class="py-5 px-6"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i class="${iconFor(a.icon)} text-[24px]"></i></div><div class="flex flex-col"><span class="text-sm font-semibold text-slate-900">${a.title}</span><span class="text-[10px] text-emerald-500 font-semibold mt-1">Aktif Berjalan</span></div></div></td>
         <td class="py-5 px-6"><p class="text-sm text-slate-500 line-clamp-2 max-w-lg">${a.description}</p></td>
-        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editArea(${a.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteArea(${a.id})">Hapus</button></div></td>
+        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editArea(${a.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteArea(${a.id}, this)">Hapus</button></div></td>
       </tr>
     `).join('') : '<tr><td colspan="3" class="px-6 py-12 text-center text-slate-500 font-medium text-sm">Fokus Area tidak ditemukan.</td></tr>';
     document.getElementById('areaCount').textContent = 'Menampilkan ' + data.length + ' area';
@@ -107,9 +155,10 @@
     } else {
       fsState.editingId = null;
       document.getElementById('areaModalTitle').textContent = 'Tambah Fokus Area Baru';
-      document.getElementById('submitAreaModal').textContent = 'Tambahkan';
       document.getElementById('areaForm').reset();
     }
+
+    setAreaSubmitLoading(false);
   }
 
   function closeAreaModal() {
@@ -123,10 +172,31 @@
     if (item) openAreaModal(item);
   }
 
-  function deleteArea(id) {
-    if (window.confirm('Apakah Anda yakin ingin menghapus fokus area ini?')) {
+  async function deleteArea(id, button) {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus fokus area ini?')) {
+      return;
+    }
+
+    const originalHtml = button?.innerHTML;
+
+    if (button) {
+      button.disabled = true;
+      button.classList.add('opacity-70', 'cursor-not-allowed');
+      button.innerHTML = '<i class="ph ph-spinner-gap animate-spin text-sm"></i>';
+    }
+
+    try {
+      await requestFocusArea(`${focusAreaBaseUrl}/${id}`, 'DELETE', {});
       fsState.areas = fsState.areas.filter((a) => a.id !== id);
       renderAreas();
+    } catch (error) {
+      window.alert(error.message);
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.classList.remove('opacity-70', 'cursor-not-allowed');
+        button.innerHTML = originalHtml || button.innerHTML;
+      }
     }
   }
 
@@ -137,16 +207,41 @@
   document.getElementById('openAreaModal').addEventListener('click', () => openAreaModal(null));
   document.getElementById('closeAreaModal').addEventListener('click', closeAreaModal);
   document.getElementById('cancelAreaModal').addEventListener('click', closeAreaModal);
-  document.getElementById('areaForm').addEventListener('submit', function (e) {
+  document.getElementById('areaForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const payload = { title: document.getElementById('areaTitle').value, description: document.getElementById('areaDesc').value };
-    if (fsState.editingId) {
-      fsState.areas = fsState.areas.map((a) => a.id === fsState.editingId ? { ...a, ...payload } : a);
-    } else {
-      fsState.areas.push({ id: Date.now(), iconName: 'PiTarget', icon: 'ph ph-target', ...payload });
+
+    if (fsState.isSubmitting) {
+      return;
     }
-    closeAreaModal();
-    renderAreas();
+
+    const existing = fsState.areas.find((a) => a.id === fsState.editingId);
+    const payload = {
+      title: document.getElementById('areaTitle').value,
+      description: document.getElementById('areaDesc').value,
+      icon: existing?.icon || 'ph ph-target',
+    };
+
+    fsState.isSubmitting = true;
+    setAreaSubmitLoading(true);
+
+    try {
+      if (fsState.editingId) {
+        const result = await requestFocusArea(`${focusAreaBaseUrl}/${fsState.editingId}`, 'PUT', payload);
+        const normalized = normalizeArea(result.data || {});
+        fsState.areas = fsState.areas.map((a) => a.id === fsState.editingId ? normalized : a);
+      } else {
+        const result = await requestFocusArea(focusAreaStoreUrl, 'POST', payload);
+        fsState.areas.push(normalizeArea(result.data || {}));
+      }
+
+      closeAreaModal();
+      renderAreas();
+    } catch (error) {
+      window.alert(error.message);
+    } finally {
+      fsState.isSubmitting = false;
+      setAreaSubmitLoading(false);
+    }
   });
 
   renderAreas();

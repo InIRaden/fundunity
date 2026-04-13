@@ -3,33 +3,48 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AboutUsItem;
+use App\Models\Campaign;
+use App\Models\FocusArea;
+use App\Models\GalleryItem;
+use App\Models\ImageSlider;
+use App\Models\Message;
 use Illuminate\View\View;
 
 class AdminUiController extends Controller
 {
     public function aboutUs(): View
     {
-        $generalProfile = [
-            [
-                'id' => 1,
-                'nama' => 'Visi Kami',
-                'description' => 'Menjadi platform donasi terpercaya yang menghubungkan kebaikan dengan yang membutuhkan.',
-                'imageUrl' => 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1474&q=80',
-            ],
-            [
-                'id' => 2,
-                'nama' => 'Misi Kami',
-                'description' => 'Memberdayakan komunitas melalui transparansi dan akuntabilitas dalam pengelolaan dana sosial.',
-                'imageUrl' => 'https://images.unsplash.com/photo-1542601906990-24d4c16419d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80',
-            ],
-        ];
+        $generalProfile = AboutUsItem::where('section', 'general')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (AboutUsItem $item): array {
+                return [
+                    'id' => $item->id,
+                    'nama' => $item->title,
+                    'description' => $item->description,
+                    'imageUrl' => $item->image_url,
+                ];
+            })
+            ->values();
 
-        $strukturData = [
-            ['id' => 101, 'jabatan' => 'Ketua Umum', 'nama' => 'Rio Pangestu', 'description' => 'Informatika - 2021', 'imageUrl' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop'],
-            ['id' => 102, 'jabatan' => 'Wakil Ketua', 'nama' => 'Siti Aminah', 'description' => 'Matematika - 2021', 'imageUrl' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop'],
-            ['id' => 103, 'jabatan' => 'Sekretaris Jenderal', 'nama' => 'Ahmad Dahlan', 'description' => 'Geofisika - 2022', 'imageUrl' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop'],
-            ['id' => 104, 'jabatan' => 'Bendahara Umum', 'nama' => 'Diana Putri', 'description' => 'Statistika - 2022', 'imageUrl' => 'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=400&h=400&fit=crop'],
-        ];
+        $strukturData = AboutUsItem::where('section', 'structure')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (AboutUsItem $item): array {
+                return [
+                    'id' => $item->id,
+                    'jabatan' => $item->position,
+                    'nama' => $item->title,
+                    'description' => $item->description,
+                    'imageUrl' => $item->image_url,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Profil Lembaga',
@@ -41,67 +56,44 @@ class AdminUiController extends Controller
 
     public function campaign(): View
     {
-        $campaigns = [
-            [
-                'id' => 1,
-                'title' => 'Bantuan Bencana Banjir NTT',
-                'description' => 'Menggalang dana untuk korban banjir bandang di Nusa Tenggara Timur yang membutuhkan bantuan segera.',
-                'collected' => 32500000,
-                'target' => 50000000,
-                'deadline' => '2025-04-30',
-                'category' => 'Kebencanaan',
-                'status' => 'aktif',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Beasiswa Anak Yatim 2025',
-                'description' => 'Program beasiswa untuk 20 anak yatim piatu berprestasi agar dapat melanjutkan pendidikan.',
-                'collected' => 30000000,
-                'target' => 30000000,
-                'deadline' => '2025-03-01',
-                'category' => 'Pendidikan',
-                'status' => 'selesai',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Pembangunan Sumur Warga Pelosok',
-                'description' => 'Pengadaan sumur bor untuk masyarakat desa yang kesulitan akses air bersih.',
-                'collected' => 4800000,
-                'target' => 20000000,
-                'deadline' => '2025-06-15',
-                'category' => 'Kesehatan & Air Bersih',
-                'status' => 'aktif',
-            ],
-        ];
-
-        $searchQuery = '';
-        $isModalOpen = false;
-        $editingId = null;
-        $form = [
-            'title' => '',
-            'description' => '',
-            'target' => '',
-            'deadline' => '',
-            'category' => '',
-            'status' => 'aktif',
-        ];
+        $campaigns = Campaign::orderByDesc('created_at')
+            ->get()
+            ->map(static function (Campaign $campaign): array {
+                return [
+                    'id' => $campaign->id,
+                    'title' => $campaign->title,
+                    'description' => $campaign->description,
+                    'collected' => (int) $campaign->collected,
+                    'target' => (int) $campaign->target,
+                    'deadline' => $campaign->deadline ? substr((string) $campaign->deadline, 0, 10) : null,
+                    'category' => $campaign->category ?? 'Umum',
+                    'status' => $campaign->status,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Campaign',
             'subtitle' => 'Kelola program galang dana dan progres pencapaian',
         ];
 
-        return view('admin.campaign', compact('campaigns', 'searchQuery', 'isModalOpen', 'editingId', 'form', 'pageMeta'));
+        return view('admin.campaign', compact('campaigns', 'pageMeta'));
     }
 
     public function focusAreas(): View
     {
-        $focusAreas = [
-            ['id' => 1, 'icon' => 'ph ph-graduation-cap', 'iconName' => 'PiGraduationCap', 'title' => 'Pendidikan', 'description' => 'Memberikan pendidikan berkualitas untuk anak-anak kurang mampu agar mereka dapat mengembangkan potensinya secara optimal.'],
-            ['id' => 2, 'icon' => 'ph ph-heartbeat', 'iconName' => 'PiHeartbeat', 'title' => 'Kesehatan', 'description' => 'Menyelenggarakan kampanye kesadaran kesehatan dan memberikan akses layanan kesehatan dasar bagi masyarakat yang membutuhkan.'],
-            ['id' => 3, 'icon' => 'ph ph-tree', 'iconName' => 'PiTree', 'title' => 'Lingkungan', 'description' => 'Mendorong inisiatif untuk perlindungan lingkungan hidup dan keberlanjutan alam untuk generasi yang akan datang.'],
-            ['id' => 4, 'icon' => 'ph ph-users', 'iconName' => 'PiUsers', 'title' => 'Komunitas', 'description' => 'Memberdayakan masyarakat melalui pengembangan keterampilan, kolaborasi, dan penguatan kapasitas kelompok.'],
-        ];
+        $focusAreas = FocusArea::orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (FocusArea $focusArea): array {
+                return [
+                    'id' => $focusArea->id,
+                    'icon' => $focusArea->icon ?: 'ph ph-target',
+                    'title' => $focusArea->title,
+                    'description' => $focusArea->description,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Fokus Area',
@@ -146,45 +138,25 @@ class AdminUiController extends Controller
 
     public function messages(): View
     {
-        $messages = [
-            [
-                'id' => 1,
-                'name' => 'Budi Santoso',
-                'email' => 'budi.santoso@gmail.com',
-                'message' => 'Halo, saya sangat tertarik dengan program pendidikan desa yang diadakan. Apakah saya bisa ikut menyumbang buku bacaan bekas layak pakai? Jika iya, ke mana saya harus mengirimkannya?',
-                'is_read' => false,
-                'date' => '12 Okt 2023 10:30',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Siti Aminah',
-                'email' => 'siti.aminah@yahoo.com',
-                'message' => 'Saya ingin menanyakan detail kolaborasi untuk acara bakti sosial bulan depan. Apakah organisasi Anda terbuka untuk bermitra dengan BEM kampus kami?',
-                'is_read' => false,
-                'date' => '11 Okt 2023 14:15',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Ahmad Dahlan',
-                'email' => 'ahmad.d@perusahaan.com',
-                'message' => 'Terima kasih atas bantuan yang disalurkan ke panti asuhan kami bulan lalu. Anak-anak sangat senang dengan bingkisan yang diberikan.',
-                'is_read' => true,
-                'date' => '09 Okt 2023 09:00',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Rina Marlina',
-                'email' => 'rina.marlina88@gmail.com',
-                'message' => 'Apakah ada lowongan relawan untuk kegiatan peduli lingkungan akhir tahun ini? Saya memiliki pengalaman di bidang pengolahan sampah.',
-                'is_read' => true,
-                'date' => '05 Okt 2023 16:45',
-            ],
-        ];
+        $messages = Message::orderByDesc('created_at')
+            ->get()
+            ->map(static function (Message $message): array {
+                return [
+                    'id' => $message->id,
+                    'name' => $message->name,
+                    'email' => $message->email,
+                    'message' => $message->message,
+                    'is_read' => (bool) $message->is_read,
+                    'date' => $message->created_at?->format('d M Y H:i'),
+                    'created_at' => $message->created_at?->toISOString(),
+                ];
+            })
+            ->values();
 
         $messageStats = [
             'total' => count($messages),
             'unread' => collect($messages)->where('is_read', false)->count(),
-            'this_month' => count($messages),
+            'this_month' => Message::whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->count(),
         ];
 
         $filter = 'all';
@@ -426,29 +398,22 @@ class AdminUiController extends Controller
 
     public function gallery(): View
     {
-        $galleryImages = [
-            [
-                'id' => 1,
-                'title' => 'Bantuan Sembako Cianjur',
-                'category' => 'Tanggap Bencana',
-                'date' => '2025-01-15',
-                'imageUrl' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Beasiswa Anak Juara',
-                'category' => 'Pendidikan',
-                'date' => '2025-02-10',
-                'imageUrl' => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Renovasi Sumur Bor NTT',
-                'category' => 'Infrastruktur',
-                'date' => '2025-03-05',
-                'imageUrl' => 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?q=80&w=600',
-            ],
-        ];
+        $galleryImages = GalleryItem::where('type', 'image')
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (GalleryItem $item): array {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'category' => $item->category ?? 'Umum',
+                    'date' => $item->activity_date
+                        ? substr((string) $item->activity_date, 0, 10)
+                        : ($item->created_at ? substr((string) $item->created_at, 0, 10) : null),
+                    'imageUrl' => $item->thumbnail ?: $item->url,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Galeri Aktivitas',
@@ -460,20 +425,20 @@ class AdminUiController extends Controller
 
     public function imageSlider(): View
     {
-        $sliderItems = [
-            [
-                'id' => 1,
-                'title' => 'Selamat Datang di FundUnity',
-                'description' => 'Platform berbagi kebaikan untuk sesama.',
-                'imageUrl' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1470&q=80',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Program Kemanusiaan',
-                'description' => 'Bersama kita bisa membantu korban bencana alam.',
-                'imageUrl' => 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1470&q=80',
-            ],
-        ];
+        $sliderItems = ImageSlider::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (ImageSlider $slider): array {
+                return [
+                    'id' => $slider->id,
+                    'title' => $slider->title,
+                    'description' => $slider->description,
+                    'imageUrl' => $slider->image_url,
+                    'sort_order' => $slider->sort_order,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Banner Slider',

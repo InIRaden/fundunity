@@ -106,11 +106,29 @@
 </style>
 
 <script>
+  const campaignStoreUrl = @json(route('admin.campaign.store'));
+  const campaignBaseUrl = @json(url('/admin/campaign'));
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+  function normalizeCampaign(raw) {
+    return {
+      id: Number(raw.id),
+      title: raw.title || '',
+      description: raw.description || '',
+      collected: Number(raw.collected || 0),
+      target: Number(raw.target || 0),
+      deadline: String(raw.deadline || '').slice(0, 10),
+      category: raw.category || 'Umum',
+      status: raw.status || 'aktif',
+    };
+  }
+
   const campaignState = {
-    campaigns: @json($campaigns),
+    campaigns: (@json($campaigns) || []).map(normalizeCampaign),
     search: '',
     editingId: null,
     status: 'aktif',
+    isSubmitting: false,
   };
 
   const statusMap = {
@@ -121,6 +139,41 @@
 
   function rp(n) {
     return 'Rp ' + Number(n).toLocaleString('id-ID');
+  }
+
+  async function requestCampaign(url, method, payload) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const firstError = json.errors ? Object.values(json.errors)[0]?.[0] : null;
+      throw new Error(firstError || json.message || 'Terjadi kesalahan saat memproses campaign.');
+    }
+
+    return json;
+  }
+
+  function setSubmitLoading(loading) {
+    const button = document.getElementById('submitCampaignBtn');
+    if (!button) return;
+
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+    button.innerHTML = loading
+      ? '<i class="ph ph-spinner-gap animate-spin text-base"></i> Menyimpan...'
+      : (campaignState.editingId
+          ? 'Simpan Perubahan'
+          : '<i class="ph ph-plus text-base"></i> Buat Campaign');
   }
 
   function renderStats() {
@@ -176,7 +229,7 @@
           <td class="py-5 px-6">
             <div class="flex items-center justify-center gap-2">
               <button class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editCampaign(${c.id})">Edit</button>
-              <button class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteCampaign(${c.id})">Hapus</button>
+              <button class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteCampaign(${c.id}, this)">Hapus</button>
             </div>
           </td>
         </tr>
@@ -209,7 +262,6 @@
       campaignState.status = editing.status;
       document.getElementById('campaignModalTitle').textContent = 'Edit Campaign';
       document.getElementById('campaignModalSub').textContent = 'Perbarui detail campaign yang dipilih';
-      document.getElementById('submitCampaignBtn').innerHTML = 'Simpan Perubahan';
       document.getElementById('fTitle').value = editing.title;
       document.getElementById('fCategory').value = editing.category;
       document.getElementById('fTarget').value = editing.target;
@@ -220,10 +272,10 @@
       campaignState.status = 'aktif';
       document.getElementById('campaignModalTitle').textContent = 'Buat Campaign Baru';
       document.getElementById('campaignModalSub').textContent = 'Isi detail campaign yang akan dipublikasikan';
-      document.getElementById('submitCampaignBtn').innerHTML = '<i class="ph ph-plus text-base"></i> Buat Campaign';
       document.getElementById('campaignForm').reset();
     }
     setStatusButtons();
+    setSubmitLoading(false);
   }
 
   function closeCampaignModal() {
@@ -237,11 +289,30 @@
     if (found) openCampaignModal(found);
   }
 
-  function deleteCampaign(id) {
+  async function deleteCampaign(id, button) {
     if (window.confirm('Hapus campaign ini secara permanen?')) {
-      campaignState.campaigns = campaignState.campaigns.filter(c => c.id !== id);
-      renderStats();
-      renderRows();
+      const originalHtml = button?.innerHTML;
+
+      if (button) {
+        button.disabled = true;
+        button.classList.add('opacity-70', 'cursor-not-allowed');
+        button.innerHTML = '<i class="ph ph-spinner-gap animate-spin"></i>';
+      }
+
+      try {
+        await requestCampaign(`${campaignBaseUrl}/${id}`, 'DELETE', {});
+        campaignState.campaigns = campaignState.campaigns.filter(c => c.id !== id);
+        renderStats();
+        renderRows();
+      } catch (error) {
+        window.alert(error.message);
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.classList.remove('opacity-70', 'cursor-not-allowed');
+          button.innerHTML = originalHtml || 'Hapus';
+        }
+      }
     }
   }
 
@@ -261,8 +332,13 @@
     });
   });
 
-  document.getElementById('campaignForm').addEventListener('submit', function (e) {
+  document.getElementById('campaignForm').addEventListener('submit', async function (e) {
     e.preventDefault();
+
+    if (campaignState.isSubmitting) {
+      return;
+    }
+
     const payload = {
       title: document.getElementById('fTitle').value,
       category: document.getElementById('fCategory').value,
@@ -271,14 +347,29 @@
       description: document.getElementById('fDescription').value,
       status: campaignState.status,
     };
-    if (campaignState.editingId) {
-      campaignState.campaigns = campaignState.campaigns.map(c => c.id === campaignState.editingId ? { ...c, ...payload } : c);
-    } else {
-      campaignState.campaigns.unshift({ id: Date.now(), collected: 0, ...payload });
+
+    campaignState.isSubmitting = true;
+    setSubmitLoading(true);
+
+    try {
+      if (campaignState.editingId) {
+        const result = await requestCampaign(`${campaignBaseUrl}/${campaignState.editingId}`, 'PUT', payload);
+        const updated = normalizeCampaign(result.data || {});
+        campaignState.campaigns = campaignState.campaigns.map((c) => c.id === campaignState.editingId ? updated : c);
+      } else {
+        const result = await requestCampaign(campaignStoreUrl, 'POST', payload);
+        campaignState.campaigns.unshift(normalizeCampaign(result.data || {}));
+      }
+
+      closeCampaignModal();
+      renderStats();
+      renderRows();
+    } catch (error) {
+      window.alert(error.message);
+    } finally {
+      campaignState.isSubmitting = false;
+      setSubmitLoading(false);
     }
-    closeCampaignModal();
-    renderStats();
-    renderRows();
   });
 
   renderStats();

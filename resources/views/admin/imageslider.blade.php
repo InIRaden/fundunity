@@ -6,7 +6,7 @@
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="relative w-full md:w-96">
         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-500"><i class="ph ph-magnifying-glass text-base"></i></div>
-        <input id="slider-search" type="text" class="w-full pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-emerald-500/50" placeholder="Cari judul banner..." oninput="filterSliderRows()" />
+        <input id="slider-search" type="text" class="w-full pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-emerald-500/50" placeholder="Cari judul banner..." />
       </div>
       <button id="openSliderModal" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm">
         <i class="ph ph-plus text-sm"></i> Tambah Banner
@@ -51,15 +51,26 @@
       </div>
       <div>
         <label class="block text-xs text-slate-500 mb-2">Media Gambar</label>
-        <div class="border-2 border-dashed border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center bg-slate-50">
-          <i class="ph ph-image text-slate-300 text-4xl mb-2"></i>
-          <p class="text-xs font-semibold text-slate-400 text-center">Pilih Banner</p>
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <button id="sliderSourceUrl" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold border border-emerald-600 bg-emerald-600 text-white">Gunakan URL</button>
+            <button id="sliderSourceUpload" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold border border-slate-200 bg-white text-slate-600">Upload File</button>
+          </div>
+
+          <div id="sliderUrlWrap">
+            <input id="sliderImageUrl" type="url" placeholder="https://..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" />
+          </div>
+
+          <div id="sliderFileWrap" class="hidden border-2 border-dashed border-slate-200 rounded-2xl p-5 bg-slate-50">
+            <input id="sliderImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 file:font-semibold">
+            <p class="text-xs font-semibold text-slate-400 mt-2">Format: JPG, PNG, WEBP. Maksimal 4MB.</p>
+          </div>
         </div>
       </div>
     </div>
     <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
       <button type="button" id="cancelSliderModal" class="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Batal</button>
-      <button type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all">Simpan Banner</button>
+      <button id="sliderSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all">Simpan Banner</button>
     </div>
     </form>
   </div>
@@ -72,13 +83,115 @@
     <p class="text-sm text-slate-500 mb-6">Tindakan ini tidak dapat dibatalkan.</p>
     <div class="flex w-full gap-3">
       <button onclick="closeDeleteModal()" class="flex-1 py-2.5 px-4 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-100">Batal</button>
-      <button onclick="confirmDelete()" class="flex-1 py-2.5 px-4 bg-rose-600 text-white rounded-xl text-sm font-semibold hover:bg-rose-700">Ya, Hapus</button>
+      <button id="confirmDeleteSlider" onclick="confirmDelete()" class="flex-1 py-2.5 px-4 bg-rose-600 text-white rounded-xl text-sm font-semibold hover:bg-rose-700">Ya, Hapus</button>
     </div>
   </div>
 </div>
 
 <script>
-  const sliderState = { items: @json($sliderItems), search: '', editingId: null, deletingId: null };
+  const sliderStoreUrl = @json(route('admin.imageslider.store'));
+  const sliderBaseUrl = @json(url('/admin/imageslider'));
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+  function normalizeSliderItem(raw) {
+    return {
+      id: Number(raw.id),
+      title: raw.title || '',
+      description: raw.description || '',
+      imageUrl: raw.imageUrl || raw.image_url || '',
+      sort_order: Number(raw.sort_order || 0),
+    };
+  }
+
+  const sliderState = {
+    items: (@json($sliderItems) || []).map(normalizeSliderItem),
+    search: '',
+    editingId: null,
+    deletingId: null,
+    isSubmitting: false,
+    isDeleting: false,
+    sourceType: 'url',
+  };
+
+  async function requestSlider(url, method, payload, isFormData = false) {
+    const options = {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    if (method !== 'GET') {
+      if (isFormData) {
+        options.body = payload;
+      } else {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(payload || {});
+      }
+    }
+
+    const response = await fetch(url, options);
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const firstError = json.errors ? Object.values(json.errors)[0]?.[0] : null;
+      throw new Error(firstError || json.message || 'Terjadi kesalahan saat memproses banner slider.');
+    }
+
+    return json;
+  }
+
+  function setSliderSourceType(type) {
+    sliderState.sourceType = type;
+
+    const urlButton = document.getElementById('sliderSourceUrl');
+    const uploadButton = document.getElementById('sliderSourceUpload');
+    const urlWrap = document.getElementById('sliderUrlWrap');
+    const fileWrap = document.getElementById('sliderFileWrap');
+
+    const activeClass = ['border-emerald-600', 'bg-emerald-600', 'text-white'];
+    const inactiveClass = ['border-slate-200', 'bg-white', 'text-slate-600'];
+
+    urlButton.classList.remove(...activeClass, ...inactiveClass);
+    uploadButton.classList.remove(...activeClass, ...inactiveClass);
+
+    if (type === 'upload') {
+      uploadButton.classList.add(...activeClass);
+      urlButton.classList.add(...inactiveClass);
+      fileWrap.classList.remove('hidden');
+      urlWrap.classList.add('hidden');
+    } else {
+      urlButton.classList.add(...activeClass);
+      uploadButton.classList.add(...inactiveClass);
+      urlWrap.classList.remove('hidden');
+      fileWrap.classList.add('hidden');
+    }
+  }
+
+  function setSliderSubmitLoading(loading) {
+    const button = document.getElementById('sliderSubmitBtn');
+    if (!button) return;
+
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+    button.innerHTML = loading
+      ? '<i class="ph ph-spinner-gap animate-spin"></i> Menyimpan...'
+      : (sliderState.editingId ? 'Simpan Perubahan' : 'Simpan Banner');
+  }
+
+  function setDeleteLoading(loading) {
+    const button = document.getElementById('confirmDeleteSlider');
+    if (!button) return;
+
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+    button.innerHTML = loading
+      ? '<i class="ph ph-spinner-gap animate-spin"></i>'
+      : 'Ya, Hapus';
+  }
 
   function filteredItems() {
     const q = sliderState.search.toLowerCase();
@@ -102,25 +215,35 @@
     const modal = document.getElementById('slider-modal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+
     if (id) {
       const item = sliderState.items.find((i) => i.id === id);
-      if (item) {
-        sliderState.editingId = id;
-        document.getElementById('sliderModalTitle').textContent = 'Ubah Banner';
-        document.getElementById('sliderTitle').value = item.title;
-        document.getElementById('sliderDesc').value = item.description;
-      }
+      if (!item) return;
+
+      sliderState.editingId = id;
+      document.getElementById('sliderModalTitle').textContent = 'Ubah Banner';
+      document.getElementById('sliderTitle').value = item.title;
+      document.getElementById('sliderDesc').value = item.description;
+      document.getElementById('sliderImageUrl').value = item.imageUrl || '';
+      document.getElementById('sliderImageFile').value = '';
+      setSliderSourceType('url');
     } else {
       sliderState.editingId = null;
       document.getElementById('sliderModalTitle').textContent = 'Tambah Banner';
       document.getElementById('sliderForm').reset();
+      setSliderSourceType('url');
     }
+
+    setSliderSubmitLoading(false);
   }
 
   function closeSliderModal() {
     const modal = document.getElementById('slider-modal');
     modal.classList.remove('flex');
     modal.classList.add('hidden');
+    sliderState.editingId = null;
+    sliderState.isSubmitting = false;
+    setSliderSubmitLoading(false);
   }
 
   function openDeleteModal(id) {
@@ -132,36 +255,88 @@
 
   function closeDeleteModal() {
     sliderState.deletingId = null;
+    sliderState.isDeleting = false;
     const modal = document.getElementById('delete-modal');
     modal.classList.remove('flex');
     modal.classList.add('hidden');
+    setDeleteLoading(false);
   }
 
-  function confirmDelete() {
-    if (sliderState.deletingId !== null) {
+  async function confirmDelete() {
+    if (sliderState.deletingId === null || sliderState.isDeleting) {
+      return;
+    }
+
+    sliderState.isDeleting = true;
+    setDeleteLoading(true);
+
+    try {
+      await requestSlider(`${sliderBaseUrl}/${sliderState.deletingId}`, 'DELETE', {});
       sliderState.items = sliderState.items.filter((i) => i.id !== sliderState.deletingId);
       renderSliderRows();
+      closeDeleteModal();
+    } catch (error) {
+      window.alert(error.message);
+      sliderState.isDeleting = false;
+      setDeleteLoading(false);
     }
-    closeDeleteModal();
   }
 
   document.getElementById('slider-search').addEventListener('input', function (e) {
     sliderState.search = e.target.value;
     renderSliderRows();
   });
+
   document.getElementById('openSliderModal').addEventListener('click', () => openSliderModal());
   document.getElementById('closeSliderModal').addEventListener('click', closeSliderModal);
   document.getElementById('cancelSliderModal').addEventListener('click', closeSliderModal);
-  document.getElementById('sliderForm').addEventListener('submit', function (e) {
+  document.getElementById('sliderSourceUrl').addEventListener('click', () => setSliderSourceType('url'));
+  document.getElementById('sliderSourceUpload').addEventListener('click', () => setSliderSourceType('upload'));
+
+  document.getElementById('sliderForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const payload = { title: document.getElementById('sliderTitle').value, description: document.getElementById('sliderDesc').value };
-    if (sliderState.editingId) {
-      sliderState.items = sliderState.items.map((i) => i.id === sliderState.editingId ? { ...i, ...payload } : i);
-    } else {
-      sliderState.items.push({ id: Date.now(), imageUrl: '', ...payload });
+
+    if (sliderState.isSubmitting) {
+      return;
     }
-    closeSliderModal();
-    renderSliderRows();
+
+    const formData = new FormData();
+    formData.append('title', document.getElementById('sliderTitle').value);
+    formData.append('description', document.getElementById('sliderDesc').value);
+
+    if (sliderState.sourceType === 'upload') {
+      const file = document.getElementById('sliderImageFile').files?.[0];
+      if (file) {
+        formData.append('image_file', file);
+      }
+    } else {
+      const imageUrl = document.getElementById('sliderImageUrl').value.trim();
+      if (imageUrl) {
+        formData.append('image_url', imageUrl);
+      }
+    }
+
+    sliderState.isSubmitting = true;
+    setSliderSubmitLoading(true);
+
+    try {
+      if (sliderState.editingId) {
+        formData.append('_method', 'PUT');
+        const result = await requestSlider(`${sliderBaseUrl}/${sliderState.editingId}`, 'POST', formData, true);
+        const normalized = normalizeSliderItem(result.data || {});
+        sliderState.items = sliderState.items.map((item) => item.id === sliderState.editingId ? normalized : item);
+      } else {
+        const result = await requestSlider(sliderStoreUrl, 'POST', formData, true);
+        sliderState.items.unshift(normalizeSliderItem(result.data || {}));
+      }
+
+      closeSliderModal();
+      renderSliderRows();
+    } catch (error) {
+      window.alert(error.message);
+      sliderState.isSubmitting = false;
+      setSliderSubmitLoading(false);
+    }
   });
 
   renderSliderRows();
