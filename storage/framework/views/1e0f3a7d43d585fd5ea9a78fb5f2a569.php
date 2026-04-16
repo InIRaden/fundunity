@@ -59,11 +59,91 @@
 </style>
 
 <script>
-  const faqState = { faqs: <?php echo json_encode($faqs, 15, 512) ?>, search: '', editingId: null };
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+  const faqStoreUrl = <?php echo json_encode(route('admin.faqs.store'), 15, 512) ?>;
+  const faqBaseUrl = <?php echo json_encode(url('/admin/faqs'), 15, 512) ?>;
+
+  function normalizeFaq(raw = {}) {
+    return {
+      id: raw.id,
+      question: raw.question || '',
+      answer: raw.answer || '',
+    };
+  }
+
+  const faqState = {
+    faqs: (<?php echo json_encode($faqs, 15, 512) ?> || []).map((item) => normalizeFaq(item)),
+    search: '',
+    editingId: null,
+    isSubmitting: false,
+    isDeleting: false,
+  };
+
+  async function requestFaq(url, method, payload) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const validationErrors = result.errors ? Object.values(result.errors).flat().join('\n') : null;
+      throw new Error(validationErrors || result.message || 'Permintaan gagal diproses.');
+    }
+
+    return result;
+  }
 
   function filteredFaqs() {
     const q = faqState.search.toLowerCase();
     return faqState.faqs.filter((f) => f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q));
+  }
+
+  function setSubmitLoading(loading) {
+    const button = document.getElementById('submitFaqModal');
+    if (!button) {
+      return;
+    }
+
+    if (loading) {
+      button.dataset.originalLabel = button.textContent;
+      button.disabled = true;
+      button.classList.add('opacity-70', 'cursor-not-allowed');
+      button.textContent = faqState.editingId ? 'Menyimpan...' : 'Menambahkan...';
+      return;
+    }
+
+    button.disabled = false;
+    button.classList.remove('opacity-70', 'cursor-not-allowed');
+    if (button.dataset.originalLabel) {
+      button.textContent = button.dataset.originalLabel;
+    }
+  }
+
+  function setDeleteButtonLoading(button, loading) {
+    if (!button) {
+      return;
+    }
+
+    if (loading) {
+      button.dataset.originalLabel = button.textContent;
+      button.disabled = true;
+      button.classList.add('opacity-70', 'cursor-not-allowed');
+      button.textContent = 'Menghapus...';
+      return;
+    }
+
+    button.disabled = false;
+    button.classList.remove('opacity-70', 'cursor-not-allowed');
+    if (button.dataset.originalLabel) {
+      button.textContent = button.dataset.originalLabel;
+    }
   }
 
   function renderFaqRows() {
@@ -73,7 +153,7 @@
         <td class="py-5 px-6 text-center"><span class="text-sm text-slate-400">${String(i + 1).padStart(2, '0')}</span></td>
         <td class="py-5 px-6"><h3 class="text-sm text-slate-900 line-clamp-2">${f.question}</h3></td>
         <td class="py-5 px-6"><p class="text-sm text-slate-500 line-clamp-2 max-w-md">${f.answer}</p></td>
-        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editFaq(${f.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteFaq(${f.id})">Hapus</button></div></td>
+        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editFaq(${f.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteFaq(${f.id}, this)">Hapus</button></div></td>
       </tr>
     `).join('') : '<tr><td colspan="4" class="px-6 py-12 text-center text-slate-500 text-sm">FAQ Tidak Ditemukan.</td></tr>';
     document.getElementById('faqCount').textContent = 'Menampilkan ' + data.length + ' baris data';
@@ -83,49 +163,104 @@
     const modal = document.getElementById('faqModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+
     if (item) {
       faqState.editingId = item.id;
       document.getElementById('faqModalTitle').textContent = 'Edit FAQ';
       document.getElementById('submitFaqModal').textContent = 'Konfirmasi Update';
       document.getElementById('faqQuestion').value = item.question;
       document.getElementById('faqAnswer').value = item.answer;
-    } else {
-      faqState.editingId = null;
-      document.getElementById('faqModalTitle').textContent = 'Tambah FAQ Baru';
-      document.getElementById('submitFaqModal').textContent = 'Tambahkan';
-      document.getElementById('faqForm').reset();
+      return;
     }
+
+    faqState.editingId = null;
+    document.getElementById('faqModalTitle').textContent = 'Tambah FAQ Baru';
+    document.getElementById('submitFaqModal').textContent = 'Tambahkan';
+    document.getElementById('faqForm').reset();
   }
 
   function closeFaqModal() {
     const modal = document.getElementById('faqModal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
+    faqState.isSubmitting = false;
+    setSubmitLoading(false);
   }
 
   function editFaq(id) {
     const found = faqState.faqs.find((f) => f.id === id);
-    if (found) openFaqModal(found);
-  }
-
-  function deleteFaq(id) {
-    if (window.confirm('Apakah Anda yakin ingin menghapus pertanyaan ini dari daftar FAQ?')) {
-      faqState.faqs = faqState.faqs.filter((f) => f.id !== id);
-      renderFaqRows();
+    if (found) {
+      openFaqModal(found);
     }
   }
 
-  document.getElementById('faqSearch').addEventListener('input', function (e) { faqState.search = e.target.value; renderFaqRows(); });
+  function deleteFaq(id, triggerButton) {
+    if (faqState.isDeleting) {
+      return;
+    }
+
+    if (!window.confirm('Apakah Anda yakin ingin menghapus pertanyaan ini dari daftar FAQ?')) {
+      return;
+    }
+
+    faqState.isDeleting = true;
+    setDeleteButtonLoading(triggerButton, true);
+
+    requestFaq(`${faqBaseUrl}/${id}`, 'DELETE', {})
+      .then(() => {
+        faqState.faqs = faqState.faqs.filter((f) => f.id !== id);
+        renderFaqRows();
+      })
+      .catch((error) => {
+        window.alert(error.message);
+      })
+      .finally(() => {
+        faqState.isDeleting = false;
+        setDeleteButtonLoading(triggerButton, false);
+      });
+  }
+
+  document.getElementById('faqSearch').addEventListener('input', function (e) {
+    faqState.search = e.target.value;
+    renderFaqRows();
+  });
+
   document.getElementById('openFaqModal').addEventListener('click', () => openFaqModal(null));
   document.getElementById('closeFaqModal').addEventListener('click', closeFaqModal);
   document.getElementById('cancelFaqModal').addEventListener('click', closeFaqModal);
-  document.getElementById('faqForm').addEventListener('submit', function (e) {
+  document.getElementById('faqForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const payload = { question: document.getElementById('faqQuestion').value, answer: document.getElementById('faqAnswer').value };
-    if (faqState.editingId) faqState.faqs = faqState.faqs.map((f) => f.id === faqState.editingId ? { ...f, ...payload } : f);
-    else faqState.faqs.unshift({ id: Date.now(), ...payload });
-    closeFaqModal();
-    renderFaqRows();
+
+    if (faqState.isSubmitting) {
+      return;
+    }
+
+    const payload = {
+      question: document.getElementById('faqQuestion').value,
+      answer: document.getElementById('faqAnswer').value,
+    };
+
+    faqState.isSubmitting = true;
+    setSubmitLoading(true);
+
+    try {
+      if (faqState.editingId) {
+        const result = await requestFaq(`${faqBaseUrl}/${faqState.editingId}`, 'PUT', payload);
+        const normalized = normalizeFaq(result.data || {});
+        faqState.faqs = faqState.faqs.map((f) => f.id === faqState.editingId ? normalized : f);
+      } else {
+        const result = await requestFaq(faqStoreUrl, 'POST', payload);
+        const normalized = normalizeFaq(result.data || {});
+        faqState.faqs.unshift(normalized);
+      }
+
+      closeFaqModal();
+      renderFaqRows();
+    } catch (error) {
+      window.alert(error.message);
+      faqState.isSubmitting = false;
+      setSubmitLoading(false);
+    }
   });
 
   renderFaqRows();

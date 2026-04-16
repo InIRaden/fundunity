@@ -72,10 +72,14 @@
           <label class="block text-xs font-bold text-slate-500 mb-1">Keterangan / Deskripsi</label>
           <textarea id="editDesc" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none"></textarea>
         </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1">URL Gambar (Opsional)</label>
+          <input id="editImageUrl" type="url" class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none" placeholder="https://...">
+        </div>
       </div>
       <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
         <button type="button" id="cancelAboutEdit" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
-        <button type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Perubahan</button>
+        <button id="editAboutSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Perubahan</button>
       </div>
     </form>
   </div>
@@ -101,10 +105,14 @@
           <label class="block text-xs font-bold text-slate-500 mb-1">Keterangan / Deskripsi</label>
           <textarea id="addDesc" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none" placeholder="Tuliskan keterangan detail..."></textarea>
         </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1">URL Gambar (Opsional)</label>
+          <input id="addImageUrl" type="url" class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none" placeholder="https://...">
+        </div>
       </div>
       <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
         <button type="button" id="cancelAboutAdd" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
-        <button type="submit" class="px-6 py-2 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800">Simpan Data Baru</button>
+        <button id="addAboutSubmitBtn" type="submit" class="px-6 py-2 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800">Simpan Data Baru</button>
       </div>
     </form>
   </div>
@@ -116,16 +124,41 @@
 </style>
 
 <script>
+  const aboutStoreUrl = <?php echo json_encode(route('admin.aboutus.store'), 15, 512) ?>;
+  const aboutBaseUrl = <?php echo json_encode(url('/admin/aboutus'), 15, 512) ?>;
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+  function normalizeAboutItem(raw, fallbackSection = 'general') {
+    const section = raw.section || fallbackSection;
+    return {
+      id: Number(raw.id),
+      section,
+      jabatan: raw.jabatan || raw.position || '',
+      nama: raw.nama || raw.title || '',
+      description: raw.description || '',
+      imageUrl: raw.imageUrl || raw.image_url || '',
+    };
+  }
+
   const aboutState = {
     active: 'umum',
     search: '',
-    umum: <?php echo json_encode($generalProfile ?? [], 15, 512) ?>,
-    struktur: <?php echo json_encode($strukturData ?? [], 15, 512) ?>,
+    umum: (<?php echo json_encode($generalProfile ?? [], 15, 512) ?> || []).map((item) => normalizeAboutItem(item, 'general')),
+    struktur: (<?php echo json_encode($strukturData ?? [], 15, 512) ?> || []).map((item) => normalizeAboutItem(item, 'structure')),
     deletingId: null,
     editingId: null,
+    editingSection: null,
+    isDeleting: false,
+    isSubmitting: false,
   };
 
-  function listByActive() { return aboutState.active === 'umum' ? aboutState.umum : aboutState.struktur; }
+  function currentSectionValue() {
+    return aboutState.active === 'umum' ? 'general' : 'structure';
+  }
+
+  function listByActive() {
+    return aboutState.active === 'umum' ? aboutState.umum : aboutState.struktur;
+  }
 
   function filteredAbout() {
     const q = aboutState.search.toLowerCase();
@@ -135,6 +168,54 @@
       const jab = (item.jabatan || '').toLowerCase();
       return nama.includes(q) || desc.includes(q) || jab.includes(q);
     });
+  }
+
+  async function requestAbout(url, method, payload) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+      body: JSON.stringify(payload || {}),
+    });
+
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const firstError = json.errors ? Object.values(json.errors)[0]?.[0] : null;
+      throw new Error(firstError || json.message || 'Terjadi kesalahan saat memproses data profil.');
+    }
+
+    return json;
+  }
+
+  function setDeleteLoading(loading) {
+    const button = document.getElementById('confirmDeleteAbout');
+    if (!button) return;
+
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+    button.innerHTML = loading
+      ? '<i class="ph ph-spinner-gap animate-spin"></i>'
+      : 'Ya, Hapus';
+  }
+
+  function setSubmitLoading(loading, isEdit) {
+    const button = document.getElementById(isEdit ? 'editAboutSubmitBtn' : 'addAboutSubmitBtn');
+    if (!button) return;
+
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+
+    if (loading) {
+      button.innerHTML = '<i class="ph ph-spinner-gap animate-spin"></i> Menyimpan...';
+    } else {
+      button.textContent = isEdit ? 'Simpan Perubahan' : 'Simpan Data Baru';
+    }
   }
 
   function paintTabs() {
@@ -152,9 +233,9 @@
     document.getElementById('aboutCount').textContent = data.length + ' Data';
     document.getElementById('aboutRows').innerHTML = data.length ? data.map((item) => `
       <tr class="hover:bg-slate-50/50 transition-colors">
-        ${aboutState.active === 'struktur' ? `<td class="px-6 py-5 align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100"><i class="ph ph-identification-badge"></i> ${item.jabatan}</span></td>` : ''}
+        ${aboutState.active === 'struktur' ? `<td class="px-6 py-5 align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100"><i class="ph ph-identification-badge"></i> ${item.jabatan || '-'}</span></td>` : ''}
         <td class="px-6 py-5 align-top"><p class="text-sm font-semibold text-slate-800">${item.nama}</p></td>
-        <td class="px-6 py-5 align-top max-w-md"><p class="text-sm text-slate-600 line-clamp-2 leading-relaxed">${item.description}</p></td>
+        <td class="px-6 py-5 align-top max-w-md"><p class="text-sm text-slate-600 line-clamp-2 leading-relaxed">${item.description || '-'}</p></td>
         <td class="px-6 py-5 align-top text-center">${item.imageUrl ? `<div class="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden mx-auto bg-slate-50"><img src="${item.imageUrl}" alt="${item.nama}" class="w-full h-full object-cover"></div>` : `<div class="w-12 h-12 rounded-lg border border-slate-200 border-dashed mx-auto flex items-center justify-center bg-slate-50 text-slate-400"><i class="ph ph-image text-xl"></i></div>`}</td>
         <td class="p-5"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditAbout(${item.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="openDeleteAbout(${item.id})">Hapus</button></div></td>
       </tr>
@@ -174,21 +255,28 @@
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     aboutState.deletingId = null;
+    aboutState.isDeleting = false;
+    setDeleteLoading(false);
   }
 
   function openEditAbout(id) {
     const source = listByActive();
     const item = source.find((v) => v.id === id);
     if (!item) return;
+
     aboutState.editingId = id;
+    aboutState.editingSection = item.section || currentSectionValue();
     document.getElementById('aboutEditTitle').textContent = aboutState.active === 'umum' ? 'Edit Profil' : 'Edit Pengurus';
     document.getElementById('editJabatanWrap').classList.toggle('hidden', aboutState.active !== 'struktur');
     document.getElementById('editJabatan').value = item.jabatan || '';
     document.getElementById('editNama').value = item.nama || '';
     document.getElementById('editDesc').value = item.description || '';
+    document.getElementById('editImageUrl').value = item.imageUrl || '';
+
     const modal = document.getElementById('aboutEditModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+    setSubmitLoading(false, true);
   }
 
   function closeEditAbout() {
@@ -196,57 +284,149 @@
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     aboutState.editingId = null;
+    aboutState.editingSection = null;
+    aboutState.isSubmitting = false;
+    setSubmitLoading(false, true);
   }
 
   function openAddAbout() {
     document.getElementById('aboutAddTitle').textContent = aboutState.active === 'umum' ? 'Tambah Profil' : 'Tambah Pengurus';
     document.getElementById('addJabatanWrap').classList.toggle('hidden', aboutState.active !== 'struktur');
     document.getElementById('aboutAddForm').reset();
+
     const modal = document.getElementById('aboutAddModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+    setSubmitLoading(false, false);
   }
 
   function closeAddAbout() {
     const modal = document.getElementById('aboutAddModal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
+    aboutState.isSubmitting = false;
+    setSubmitLoading(false, false);
   }
 
-  document.getElementById('tabUmum').addEventListener('click', () => { aboutState.active = 'umum'; paintTabs(); renderAboutRows(); });
-  document.getElementById('tabStruktur').addEventListener('click', () => { aboutState.active = 'struktur'; paintTabs(); renderAboutRows(); });
-  document.getElementById('aboutSearch').addEventListener('input', function (e) { aboutState.search = e.target.value; renderAboutRows(); });
+  document.getElementById('tabUmum').addEventListener('click', () => {
+    aboutState.active = 'umum';
+    paintTabs();
+    renderAboutRows();
+  });
+
+  document.getElementById('tabStruktur').addEventListener('click', () => {
+    aboutState.active = 'struktur';
+    paintTabs();
+    renderAboutRows();
+  });
+
+  document.getElementById('aboutSearch').addEventListener('input', function (e) {
+    aboutState.search = e.target.value;
+    renderAboutRows();
+  });
+
   document.getElementById('openAboutAdd').addEventListener('click', openAddAbout);
   document.getElementById('cancelDeleteAbout').addEventListener('click', closeDeleteAbout);
-  document.getElementById('confirmDeleteAbout').addEventListener('click', function () {
-    if (aboutState.deletingId !== null) {
-      if (aboutState.active === 'umum') aboutState.umum = aboutState.umum.filter((v) => v.id !== aboutState.deletingId);
-      else aboutState.struktur = aboutState.struktur.filter((v) => v.id !== aboutState.deletingId);
+
+  document.getElementById('confirmDeleteAbout').addEventListener('click', async function () {
+    if (aboutState.deletingId === null || aboutState.isDeleting) {
+      return;
     }
-    closeDeleteAbout();
-    renderAboutRows();
+
+    aboutState.isDeleting = true;
+    setDeleteLoading(true);
+
+    try {
+      await requestAbout(`${aboutBaseUrl}/${aboutState.deletingId}`, 'DELETE', {});
+      aboutState.umum = aboutState.umum.filter((v) => v.id !== aboutState.deletingId);
+      aboutState.struktur = aboutState.struktur.filter((v) => v.id !== aboutState.deletingId);
+      closeDeleteAbout();
+      renderAboutRows();
+    } catch (error) {
+      window.alert(error.message);
+      aboutState.isDeleting = false;
+      setDeleteLoading(false);
+    }
   });
 
   document.getElementById('closeAboutEdit').addEventListener('click', closeEditAbout);
   document.getElementById('cancelAboutEdit').addEventListener('click', closeEditAbout);
-  document.getElementById('aboutEditForm').addEventListener('submit', function (e) {
+  document.getElementById('aboutEditForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const payload = { jabatan: document.getElementById('editJabatan').value, nama: document.getElementById('editNama').value, description: document.getElementById('editDesc').value };
-    if (aboutState.active === 'umum') aboutState.umum = aboutState.umum.map((v) => v.id === aboutState.editingId ? { ...v, ...payload } : v);
-    else aboutState.struktur = aboutState.struktur.map((v) => v.id === aboutState.editingId ? { ...v, ...payload } : v);
-    closeEditAbout();
-    renderAboutRows();
+
+    if (aboutState.isSubmitting || aboutState.editingId === null) {
+      return;
+    }
+
+    const payload = {
+      section: aboutState.editingSection || currentSectionValue(),
+      jabatan: (aboutState.editingSection || currentSectionValue()) === 'structure' ? document.getElementById('editJabatan').value : null,
+      nama: document.getElementById('editNama').value,
+      description: document.getElementById('editDesc').value,
+      image_url: document.getElementById('editImageUrl').value || null,
+    };
+
+    aboutState.isSubmitting = true;
+    setSubmitLoading(true, true);
+
+    try {
+      const result = await requestAbout(`${aboutBaseUrl}/${aboutState.editingId}`, 'PUT', payload);
+      const normalized = normalizeAboutItem(result.data || {}, payload.section);
+
+      if (normalized.section === 'general') {
+        aboutState.umum = aboutState.umum.map((v) => v.id === normalized.id ? normalized : v);
+        aboutState.struktur = aboutState.struktur.filter((v) => v.id !== normalized.id);
+      } else {
+        aboutState.struktur = aboutState.struktur.map((v) => v.id === normalized.id ? normalized : v);
+        aboutState.umum = aboutState.umum.filter((v) => v.id !== normalized.id);
+      }
+
+      closeEditAbout();
+      renderAboutRows();
+    } catch (error) {
+      window.alert(error.message);
+      aboutState.isSubmitting = false;
+      setSubmitLoading(false, true);
+    }
   });
 
   document.getElementById('closeAboutAdd').addEventListener('click', closeAddAbout);
   document.getElementById('cancelAboutAdd').addEventListener('click', closeAddAbout);
-  document.getElementById('aboutAddForm').addEventListener('submit', function (e) {
+  document.getElementById('aboutAddForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const payload = { id: Date.now(), jabatan: document.getElementById('addJabatan').value, nama: document.getElementById('addNama').value, description: document.getElementById('addDesc').value, imageUrl: '' };
-    if (aboutState.active === 'umum') aboutState.umum.push(payload);
-    else aboutState.struktur.push(payload);
-    closeAddAbout();
-    renderAboutRows();
+
+    if (aboutState.isSubmitting) {
+      return;
+    }
+
+    const payload = {
+      section: currentSectionValue(),
+      jabatan: aboutState.active === 'struktur' ? document.getElementById('addJabatan').value : null,
+      nama: document.getElementById('addNama').value,
+      description: document.getElementById('addDesc').value,
+      image_url: document.getElementById('addImageUrl').value || null,
+    };
+
+    aboutState.isSubmitting = true;
+    setSubmitLoading(true, false);
+
+    try {
+      const result = await requestAbout(aboutStoreUrl, 'POST', payload);
+      const normalized = normalizeAboutItem(result.data || {}, payload.section);
+
+      if (normalized.section === 'general') {
+        aboutState.umum.unshift(normalized);
+      } else {
+        aboutState.struktur.unshift(normalized);
+      }
+
+      closeAddAbout();
+      renderAboutRows();
+    } catch (error) {
+      window.alert(error.message);
+      aboutState.isSubmitting = false;
+      setSubmitLoading(false, false);
+    }
   });
 
   paintTabs();

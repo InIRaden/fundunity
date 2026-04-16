@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AboutUsItem;
 use App\Models\Campaign;
+use App\Models\Faq;
 use App\Models\FocusArea;
 use App\Models\GalleryItem;
 use App\Models\ImageSlider;
 use App\Models\Message;
+use App\Models\SiteSetting;
 use Illuminate\View\View;
 
 class AdminUiController extends Controller
@@ -105,28 +107,21 @@ class AdminUiController extends Controller
 
     public function faqs(): View
     {
-        $faqs = [
-            [
-                'id' => 1,
-                'question' => 'Apakah organisasi ini sah dan memiliki legalitas resmi?',
-                'answer' => 'Ya, kami terdaftar resmi dan diakui secara institusional sesuai bentuk organisasi kami, serta memiliki pedoman transparansi yang jelas dan rutin diaudit.',
-            ],
-            [
-                'id' => 2,
-                'question' => 'Apakah saya bisa berdonasi tanpa mencantumkan nama (Anonim)?',
-                'answer' => 'Tentu. Saat mengisi formulir donasi, Anda bisa menyembunyikan identitas Anda. Laporan transaksi publik hanya akan menampilkan status Hamba Allah atau Inisial.',
-            ],
-            [
-                'id' => 3,
-                'question' => 'Bagaimana saya memastikan dana disalurkan ke tempat yang tepat?',
-                'answer' => 'Setiap kampanye memiliki pembaruan (Update) secara berkala yang memuat laporan foto, kuitansi, dan rincian penyaluran yang dapat diverifikasi semua orang di menu Transparansi.',
-            ],
-            [
-                'id' => 4,
-                'question' => 'Berapa persen potongan administrasi dari donasi saya?',
-                'answer' => 'Sistem mengenakan potongan platform/payment gateway (maksimal 5%) untuk menjaga kelangsungan infrastruktur server. Selebihnya disalurkan penuh ke penerima manfaat.',
-            ],
-        ];
+        $faqs = Faq::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (Faq $faq): array {
+                return [
+                    'id' => $faq->id,
+                    'question' => $faq->question,
+                    'answer' => $faq->answer,
+                    'category' => $faq->category,
+                    'sort_order' => $faq->sort_order,
+                    'is_active' => (bool) $faq->is_active,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Tanya Jawab',
@@ -450,14 +445,30 @@ class AdminUiController extends Controller
 
     public function websiteIdentity(): View
     {
+        $settingKeys = [
+            'site_name',
+            'site_short_name',
+            'identity_tagline',
+            'email',
+            'phone',
+            'instagram_url',
+            'address',
+            'site_logo',
+        ];
+
+        $settings = SiteSetting::query()
+            ->whereIn('key', $settingKeys)
+            ->pluck('value', 'key');
+
         $identity = [
-            'orgName' => 'Komunitas Ruang Berbagi',
-            'shortName' => 'FundUnity',
-            'tagline' => 'Bangun komunitas, kelola donasi.',
-            'email' => 'halo@fundunity.id',
-            'phone' => '0812-3456-7890',
-            'instagram' => '@fundunity',
-            'address' => 'Jl. Kolaborasi Sosial No. 17, Bandung',
+            'orgName' => $settings->get('site_name') ?: 'Komunitas Ruang Berbagi',
+            'shortName' => $settings->get('site_short_name') ?: 'FundUnity',
+            'tagline' => $settings->get('identity_tagline') ?: 'Bangun komunitas, kelola donasi.',
+            'email' => $settings->get('email') ?: 'halo@fundunity.id',
+            'phone' => $settings->get('phone') ?: '0812-3456-7890',
+            'instagramUrl' => $settings->get('instagram_url') ?: 'https://instagram.com/fundunity',
+            'address' => $settings->get('address') ?: 'Jl. Kolaborasi Sosial No. 17, Bandung',
+            'logoUrl' => $settings->get('site_logo') ?: 'https://via.placeholder.com/256x256/22c55e/ffffff?text=FU',
         ];
 
         $pageMeta = [

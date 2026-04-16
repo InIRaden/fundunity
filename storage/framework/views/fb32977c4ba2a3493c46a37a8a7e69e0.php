@@ -47,9 +47,21 @@
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">URL Foto Utama</label>
-          <input id="galleryImageUrl" required type="url" class="w-full border border-slate-200 rounded-2xl px-5 py-3.5 text-sm bg-slate-50/50 outline-none focus:border-emerald-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-300" placeholder="https://...">
+        <div class="space-y-3">
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest">Sumber Foto Utama</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="gallerySourceUrl" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-600 text-white transition-colors">Gunakan URL</button>
+            <button id="gallerySourceUpload" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-600 transition-colors">Upload File</button>
+          </div>
+
+          <div id="galleryUrlWrap">
+            <input id="galleryImageUrl" type="url" class="w-full border border-slate-200 rounded-2xl px-5 py-3.5 text-sm bg-slate-50/50 outline-none focus:border-emerald-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-300" placeholder="https://...">
+          </div>
+
+          <div id="galleryFileWrap" class="hidden">
+            <input id="galleryImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm bg-slate-50/50 outline-none focus:border-emerald-500 transition-all file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 file:font-semibold">
+            <p class="text-xs text-slate-400 mt-2">Format: JPG, PNG, WEBP. Maksimal 4MB.</p>
+          </div>
         </div>
       </div>
 
@@ -88,18 +100,28 @@
     search: '',
     editingId: null,
     isSubmitting: false,
+    sourceType: 'url',
   };
 
-  async function requestGallery(url, method, payload) {
-    const response = await fetch(url, {
+  async function requestGallery(url, method, payload, isFormData = false) {
+    const options = {
       method,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
       },
-      body: JSON.stringify(payload),
-    });
+    };
+
+    if (method !== 'GET') {
+      if (isFormData) {
+        options.body = payload;
+      } else {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(payload || {});
+      }
+    }
+
+    const response = await fetch(url, options);
 
     const json = await response.json().catch(() => ({}));
 
@@ -121,6 +143,33 @@
     button.innerHTML = loading
       ? '<i class="ph ph-spinner-gap animate-spin text-base"></i> Menyimpan...'
       : (galleryState.editingId ? 'Simpan Perubahan' : 'Simpan Dokumentasi');
+  }
+
+  function setGallerySourceType(type) {
+    galleryState.sourceType = type;
+
+    const urlButton = document.getElementById('gallerySourceUrl');
+    const uploadButton = document.getElementById('gallerySourceUpload');
+    const urlWrap = document.getElementById('galleryUrlWrap');
+    const fileWrap = document.getElementById('galleryFileWrap');
+
+    const activeClass = ['border-emerald-600', 'bg-emerald-600', 'text-white'];
+    const inactiveClass = ['border-slate-200', 'bg-white', 'text-slate-600'];
+
+    urlButton.classList.remove(...activeClass, ...inactiveClass);
+    uploadButton.classList.remove(...activeClass, ...inactiveClass);
+
+    if (type === 'upload') {
+      uploadButton.classList.add(...activeClass);
+      urlButton.classList.add(...inactiveClass);
+      fileWrap.classList.remove('hidden');
+      urlWrap.classList.add('hidden');
+    } else {
+      urlButton.classList.add(...activeClass);
+      uploadButton.classList.add(...inactiveClass);
+      urlWrap.classList.remove('hidden');
+      fileWrap.classList.add('hidden');
+    }
   }
 
   function filteredGallery() {
@@ -163,12 +212,15 @@
       document.getElementById('galleryCategory').value = found.category;
       document.getElementById('galleryDate').value = found.date || '';
       document.getElementById('galleryImageUrl').value = found.imageUrl || '';
+      document.getElementById('galleryImageFile').value = '';
+      setGallerySourceType('url');
     } else {
       galleryState.editingId = null;
       document.getElementById('galleryEditingId').value = '';
       document.getElementById('galleryModalTitle').textContent = 'Dokumentasi Baru';
       document.getElementById('galleryModalSub').textContent = 'Unggah bukti kegiatan lapangan untuk transparansi publik.';
       document.getElementById('galleryForm').reset();
+      setGallerySourceType('url');
     }
 
     setGallerySubmitLoading(false);
@@ -217,6 +269,8 @@
   document.getElementById('openGalleryModal').addEventListener('click', () => openGalleryModal(null));
   document.getElementById('closeGalleryModal').addEventListener('click', closeGalleryModal);
   document.getElementById('cancelGalleryModal').addEventListener('click', closeGalleryModal);
+  document.getElementById('gallerySourceUrl').addEventListener('click', () => setGallerySourceType('url'));
+  document.getElementById('gallerySourceUpload').addEventListener('click', () => setGallerySourceType('upload'));
   document.getElementById('galleryForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -224,23 +278,38 @@
       return;
     }
 
-    const payload = {
-      title: document.getElementById('galleryTitle').value,
-      category: document.getElementById('galleryCategory').value,
-      activity_date: document.getElementById('galleryDate').value || null,
-      image_url: document.getElementById('galleryImageUrl').value,
-    };
+    const formData = new FormData();
+    formData.append('title', document.getElementById('galleryTitle').value);
+    formData.append('category', document.getElementById('galleryCategory').value);
+
+    const activityDate = document.getElementById('galleryDate').value;
+    if (activityDate) {
+      formData.append('activity_date', activityDate);
+    }
+
+    if (galleryState.sourceType === 'upload') {
+      const file = document.getElementById('galleryImageFile').files?.[0];
+      if (file) {
+        formData.append('image_file', file);
+      }
+    } else {
+      const imageUrl = document.getElementById('galleryImageUrl').value.trim();
+      if (imageUrl) {
+        formData.append('image_url', imageUrl);
+      }
+    }
 
     galleryState.isSubmitting = true;
     setGallerySubmitLoading(true);
 
     try {
       if (galleryState.editingId) {
-        const result = await requestGallery(`${galleryBaseUrl}/${galleryState.editingId}`, 'PUT', payload);
+        formData.append('_method', 'PUT');
+        const result = await requestGallery(`${galleryBaseUrl}/${galleryState.editingId}`, 'POST', formData, true);
         const normalized = normalizeGalleryItem(result.data || {});
         galleryState.items = galleryState.items.map((item) => item.id === galleryState.editingId ? normalized : item);
       } else {
-        const result = await requestGallery(galleryStoreUrl, 'POST', payload);
+        const result = await requestGallery(galleryStoreUrl, 'POST', formData, true);
         galleryState.items.unshift(normalizeGalleryItem(result.data || {}));
       }
 

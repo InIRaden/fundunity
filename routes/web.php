@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\CampaignController as AdminCampaignController;
 use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\AboutUsController as AdminAboutUsController;
 use App\Http\Controllers\Admin\ImageSliderController as AdminImageSliderController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Admin\IdentityController as AdminIdentityController;
 use App\Http\Controllers\Admin\AdminUiController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -106,6 +108,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'destroyFromAdminPage'])->name('focusareas.destroy');
 
     Route::get('/faqs', [AdminUiController::class, 'faqs'])->name('faqs');
+    Route::post('/faqs', [AdminFaqController::class, 'store'])->name('faqs.store');
+    Route::put('/faqs/{faq}', [AdminFaqController::class, 'update'])->name('faqs.update');
+    Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
     Route::get('/partners', [AdminUiController::class, 'partners'])->name('partners');
     Route::get('/gallery', [AdminUiController::class, 'gallery'])->name('gallery');
     Route::post('/gallery', [AdminGalleryController::class, 'store'])->name('gallery.store');
@@ -118,6 +123,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
 
     Route::get('/identity', [AdminUiController::class, 'websiteIdentity'])->name('identity');
+    Route::put('/identity', [AdminIdentityController::class, 'update'])->name('identity.update');
     Route::get('/landing-manager', [AdminUiController::class, 'landingManager'])->name('landing-manager');
 
     Route::resource('programs', AdminProgramController::class)->except(['show']);
