@@ -64,7 +64,7 @@
             Setiap kontribusi Anda akan membawa perubahan nyata bagi mereka yang membutuhkan
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#" class="bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition">
+            <a href="{{ route('donation.form') }}" class="bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition">
                 Donasi Sekarang
             </a>
             <a href="{{ route('get-involved') }}" class="bg-white border-2 border-green-600 text-green-600 px-8 py-4 rounded-full font-semibold hover:bg-green-50 transition">

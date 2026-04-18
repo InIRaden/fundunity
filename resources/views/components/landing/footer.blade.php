@@ -10,6 +10,19 @@
                 <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
                     {{ $siteSettings['newsletter_description'] ?? 'Dapatkan pembaruan terbaru seputar program, kisah inspiratif, dan kesempatan berkontribusi.' }}
                 </p>
+
+                @if(session('newsletter_success'))
+                    <div class="mb-4 rounded-xl border border-emerald-300 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-200 max-w-xl mx-auto">
+                        {{ session('newsletter_success') }}
+                    </div>
+                @endif
+
+                @if(session('newsletter_error'))
+                    <div class="mb-4 rounded-xl border border-rose-300 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-200 max-w-xl mx-auto">
+                        {{ session('newsletter_error') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('newsletter.subscribe') }}" class="flex flex-col sm:flex-row items-center gap-4 max-w-xl mx-auto">
                     @csrf
                     <input
@@ -39,15 +52,15 @@
                 {{ $siteSettings['footer_tagline'] ?? 'Membantu individu dan organisasi mendukung berbagai aksi nyata demi dunia yang lebih baik.' }}
             </p>
             <div class="flex items-center gap-3 text-gray-300 hover:text-white transition">
-                <x-icons.phone class="flex-shrink-0" />
+                <x-icons.phone class="w-5 h-5 flex-shrink-0" />
                 <span>{{ $siteSettings['phone'] ?? '0821 - 1677 - 1146' }}</span>
             </div>
             <div class="flex items-center gap-3 text-gray-300 hover:text-white transition">
-                <x-icons.envelope class="flex-shrink-0" />
+                <x-icons.envelope class="w-5 h-5 flex-shrink-0" />
                 <span>{{ $siteSettings['email'] ?? 'komunitasruangberbagi@gmail.com' }}</span>
             </div>
             <div class="flex items-center gap-3 text-gray-300 hover:text-white transition">
-                <x-icons.location-dot class="flex-shrink-0" />
+                <x-icons.location-dot class="w-5 h-5 flex-shrink-0" />
                 <span>{{ $siteSettings['address'] ?? 'Bandung, Jawa Barat, Indonesia' }}</span>
             </div>
         </div>

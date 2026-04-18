@@ -56,7 +56,8 @@
 
                 {{-- Donasi Button --}}
                 <a
-                    href="{{ $siteSettings['nav_donate_button_url'] ?? route('get-involved') }}"
+                    href="{{ route('donation.form') }}"
+                    data-donation-trigger="modal"
                     class="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition font-medium shadow-md"
                 >
                     {{ $siteSettings['nav_donate_button_text'] ?? 'Donasi Sekarang' }}
@@ -86,7 +87,7 @@
             <a href="{{ $siteSettings['nav_programs_url'] ?? route('programs') }}" class="block px-3 py-2 text-white hover:bg-gray-800 rounded">{{ $siteSettings['nav_programs_label'] ?? 'Program' }}</a>
             <a href="{{ $siteSettings['nav_focus_areas_url'] ?? route('focus-areas') }}" class="block px-3 py-2 text-white hover:bg-gray-800 rounded">{{ $siteSettings['nav_focus_areas_label'] ?? 'Fokus Utama' }}</a>
             <a href="{{ $siteSettings['nav_faq_url'] ?? route('faq') }}" class="block px-3 py-2 text-white hover:bg-gray-800 rounded">{{ $siteSettings['nav_faq_label'] ?? 'FAQ' }}</a>
-            <a href="{{ $siteSettings['nav_donate_button_url'] ?? route('get-involved') }}" class="block px-3 py-2 bg-blue-600 text-white rounded-lg">{{ $siteSettings['nav_donate_button_text'] ?? 'Donasi Sekarang' }}</a>
+            <a href="{{ route('donation.form') }}" data-donation-trigger="modal" class="block px-3 py-2 bg-blue-600 text-white rounded-lg">{{ $siteSettings['nav_donate_button_text'] ?? 'Donasi Sekarang' }}</a>
         </div>
     </div>
 </nav>

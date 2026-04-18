@@ -1,46 +1,49 @@
-@extends('layouts.landing')
+<?php $__env->startSection('title', $page->meta_title ?? 'Bersama Ciptakan Perubahan'); ?>
 
-@section('title', $page->meta_title ?? 'Bersama Ciptakan Perubahan')
-
-@section('content')
-@php
+<?php $__env->startSection('content'); ?>
+<?php
     $sliderItems = collect($sliderItems ?? []);
     $homePrograms = collect($homePrograms ?? []);
     $homeGallery = collect($homeGallery ?? []);
     $homePartners = collect($homePartners ?? []);
     $donationErrors = $errors->getBag('donation');
-@endphp
+?>
 
 <main class="p-8">
-    @if(session('donation_success'))
+    <?php if(session('donation_success')): ?>
         <div class="fixed top-24 right-4 z-[95] rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 shadow-lg">
-            {{ session('donation_success') }}
+            <?php echo e(session('donation_success')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
     <section class="relative min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
-        style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ $page->hero_image ?? 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80' }}') center/cover no-repeat;">
+        style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo e($page->hero_image ?? 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80'); ?>') center/cover no-repeat;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="max-w-4xl">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-lg mb-2 sm:mb-3 font-['Poppins']">
-                    {{ $page->hero_title ?? 'Bersama, Ciptakan Perubahan bersama Komunitas Ruang Berbagi' }}
+                    <?php echo e($page->hero_title ?? 'Bersama, Ciptakan Perubahan bersama Komunitas Ruang Berbagi'); ?>
+
                 </h1>
                 <p class="text-base sm:text-lg md:text-xl text-blue-100 max-w-2xl drop-shadow mb-2 sm:mb-3 leading-relaxed">
-                    {{ $page->hero_subtitle ?? 'Bergabunglah bersama kami untuk memberi dampak nyata bagi yang membutuhkan dan membangun masa depan yang lebih baik.' }}
+                    <?php echo e($page->hero_subtitle ?? 'Bergabunglah bersama kami untuk memberi dampak nyata bagi yang membutuhkan dan membangun masa depan yang lebih baik.'); ?>
+
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3">
                     <a
-                        href="{{ $page->hero_btn_primary_url ?? route('get-involved') }}"
+                        href="<?php echo e($page->hero_btn_primary_url ?? route('get-involved')); ?>"
                         class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-blue-400 text-white font-semibold rounded-lg shadow-lg hover:brightness-110 transition transform hover:scale-105 text-sm sm:text-base text-center"
                     >
-                        {{ $page->hero_btn_primary_text ?? 'Ayo Mulai Bergerak' }}
+                        <?php echo e($page->hero_btn_primary_text ?? 'Ayo Mulai Bergerak'); ?>
+
                     </a>
                     <a
-                        href="{{ route('donation.form') }}"
+                        href="<?php echo e(route('donation.form')); ?>"
                         data-donation-trigger="modal"
                         class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition transform hover:scale-105 text-sm sm:text-base text-center"
                     >
-                        {{ $page->hero_btn_secondary_text ?? 'Donasi Sekarang' }}
+                        <?php echo e($page->hero_btn_secondary_text ?? 'Donasi Sekarang'); ?>
+
                     </a>
                 </div>
             </div>
@@ -57,28 +60,28 @@
             </header>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @if(isset($homeVideo) && $homeVideo)
+                <?php if(isset($homeVideo) && $homeVideo): ?>
                     <div class="bg-white shadow-xl rounded-2xl overflow-hidden transition-transform duration-500 hover:scale-105">
                         <div class="relative w-full h-[320px]">
-                            <iframe src="{{ $homeVideo->url }}" title="Video galeri" allowfullscreen class="w-full h-full"></iframe>
+                            <iframe src="<?php echo e($homeVideo->url); ?>" title="Video galeri" allowfullscreen class="w-full h-full"></iframe>
                         </div>
                         <div class="p-5 text-center">
-                            <p class="text-lg font-extrabold text-slate-800">{{ $homeVideo->title }}</p>
+                            <p class="text-lg font-extrabold text-slate-800"><?php echo e($homeVideo->title); ?></p>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                @foreach($homeGallery->take(2) as $item)
+                <?php $__currentLoopData = $homeGallery->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="bg-white shadow-xl rounded-2xl overflow-hidden">
-                        <img src="{{ $item->thumbnail ?: $item->url }}" alt="{{ $item->title }}" class="w-full h-[320px] object-cover">
+                        <img src="<?php echo e($item->thumbnail ?: $item->url); ?>" alt="<?php echo e($item->title); ?>" class="w-full h-[320px] object-cover">
                         <div class="p-5">
-                            <p class="font-bold text-slate-800">{{ $item->title }}</p>
-                            @if($item->caption)
-                                <p class="text-sm text-slate-500 mt-1">{{ $item->caption }}</p>
-                            @endif
+                            <p class="font-bold text-slate-800"><?php echo e($item->title); ?></p>
+                            <?php if($item->caption): ?>
+                                <p class="text-sm text-slate-500 mt-1"><?php echo e($item->caption); ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </section>
@@ -86,19 +89,19 @@
     <section class="relative w-full max-w-6xl mx-auto py-10 px-4">
         <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Galeri Slider</h2>
         <div class="flex overflow-x-auto scroll-smooth gap-6 pb-4">
-            @forelse($sliderItems as $slider)
+            <?php $__empty_1 = true; $__currentLoopData = $sliderItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <article class="min-w-[280px] bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                    <img src="{{ $slider->image_url }}" alt="{{ $slider->title }}" class="w-full h-44 object-cover">
+                    <img src="<?php echo e($slider->image_url); ?>" alt="<?php echo e($slider->title); ?>" class="w-full h-44 object-cover">
                     <div class="p-4">
-                        <h3 class="font-bold text-slate-800">{{ $slider->title }}</h3>
-                        @if($slider->description)
-                            <p class="text-sm text-slate-500 mt-1">{{ $slider->description }}</p>
-                        @endif
+                        <h3 class="font-bold text-slate-800"><?php echo e($slider->title); ?></h3>
+                        <?php if($slider->description): ?>
+                            <p class="text-sm text-slate-500 mt-1"><?php echo e($slider->description); ?></p>
+                        <?php endif; ?>
                     </div>
                 </article>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="text-center w-full text-slate-500">Belum ada slider aktif.</p>
-            @endforelse
+            <?php endif; ?>
         </div>
     </section>
 
@@ -108,26 +111,26 @@
         </h2>
 
         <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
-            @forelse($homePrograms as $program)
+            <?php $__empty_1 = true; $__currentLoopData = $homePrograms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $program): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <article class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-md">
-                    @if($program->image)
-                        <img src="{{ $program->image }}" alt="{{ $program->title }}" class="w-full h-44 object-cover">
-                    @endif
+                    <?php if($program->image): ?>
+                        <img src="<?php echo e($program->image); ?>" alt="<?php echo e($program->title); ?>" class="w-full h-44 object-cover">
+                    <?php endif; ?>
                     <div class="p-5">
-                        <h3 class="font-bold text-lg text-slate-800">{{ $program->title }}</h3>
-                        <p class="text-sm text-slate-600 mt-2 line-clamp-3">{{ $program->short_description }}</p>
-                        @if($program->category)
-                            <span class="inline-block mt-3 text-xs font-bold px-2 py-1 bg-blue-50 text-blue-700 rounded-md">{{ $program->category }}</span>
-                        @endif
+                        <h3 class="font-bold text-lg text-slate-800"><?php echo e($program->title); ?></h3>
+                        <p class="text-sm text-slate-600 mt-2 line-clamp-3"><?php echo e($program->short_description); ?></p>
+                        <?php if($program->category): ?>
+                            <span class="inline-block mt-3 text-xs font-bold px-2 py-1 bg-blue-50 text-blue-700 rounded-md"><?php echo e($program->category); ?></span>
+                        <?php endif; ?>
                     </div>
                 </article>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="col-span-full text-center text-slate-500">Belum ada program aktif.</p>
-            @endforelse
+            <?php endif; ?>
         </div>
 
         <div class="mt-12">
-            <a href="{{ route('programs') }}" class="inline-block bg-transparent border-2 border-blue-700 text-blue-700 font-semibold py-3 px-10 rounded-full hover:bg-blue-700 hover:text-white transition-colors duration-300 shadow-md">
+            <a href="<?php echo e(route('programs')); ?>" class="inline-block bg-transparent border-2 border-blue-700 text-blue-700 font-semibold py-3 px-10 rounded-full hover:bg-blue-700 hover:text-white transition-colors duration-300 shadow-md">
                 Lihat Semua Program
             </a>
         </div>
@@ -142,16 +145,16 @@
         </div>
 
         <div class="max-w-[1000px] mx-auto px-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @forelse($homePartners as $partner)
+            <?php $__empty_1 = true; $__currentLoopData = $homePartners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <article class="bg-white rounded-2xl border border-slate-100 p-4 flex flex-col items-center justify-center shadow-sm">
-                    @if($partner->logo)
-                        <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" class="h-14 w-auto object-contain">
-                    @endif
-                    <p class="mt-3 text-xs font-semibold text-slate-700 text-center">{{ $partner->name }}</p>
+                    <?php if($partner->logo): ?>
+                        <img src="<?php echo e($partner->logo); ?>" alt="<?php echo e($partner->name); ?>" class="h-14 w-auto object-contain">
+                    <?php endif; ?>
+                    <p class="mt-3 text-xs font-semibold text-slate-700 text-center"><?php echo e($partner->name); ?></p>
                 </article>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="col-span-full text-center text-slate-500">Belum ada data partner aktif.</p>
-            @endforelse
+            <?php endif; ?>
         </div>
     </section>
 
@@ -163,23 +166,23 @@
 
             <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-700 text-center mb-5">Formulir Donasi</h2>
 
-            @if($donationErrors->any())
+            <?php if($donationErrors->any()): ?>
                 <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                     <ul class="list-disc list-inside space-y-1">
-                        @foreach($donationErrors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                        <?php $__currentLoopData = $donationErrors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <form action="{{ route('donation.store') }}" method="POST" class="space-y-3">
-                @csrf
+            <form action="<?php echo e(route('donation.store')); ?>" method="POST" class="space-y-3">
+                <?php echo csrf_field(); ?>
 
                 <input
                     name="name"
                     type="text"
-                    value="{{ old('name') }}"
+                    value="<?php echo e(old('name')); ?>"
                     placeholder="Nama Lengkap"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                     required
@@ -188,7 +191,7 @@
                 <input
                     name="email"
                     type="email"
-                    value="{{ old('email') }}"
+                    value="<?php echo e(old('email')); ?>"
                     placeholder="Alamat Email (hanya Gmail)"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                     required
@@ -198,7 +201,7 @@
                     name="amount"
                     type="number"
                     min="1000"
-                    value="{{ old('amount') }}"
+                    value="<?php echo e(old('amount')); ?>"
                     placeholder="Jumlah Donasi (IDR)"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                     required
@@ -209,7 +212,7 @@
                     rows="3"
                     placeholder="Tulis pesan atau keterangan (opsional)"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none"
-                >{{ old('note') }}</textarea>
+                ><?php echo e(old('note')); ?></textarea>
 
                 <button
                     type="submit"
@@ -222,13 +225,13 @@
     </div>
 </main>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const modal = document.getElementById('homeDonationModal');
         const closeButton = document.getElementById('closeHomeDonationModal');
         const donationTriggers = document.querySelectorAll('[data-donation-trigger="modal"]');
-        const hasDonationErrors = @json($donationErrors->any());
+        const hasDonationErrors = <?php echo json_encode($donationErrors->any(), 15, 512) ?>;
 
         if (!modal) {
             return;
@@ -274,6 +277,8 @@
         }
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.landing', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/landing/home.blade.php ENDPATH**/ ?>

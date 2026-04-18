@@ -19,6 +19,70 @@ use Illuminate\View\View;
 
 class AdminUiController extends Controller
 {
+    public function dashboard(): View
+    {
+        $totalCollected = (int) Campaign::sum('collected');
+        $totalTarget = (int) Campaign::sum('target');
+        $totalDistributed = (int) Beneficiary::sum('assistance_value');
+
+        $activeCampaignCount = Campaign::where('status', 'aktif')->count();
+        $nearDeadlineCount = Campaign::where('status', 'aktif')
+            ->whereDate('deadline', '>=', now()->toDateString())
+            ->whereDate('deadline', '<=', now()->addDays(7)->toDateString())
+            ->count();
+
+        $donorCount = Donor::where('is_active', true)->count();
+        $newDonorThisWeek = Donor::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+
+        $completionRate = $this->ratioPercent($totalCollected, $totalTarget);
+        $distributionRate = $this->ratioPercent($totalDistributed, $totalCollected);
+
+        $stats = [
+            [
+                'icon' => 'ph ph-wallet',
+                'title' => 'Total Dana Terkumpul',
+                'value' => $this->formatCurrencyShort($totalCollected),
+                'change' => $completionRate.'% dari target',
+                'trend' => $completionRate >= 50 ? 'up' : 'down',
+            ],
+            [
+                'icon' => 'ph ph-hand-heart',
+                'title' => 'Telah Disalurkan',
+                'value' => $this->formatCurrencyShort($totalDistributed),
+                'change' => $distributionRate.'% tersalur',
+                'trend' => $distributionRate >= 50 ? 'up' : 'down',
+            ],
+            [
+                'icon' => 'ph ph-chart-line-up',
+                'title' => 'Campaign Berjalan',
+                'value' => $activeCampaignCount.' Aktif',
+                'change' => $nearDeadlineCount.' hampir timeout',
+                'trend' => $nearDeadlineCount > 0 ? 'down' : 'up',
+            ],
+            [
+                'icon' => 'ph ph-users',
+                'title' => 'Basis Donatur',
+                'value' => number_format($donorCount, 0, ',', '.'),
+                'change' => ($newDonorThisWeek > 0 ? '+' : '').$newDonorThisWeek.' minggu ini',
+                'trend' => $newDonorThisWeek > 0 ? 'up' : 'down',
+            ],
+        ];
+
+        $feedItems = $this->buildDashboardFeedItems();
+
+        $selectedFilter = '6 Bulan Terakhir';
+        $filterOpen = false;
+        $filterOptions = ['6 Bulan Terakhir', 'Tahun Ini', 'Tahun Lalu'];
+
+        $pageMeta = [
+            'title' => 'Dashboard Admin',
+            'subtitle' => 'Pantau metrik dan aktivitas FundUnity',
+        ];
+
+        return view('admin.home', compact('stats', 'feedItems', 'selectedFilter', 'filterOpen', 'filterOptions', 'pageMeta'))
+            ->with('sidebarWidth', '256px');
+    }
+
     public function aboutUs(): View
     {
         $generalProfile = AboutUsItem::where('section', 'general')
@@ -170,41 +234,76 @@ class AdminUiController extends Controller
 
     public function notifications(): View
     {
-        $activities = [
-            [
-                'icon' => 'ph ph-lock-key',
-                'title' => 'Admin login ke sistem',
-                'description' => 'Akses panel admin berhasil dari perangkat terdaftar.',
-                'timestamp' => now()->subMinutes(35),
-                'type' => 'login',
-                'user' => 'admin@fundunity.id',
-                'ip' => '192.168.1.10',
-            ],
-            [
-                'icon' => 'ph ph-money',
-                'title' => 'Donasi baru diterima',
-                'description' => 'Donasi masuk Rp 1.500.000 untuk campaign Pendidikan.',
-                'timestamp' => now()->subHours(3),
-                'type' => 'donation',
-                'user' => 'Sistem',
-                'ip' => '127.0.0.1',
-            ],
-            [
-                'icon' => 'ph ph-megaphone',
-                'title' => 'Campaign diperbarui',
-                'description' => 'Deadline campaign Tanggap Banjir diperpanjang 7 hari.',
-                'timestamp' => now()->subDay(),
-                'type' => 'campaign',
-                'user' => 'Nadia Putri',
-                'ip' => '192.168.1.21',
-            ],
-        ];
+        $activities = collect();
+
+        $activities = $activities
+            ->merge(
+                Message::orderByDesc('created_at')
+                    ->limit(8)
+                    ->get()
+                    ->map(function (Message $message): array {
+                        return [
+                            'icon' => 'ph ph-chat-circle-text',
+                            'title' => 'Pesan kontak baru diterima',
+                            'description' => 'Pesan dari '.$message->name.' ('.$message->email.').',
+                            'timestamp' => $message->created_at,
+                            'type' => 'user',
+                            'user' => $message->name,
+                            'ip' => '-',
+                        ];
+                    })
+            )
+            ->merge(
+                Donor::orderByDesc('created_at')
+                    ->limit(8)
+                    ->get()
+                    ->map(function (Donor $donor): array {
+                        return [
+                            'icon' => 'ph ph-money',
+                            'title' => 'Donasi donatur tercatat',
+                            'description' => 'Donasi '.$this->formatCurrency((int) $donor->total_donation).' oleh '.$donor->name.'.',
+                            'timestamp' => $donor->last_donation ?? $donor->created_at,
+                            'type' => 'donation',
+                            'user' => $donor->name,
+                            'ip' => '-',
+                        ];
+                    })
+            )
+            ->merge(
+                Campaign::orderByDesc('updated_at')
+                    ->limit(8)
+                    ->get()
+                    ->map(function (Campaign $campaign): array {
+                        return [
+                            'icon' => 'ph ph-megaphone',
+                            'title' => 'Campaign diperbarui',
+                            'description' => 'Campaign '.$campaign->title.' berstatus '.$campaign->status.'.',
+                            'timestamp' => $campaign->updated_at,
+                            'type' => 'campaign',
+                            'user' => 'Sistem',
+                            'ip' => '-',
+                        ];
+                    })
+            )
+            ->sortByDesc(static fn (array $activity): int => $activity['timestamp']?->getTimestamp() ?? 0)
+            ->take(20)
+            ->values();
 
         $stats = [
-            'total_activities' => 128,
-            'today_activities' => 16,
-            'unique_users' => 8,
-            'failed_attempts' => 2,
+            'total_activities' => Message::count() + Donor::count() + Campaign::count() + Volunteer::count() + Beneficiary::count(),
+            'today_activities' => Message::whereDate('created_at', now()->toDateString())->count()
+                + Donor::whereDate('created_at', now()->toDateString())->count()
+                + Campaign::whereDate('updated_at', now()->toDateString())->count()
+                + Volunteer::whereDate('created_at', now()->toDateString())->count()
+                + Beneficiary::whereDate('created_at', now()->toDateString())->count(),
+            'unique_users' => collect()
+                ->merge(Message::whereNotNull('email')->pluck('email'))
+                ->merge(Donor::whereNotNull('email')->pluck('email'))
+                ->merge(Volunteer::whereNotNull('email')->pluck('email'))
+                ->filter()
+                ->unique()
+                ->count(),
+            'failed_attempts' => Message::whereNull('email')->orWhere('email', '')->count(),
         ];
 
         $pageMeta = [
@@ -212,7 +311,11 @@ class AdminUiController extends Controller
             'subtitle' => 'Riwayat audit sistem dan manipulasi data',
         ];
 
-        return view('admin.notifications', compact('activities', 'stats', 'pageMeta'));
+        return view('admin.notifications', [
+            'activities' => $activities->all(),
+            'stats' => $stats,
+            'pageMeta' => $pageMeta,
+        ]);
     }
 
     public function partners(): View
@@ -305,86 +408,69 @@ class AdminUiController extends Controller
         $incomeSearch = '';
         $incomeFilterTab = 'semua';
 
-        $filteredIncomes = [
-            [
-                'id' => 101,
-                'nama' => 'Budi Santoso',
-                'category' => 'Bantuan Banjir NTT',
-                'notes' => 'Semoga berkah',
-                'amount' => 500000,
-                'status' => 'berhasil',
-                'date' => '2025-03-01',
-            ],
-            [
-                'id' => 102,
-                'nama' => 'PT Maju Bersama',
-                'category' => 'Pembangunan Sumur Bor',
-                'notes' => 'Donasi CSR Perusahaan',
-                'amount' => 5000000,
-                'status' => 'pending',
-                'date' => '2025-03-02',
-            ],
-            [
-                'id' => 103,
-                'nama' => 'Siti Aminah',
-                'category' => 'Beasiswa Anak Yatim 2025',
-                'notes' => 'Titip untuk yatim piatu',
-                'amount' => 250000,
-                'status' => 'berhasil',
-                'date' => '2025-03-02',
-            ],
-            [
-                'id' => 104,
-                'nama' => 'Hamba Allah',
-                'category' => 'Bantuan Banjir NTT',
-                'notes' => '',
-                'amount' => 100000,
-                'status' => 'gagal',
-                'date' => '2025-03-03',
-            ],
-            [
-                'id' => 105,
-                'nama' => 'Anonim',
-                'category' => 'Beasiswa Anak Yatim 2025',
-                'notes' => 'Semoga bermanfaat',
-                'amount' => 1500000,
-                'status' => 'berhasil',
-                'date' => '2025-03-04',
-            ],
-        ];
+        $campaigns = Campaign::orderByDesc('created_at')->get();
+        $donors = Donor::orderByDesc('last_donation')->orderByDesc('created_at')->get();
 
-        $laporanItems = [
-            [
-                'program' => 'Bantuan Banjir NTT',
-                'kategori' => 'Kebencanaan',
-                'pemasukan' => 32500000,
-                'disalurkan' => 30000000,
-                'sisa' => 2500000,
-                'penerima' => 47,
-                'periode' => 'Mar 2025',
-                'status' => 'selesai',
-            ],
-            [
-                'program' => 'Beasiswa Anak Yatim 2025',
-                'kategori' => 'Pendidikan',
-                'pemasukan' => 30000000,
-                'disalurkan' => 20000000,
-                'sisa' => 10000000,
-                'penerima' => 20,
-                'periode' => 'Jan-Des 2025',
-                'status' => 'berjalan',
-            ],
-            [
-                'program' => 'Pembangunan Sumur Bor',
-                'kategori' => 'Kesehatan',
-                'pemasukan' => 4800000,
-                'disalurkan' => 0,
-                'sisa' => 4800000,
-                'penerima' => 0,
-                'periode' => 'Apr-Jun 2025',
-                'status' => 'berjalan',
-            ],
-        ];
+        $campaignPool = $campaigns->values();
+        $campaignPoolCount = max($campaignPool->count(), 1);
+
+        $filteredIncomes = $donors
+            ->values()
+            ->map(function (Donor $donor, int $index) use ($campaignPool, $campaignPoolCount): array {
+                /** @var Campaign|null $mappedCampaign */
+                $mappedCampaign = $campaignPool->get($index % $campaignPoolCount);
+                $amount = (int) $donor->total_donation;
+
+                return [
+                    'id' => $donor->id,
+                    'nama' => $donor->name,
+                    'category' => $mappedCampaign?->title ?: ($mappedCampaign?->category ?: 'Donasi Umum'),
+                    'notes' => $amount > 0
+                        ? 'Sinkron otomatis dari database donatur.'
+                        : 'Menunggu pembaruan nominal donasi.',
+                    'amount' => $amount,
+                    'status' => $amount > 0 ? 'berhasil' : 'pending',
+                    'date' => ($donor->last_donation ?? $donor->created_at)?->format('Y-m-d'),
+                ];
+            })
+            ->values()
+            ->all();
+
+        $totalCampaignIncome = (int) $campaigns->sum('collected');
+        $totalDistributed = (int) Beneficiary::sum('assistance_value');
+        $distributionRatio = $totalCampaignIncome > 0
+            ? min(1, $totalDistributed / $totalCampaignIncome)
+            : 0;
+
+        $beneficiaryByProgram = Beneficiary::query()
+            ->selectRaw('program_name, COUNT(*) as total')
+            ->groupBy('program_name')
+            ->pluck('total', 'program_name');
+
+        $laporanItems = $campaigns
+            ->map(function (Campaign $campaign) use ($distributionRatio, $beneficiaryByProgram): array {
+                $pemasukan = (int) $campaign->collected;
+                $disalurkan = $campaign->status === 'selesai'
+                    ? $pemasukan
+                    : (int) round($pemasukan * $distributionRatio);
+
+                $sisa = max($pemasukan - $disalurkan, 0);
+
+                return [
+                    'program' => $campaign->title,
+                    'kategori' => $campaign->category ?: 'Umum',
+                    'pemasukan' => $pemasukan,
+                    'disalurkan' => $disalurkan,
+                    'sisa' => $sisa,
+                    'penerima' => (int) ($beneficiaryByProgram[$campaign->title] ?? 0),
+                    'periode' => $campaign->deadline
+                        ? date('M Y', strtotime((string) $campaign->deadline))
+                        : ($campaign->created_at ? date('M Y', strtotime((string) $campaign->created_at)) : null),
+                    'status' => $campaign->status === 'selesai' ? 'selesai' : 'berjalan',
+                ];
+            })
+            ->values()
+            ->all();
 
         $totalPemasukanGlobal = collect($laporanItems)->sum('pemasukan');
         $totalDisalurkanGlobal = collect($laporanItems)->sum('disalurkan');
@@ -512,5 +598,107 @@ class AdminUiController extends Controller
         ];
 
         return view('admin.landing-manager', compact('tabs', 'pageMeta'));
+    }
+
+    private function buildDashboardFeedItems(): array
+    {
+        $feedItems = collect()
+            ->merge(
+                Donor::orderByDesc('last_donation')
+                    ->orderByDesc('created_at')
+                    ->limit(4)
+                    ->get()
+                    ->map(function (Donor $donor): array {
+                        $timestamp = $donor->last_donation ?? $donor->created_at;
+
+                        return [
+                            'event' => 'Donasi Masuk ('.$this->formatCurrency((int) $donor->total_donation).')',
+                            'detail' => 'Dari '.$donor->name,
+                            'time' => $timestamp?->diffForHumans() ?? 'Baru saja',
+                            'type' => 'in',
+                            'timestamp' => $timestamp,
+                        ];
+                    })
+            )
+            ->merge(
+                Beneficiary::orderByDesc('created_at')
+                    ->limit(3)
+                    ->get()
+                    ->map(function (Beneficiary $beneficiary): array {
+                        return [
+                            'event' => 'Penyaluran ('.$this->formatCurrency((int) $beneficiary->assistance_value).')',
+                            'detail' => 'Untuk '.$beneficiary->name.' - '.($beneficiary->program_name ?: 'Program Umum'),
+                            'time' => $beneficiary->created_at?->diffForHumans() ?? 'Baru saja',
+                            'type' => 'out',
+                            'timestamp' => $beneficiary->created_at,
+                        ];
+                    })
+            )
+            ->merge(
+                Campaign::orderByDesc('updated_at')
+                    ->limit(3)
+                    ->get()
+                    ->map(function (Campaign $campaign): array {
+                        return [
+                            'event' => 'Campaign Diperbarui',
+                            'detail' => 'Program: '.$campaign->title,
+                            'time' => $campaign->updated_at?->diffForHumans() ?? 'Baru saja',
+                            'type' => 'sys',
+                            'timestamp' => $campaign->updated_at,
+                        ];
+                    })
+            )
+            ->sortByDesc(static fn (array $item): int => $item['timestamp']?->getTimestamp() ?? 0)
+            ->take(5)
+            ->values();
+
+        if ($feedItems->isEmpty()) {
+            return [
+                [
+                    'event' => 'Belum ada aktivitas terbaru',
+                    'detail' => 'Data akan muncul otomatis setelah ada transaksi.',
+                    'time' => 'Baru saja',
+                    'type' => 'sys',
+                ],
+            ];
+        }
+
+        return $feedItems
+            ->map(static function (array $item): array {
+                return [
+                    'event' => $item['event'],
+                    'detail' => $item['detail'],
+                    'time' => $item['time'],
+                    'type' => $item['type'],
+                ];
+            })
+            ->all();
+    }
+
+    private function ratioPercent(int $value, int $total): int
+    {
+        if ($total <= 0) {
+            return 0;
+        }
+
+        return (int) round(($value / $total) * 100);
+    }
+
+    private function formatCurrency(int $value): string
+    {
+        return 'Rp '.number_format($value, 0, ',', '.');
+    }
+
+    private function formatCurrencyShort(int $value): string
+    {
+        if ($value >= 1000000000) {
+            return 'Rp '.number_format($value / 1000000000, 1, ',', '.').' Miliar';
+        }
+
+        if ($value >= 1000000) {
+            return 'Rp '.number_format($value / 1000000, 1, ',', '.').' Juta';
+        }
+
+        return $this->formatCurrency($value);
     }
 }

@@ -13,8 +13,8 @@ use App\Http\Controllers\Admin\IdentityController as AdminIdentityController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\StakeholderController as AdminStakeholderController;
 use App\Http\Controllers\Admin\AdminUiController;
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\LandingController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page Routes
@@ -25,63 +25,21 @@ Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus
 Route::get('/moregallery', [LandingController::class, 'gallery'])->name('gallery');
 Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
 Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
+Route::post('/contact', [LandingController::class, 'submitContact'])->name('contact.store');
+Route::get('/donasi', [LandingController::class, 'donationForm'])->name('donation.form');
+Route::post('/donasi', [LandingController::class, 'submitDonation'])->name('donation.store');
 Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
 Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
 
 // Super Simple Admin Routes
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        // Static dashboard data aligned with React Home component
-        $stats = [
-            [
-                'icon' => 'ph ph-wallet',
-                'title' => 'Total Dana Terkumpul',
-                'value' => 'Rp 1.460 Juta',
-                'change' => '+24% vs Bln lalu',
-                'trend' => 'up'
-            ],
-            [
-                'icon' => 'ph ph-hand-heart',
-                'title' => 'Telah Disalurkan',
-                'value' => 'Rp 1.120 Juta',
-                'change' => '76% Tersalur',
-                'trend' => 'up'
-            ],
-            [
-                'icon' => 'ph ph-chart-line-up',
-                'title' => 'Campaign Berjalan',
-                'value' => '18 Aktif',
-                'change' => '2 Hampir Timeout',
-                'trend' => 'down'
-            ],
-            [
-                'icon' => 'ph ph-users',
-                'title' => 'Basis Donatur',
-                'value' => '12.450',
-                'change' => '+142 Minggu ini',
-                'trend' => 'up'
-            ]
-        ];
-
-        $selectedFilter = '6 Bulan Terakhir';
-        $filterOpen = false;
-        $filterOptions = ['6 Bulan Terakhir', 'Tahun Ini', 'Tahun Lalu'];
-
-        $pageMeta = [
-            'title' => 'Dashboard Admin',
-            'subtitle' => 'Pantau metrik dan aktivitas FundUnity'
-        ];
-
-        return view('admin.home', compact('stats', 'selectedFilter', 'filterOpen', 'filterOptions', 'pageMeta'))->with('sidebarWidth', '256px');
-    })->name('dashboard');
-    Route::get('/settings', function () {
-        $pageMeta = [
-            'title' => 'Pengaturan Admin',
-            'subtitle' => 'Kelola pengaturan sistem FundUnity'
-        ];
-        $user = Auth::user();
-        return view('admin.settings', compact('pageMeta', 'user'))->with('sidebarWidth', '256px');
-    })->name('settings');
+    Route::get('/dashboard', [AdminUiController::class, 'dashboard'])->name('dashboard');
+    Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings');
+    Route::post('/settings/profile', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/settings/identity', [AdminSettingsController::class, 'updateIdentity'])->name('settings.identity.update');
+    Route::post('/settings/payment', [AdminSettingsController::class, 'updatePayment'])->name('settings.payment.update');
+    Route::post('/settings/seo', [AdminSettingsController::class, 'updateSeo'])->name('settings.seo.update');
+    Route::post('/settings/security', [AdminSettingsController::class, 'updateSecurity'])->name('settings.security.update');
 
     // Converted admin pages from React app flow
     Route::get('/campaign', [AdminUiController::class, 'campaign'])->name('campaign');

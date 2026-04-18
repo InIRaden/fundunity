@@ -3,7 +3,21 @@
 @section('title', 'Mitra Kami')
 
 @section('content')
-<!-- Hero Section -->
+@php
+    $partnerGroups = $partnerGroups ?? [
+        'corporate' => collect(),
+        'ngo' => collect(),
+        'government' => collect(),
+        'other' => collect(),
+    ];
+
+    $sections = [
+        ['key' => 'corporate', 'title' => 'Partner Korporat', 'fallback' => 8],
+        ['key' => 'ngo', 'title' => 'Partner LSM & Organisasi Sosial', 'fallback' => 4],
+        ['key' => 'government', 'title' => 'Partner Pemerintah', 'fallback' => 4],
+    ];
+@endphp
+
 <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">Mitra Kami</h1>
@@ -11,7 +25,6 @@
     </div>
 </section>
 
-<!-- Partners Grid -->
 <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
@@ -21,47 +34,42 @@
             </p>
         </div>
 
-        <!-- Corporate Partners -->
-        <div class="mb-16">
-            <h2 class="text-2xl font-bold mb-8">Partner Korporat</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                @for($i = 1; $i <= 8; $i++)
-                <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition">
-                    <div class="text-center text-gray-400">
-                        <div class="text-sm font-semibold">Partner Logo {{ $i }}</div>
-                    </div>
-                </div>
-                @endfor
-            </div>
-        </div>
+        @foreach($sections as $section)
+            @php
+                $partnersInSection = collect($partnerGroups[$section['key']] ?? []);
+            @endphp
 
-        <!-- NGO Partners -->
-        <div class="mb-16">
-            <h2 class="text-2xl font-bold mb-8">Partner LSM & Organisasi Sosial</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                @for($i = 1; $i <= 4; $i++)
-                <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition">
-                    <div class="text-center text-gray-400">
-                        <div class="text-sm font-semibold">NGO Logo {{ $i }}</div>
-                    </div>
-                </div>
-                @endfor
-            </div>
-        </div>
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold mb-8">{{ $section['title'] }}</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    @forelse($partnersInSection as $partner)
+                        <div class="bg-gray-50 rounded-lg p-6 flex flex-col items-center justify-center aspect-square hover:shadow-lg transition border border-slate-100">
+                            @if(!empty($partner->logo))
+                                <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" class="max-h-20 w-auto object-contain">
+                            @else
+                                <div class="text-center text-gray-400 text-sm font-semibold">Logo Mitra</div>
+                            @endif
 
-        <!-- Government Partners -->
-        <div class="mb-16">
-            <h2 class="text-2xl font-bold mb-8">Partner Pemerintah</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                @for($i = 1; $i <= 4; $i++)
-                <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition">
-                    <div class="text-center text-gray-400">
-                        <div class="text-sm font-semibold">Gov Logo {{ $i }}</div>
-                    </div>
+                            <p class="mt-4 text-sm font-semibold text-slate-700 text-center line-clamp-2">{{ $partner->name }}</p>
+
+                            @if(!empty($partner->website_url))
+                                <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="mt-2 text-xs font-semibold text-green-700 hover:text-green-800">
+                                    Kunjungi situs
+                                </a>
+                            @endif
+                        </div>
+                    @empty
+                        @for($i = 1; $i <= $section['fallback']; $i++)
+                            <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition">
+                                <div class="text-center text-gray-400">
+                                    <div class="text-sm font-semibold">Partner Logo {{ $i }}</div>
+                                </div>
+                            </div>
+                        @endfor
+                    @endforelse
                 </div>
-                @endfor
             </div>
-        </div>
+        @endforeach
     </div>
 </section>
 
