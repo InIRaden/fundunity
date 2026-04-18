@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutUsItem;
+use App\Models\Beneficiary;
 use App\Models\Campaign;
+use App\Models\Donor;
 use App\Models\Faq;
 use App\Models\FocusArea;
 use App\Models\GalleryItem;
 use App\Models\ImageSlider;
 use App\Models\Message;
+use App\Models\Partner;
 use App\Models\SiteSetting;
+use App\Models\Volunteer;
 use Illuminate\View\View;
 
 class AdminUiController extends Controller
@@ -213,18 +217,22 @@ class AdminUiController extends Controller
 
     public function partners(): View
     {
-        $partners = [
-            [
-                'id' => 1,
-                'name' => 'Bank Syariah Indonesia',
-                'imageUrl' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bank_Syariah_Indonesia.svg/2560px-Bank_Syariah_Indonesia.svg.png',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Kitabisa',
-                'imageUrl' => 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Kitabisa_Logo.png',
-            ],
-        ];
+        $partners = Partner::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (Partner $partner): array {
+                return [
+                    'id' => $partner->id,
+                    'name' => $partner->name,
+                    'imageUrl' => $partner->logo,
+                    'websiteUrl' => $partner->website_url,
+                    'type' => $partner->type,
+                    'description' => $partner->description,
+                    'sort_order' => $partner->sort_order,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Mitra Kami',
@@ -239,40 +247,49 @@ class AdminUiController extends Controller
         $activeTab = 'donatur';
         $searchQuery = '';
 
-        $donatur = [
-            [
-                'id' => 1,
-                'nama' => 'Budi Santoso',
-                'email' => 'budi@mail.com',
-                'totalDonasi' => 12500000,
-                'lastDonasi' => '2025-03-01',
-            ],
-            [
-                'id' => 2,
-                'nama' => 'PT Maju Bersama',
-                'email' => 'csr@majubersama.co.id',
-                'totalDonasi' => 50000000,
-                'lastDonasi' => '2025-02-15',
-            ],
-            [
-                'id' => 3,
-                'nama' => 'Siti Aminah',
-                'email' => 'siti.a@mail.com',
-                'totalDonasi' => 500000,
-                'lastDonasi' => '2025-03-02',
-            ],
-        ];
+        $donatur = Donor::where('is_active', true)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (Donor $donor): array {
+                return [
+                    'id' => $donor->id,
+                    'nama' => $donor->name,
+                    'email' => $donor->email,
+                    'totalDonasi' => (int) $donor->total_donation,
+                    'lastDonasi' => $donor->last_donation ? substr((string) $donor->last_donation, 0, 10) : null,
+                ];
+            })
+            ->values();
 
-        $penerima = [
-            ['id' => 1, 'nama' => 'SDN 01 Atap', 'program' => 'Renovasi Sekolah', 'nilai' => 15000000, 'lokasi' => 'Kupang, NTT'],
-            ['id' => 2, 'nama' => 'Panti Asuhan Al-Kautsar', 'program' => 'Beasiswa Anak Yatim', 'nilai' => 5000000, 'lokasi' => 'Bandung, Jabar'],
-            ['id' => 3, 'nama' => 'Desa Sukamakmur', 'program' => 'Pembangunan Sumur Bor', 'nilai' => 8000000, 'lokasi' => 'Gunungkidul, DIY'],
-        ];
+        $penerima = Beneficiary::where('is_active', true)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (Beneficiary $beneficiary): array {
+                return [
+                    'id' => $beneficiary->id,
+                    'nama' => $beneficiary->name,
+                    'program' => $beneficiary->program_name,
+                    'nilai' => (int) $beneficiary->assistance_value,
+                    'lokasi' => $beneficiary->location,
+                ];
+            })
+            ->values();
 
-        $relawan = [
-            ['id' => 1, 'nama' => 'Rina Kusumawati', 'email' => 'rina.k@mail.com', 'phone' => '081234567890', 'kategori' => 'Relawan Lapangan', 'date' => '2026-03-29'],
-            ['id' => 2, 'nama' => 'Andi Pratama', 'email' => 'andi.p@mail.com', 'phone' => '085678901234', 'kategori' => 'Digital Media', 'date' => '2026-03-28'],
-        ];
+        $relawan = Volunteer::where('is_active', true)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(static function (Volunteer $volunteer): array {
+                return [
+                    'id' => $volunteer->id,
+                    'nama' => $volunteer->name,
+                    'email' => $volunteer->email,
+                    'phone' => $volunteer->phone,
+                    'kategori' => $volunteer->category,
+                    'date' => $volunteer->registered_at ? substr((string) $volunteer->registered_at, 0, 10) : null,
+                    'isVerified' => (bool) $volunteer->is_verified,
+                ];
+            })
+            ->values();
 
         $pageMeta = [
             'title' => 'Relasi & Bantuan',

@@ -51,16 +51,13 @@
           <input id="partnerName" required placeholder="Masukkan nama resmi..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
         </div>
         <div>
-          <label class="block text-xs text-slate-500 mb-2">Logo Partner</label>
-          <div class="border-2 border-dashed border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer group">
-            <i class="ph ph-image text-[40px] text-slate-300 mb-2 group-hover:text-emerald-400 transition-colors"></i>
-            <p class="text-xs font-semibold text-slate-400 text-center">Pilih File PNG / SVG</p>
-          </div>
+          <label class="block text-xs text-slate-500 mb-2">Logo Partner (URL)</label>
+          <input id="partnerImageUrl" type="url" required placeholder="https://example.com/logo.png" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
         </div>
       </div>
       <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
         <button type="button" id="cancelPartnerModal" class="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Batal</button>
-        <button type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all hover:scale-105 active:scale-95">Konfirmasi Simpan</button>
+        <button id="submitPartnerModal" type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all hover:scale-105 active:scale-95">Konfirmasi Simpan</button>
       </div>
     </form>
   </div>
@@ -84,7 +81,89 @@
 </style>
 
 <script>
-  const partnerState = { data: @json($partners), search: '', editingId: null, deletingId: null };
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+  const partnerStoreUrl = @json(route('admin.partners.store'));
+  const partnerBaseUrl = @json(url('/admin/partners'));
+
+  function normalizePartner(raw = {}) {
+    return {
+      id: raw.id,
+      name: raw.name || '',
+      imageUrl: raw.imageUrl || raw.logo || '',
+    };
+  }
+
+  const partnerState = {
+    data: (@json($partners) || []).map((item) => normalizePartner(item)),
+    search: '',
+    editingId: null,
+    deletingId: null,
+    isSubmitting: false,
+    isDeleting: false,
+  };
+
+  async function requestPartner(url, method, payload = null) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+      body: payload ? JSON.stringify(payload) : null,
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const validationErrors = result.errors ? Object.values(result.errors).flat().join('\n') : null;
+      throw new Error(validationErrors || result.message || 'Permintaan gagal diproses.');
+    }
+
+    return result;
+  }
+
+  function setPartnerSubmitLoading(loading) {
+    const button = document.getElementById('submitPartnerModal');
+    if (!button) {
+      return;
+    }
+
+    if (loading) {
+      button.dataset.originalLabel = button.textContent;
+      button.disabled = true;
+      button.classList.add('opacity-70', 'cursor-not-allowed');
+      button.textContent = partnerState.editingId ? 'Menyimpan...' : 'Menambahkan...';
+      return;
+    }
+
+    button.disabled = false;
+    button.classList.remove('opacity-70', 'cursor-not-allowed');
+    if (button.dataset.originalLabel) {
+      button.textContent = button.dataset.originalLabel;
+    }
+  }
+
+  function setPartnerDeleteLoading(loading) {
+    const button = document.getElementById('confirmPartnerDelete');
+    if (!button) {
+      return;
+    }
+
+    if (loading) {
+      button.dataset.originalLabel = button.textContent;
+      button.disabled = true;
+      button.classList.add('opacity-70', 'cursor-not-allowed');
+      button.textContent = 'Menghapus...';
+      return;
+    }
+
+    button.disabled = false;
+    button.classList.remove('opacity-70', 'cursor-not-allowed');
+    if (button.dataset.originalLabel) {
+      button.textContent = button.dataset.originalLabel;
+    }
+  }
 
   function filteredPartners() {
     const q = partnerState.search.toLowerCase();
@@ -94,14 +173,14 @@
   function renderPartners() {
     const data = filteredPartners();
     document.getElementById('partnerTotal').textContent = String(partnerState.data.length);
-    document.getElementById('partnerRows').innerHTML = data.map((p) => `
+    document.getElementById('partnerRows').innerHTML = data.length ? data.map((p) => `
       <tr class="hover:bg-slate-50/50 transition-colors">
         <td class="py-5 px-6 text-sm font-semibold text-slate-400">#${p.id}</td>
         <td class="py-5 px-6"><div class="w-24 h-12 bg-white border border-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-2 shadow-sm"><img src="${p.imageUrl || ''}" class="max-w-full max-h-full object-contain" alt=""></div></td>
         <td class="py-5 px-6"><span class="text-sm font-semibold text-slate-900">${p.name}</span></td>
         <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editPartner(${p.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="promptDeletePartner(${p.id})">Hapus</button></div></td>
       </tr>
-    `).join('');
+    `).join('') : '<tr><td colspan="4" class="px-6 py-12 text-center text-slate-500 text-sm">Mitra tidak ditemukan.</td></tr>';
     document.getElementById('partnerCount').textContent = 'Menampilkan ' + data.length + ' mitra';
   }
 
@@ -113,17 +192,22 @@
       partnerState.editingId = item.id;
       document.getElementById('partnerModalTitle').textContent = 'Ubah Data Mitra';
       document.getElementById('partnerName').value = item.name;
+      document.getElementById('partnerImageUrl').value = item.imageUrl || '';
     } else {
       partnerState.editingId = null;
       document.getElementById('partnerModalTitle').textContent = 'Tambah Mitra';
       document.getElementById('partnerForm').reset();
     }
+
+    setPartnerSubmitLoading(false);
   }
 
   function hidePartnerModal() {
     const modal = document.getElementById('partnerModal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
+    partnerState.isSubmitting = false;
+    setPartnerSubmitLoading(false);
   }
 
   function editPartner(id) {
@@ -151,20 +235,62 @@
   document.getElementById('cancelPartnerModal').addEventListener('click', hidePartnerModal);
   document.getElementById('partnerForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    const name = document.getElementById('partnerName').value;
-    if (partnerState.editingId) {
-      partnerState.data = partnerState.data.map((p) => p.id === partnerState.editingId ? { ...p, name } : p);
-    } else {
-      partnerState.data.push({ id: Date.now(), name, imageUrl: '' });
+
+    if (partnerState.isSubmitting) {
+      return;
     }
-    hidePartnerModal();
-    renderPartners();
+
+    const payload = {
+      name: document.getElementById('partnerName').value,
+      image_url: document.getElementById('partnerImageUrl').value,
+    };
+
+    partnerState.isSubmitting = true;
+    setPartnerSubmitLoading(true);
+
+    const action = partnerState.editingId
+      ? requestPartner(`${partnerBaseUrl}/${partnerState.editingId}`, 'PUT', payload)
+      : requestPartner(partnerStoreUrl, 'POST', payload);
+
+    action
+      .then((result) => {
+        const normalized = normalizePartner(result.data || {});
+        if (partnerState.editingId) {
+          partnerState.data = partnerState.data.map((p) => p.id === partnerState.editingId ? normalized : p);
+        } else {
+          partnerState.data.unshift(normalized);
+        }
+        hidePartnerModal();
+        renderPartners();
+      })
+      .catch((error) => {
+        window.alert(error.message);
+        partnerState.isSubmitting = false;
+        setPartnerSubmitLoading(false);
+      });
   });
   document.getElementById('cancelPartnerDelete').addEventListener('click', hideDeleteModal);
   document.getElementById('confirmPartnerDelete').addEventListener('click', function () {
-    if (partnerState.deletingId !== null) partnerState.data = partnerState.data.filter((p) => p.id !== partnerState.deletingId);
-    hideDeleteModal();
-    renderPartners();
+    if (partnerState.deletingId === null || partnerState.isDeleting) {
+      return;
+    }
+
+    partnerState.isDeleting = true;
+    setPartnerDeleteLoading(true);
+
+    requestPartner(`${partnerBaseUrl}/${partnerState.deletingId}`, 'DELETE')
+      .then(() => {
+        partnerState.data = partnerState.data.filter((p) => p.id !== partnerState.deletingId);
+        hideDeleteModal();
+        renderPartners();
+      })
+      .catch((error) => {
+        window.alert(error.message);
+      })
+      .finally(() => {
+        partnerState.isDeleting = false;
+        setPartnerDeleteLoading(false);
+      });
   });
 
   renderPartners();

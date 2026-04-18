@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\AboutUsController as AdminAboutUsController;
 use App\Http\Controllers\Admin\ImageSliderController as AdminImageSliderController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\IdentityController as AdminIdentityController;
+use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
+use App\Http\Controllers\Admin\StakeholderController as AdminStakeholderController;
 use App\Http\Controllers\Admin\AdminUiController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +91,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::get('/keuangantransparansi', [AdminUiController::class, 'keuanganTransparansi'])->name('keuangantransparansi');
     Route::get('/databasestakeholder', [AdminUiController::class, 'databaseStakeholder'])->name('databasestakeholder');
+    Route::post('/databasestakeholder/{type}', [AdminStakeholderController::class, 'store'])->name('databasestakeholder.store');
+    Route::put('/databasestakeholder/{type}/{id}', [AdminStakeholderController::class, 'update'])->name('databasestakeholder.update');
+    Route::delete('/databasestakeholder/{type}/{id}', [AdminStakeholderController::class, 'destroy'])->name('databasestakeholder.destroy');
 
     Route::get('/messages', [AdminUiController::class, 'messages'])->name('messages');
     Route::post('/messages', [AdminMessageController::class, 'store'])->name('messages.store');
@@ -112,6 +117,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/faqs/{faq}', [AdminFaqController::class, 'update'])->name('faqs.update');
     Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
     Route::get('/partners', [AdminUiController::class, 'partners'])->name('partners');
+    Route::post('/partners', [AdminPartnerController::class, 'store'])->name('partners.store');
+    Route::put('/partners/{partner}', [AdminPartnerController::class, 'update'])->name('partners.update');
+    Route::delete('/partners/{partner}', [AdminPartnerController::class, 'destroy'])->name('partners.destroy');
     Route::get('/gallery', [AdminUiController::class, 'gallery'])->name('gallery');
     Route::post('/gallery', [AdminGalleryController::class, 'store'])->name('gallery.store');
     Route::put('/gallery/{galleryItem}', [AdminGalleryController::class, 'update'])->name('gallery.update');
