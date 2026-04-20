@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutUsItem;
+use App\Models\AdminActivityLog;
 use App\Models\Beneficiary;
 use App\Models\Campaign;
 use App\Models\Donor;
@@ -170,41 +171,33 @@ class AdminUiController extends Controller
 
     public function notifications(): View
     {
-        $activities = [
-            [
-                'icon' => 'ph ph-lock-key',
-                'title' => 'Admin login ke sistem',
-                'description' => 'Akses panel admin berhasil dari perangkat terdaftar.',
-                'timestamp' => now()->subMinutes(35),
-                'type' => 'login',
-                'user' => 'admin@fundunity.id',
-                'ip' => '192.168.1.10',
-            ],
-            [
-                'icon' => 'ph ph-money',
-                'title' => 'Donasi baru diterima',
-                'description' => 'Donasi masuk Rp 1.500.000 untuk campaign Pendidikan.',
-                'timestamp' => now()->subHours(3),
-                'type' => 'donation',
-                'user' => 'Sistem',
-                'ip' => '127.0.0.1',
-            ],
-            [
-                'icon' => 'ph ph-megaphone',
-                'title' => 'Campaign diperbarui',
-                'description' => 'Deadline campaign Tanggap Banjir diperpanjang 7 hari.',
-                'timestamp' => now()->subDay(),
-                'type' => 'campaign',
-                'user' => 'Nadia Putri',
-                'ip' => '192.168.1.21',
-            ],
-        ];
+        $activities = AdminActivityLog::with('user:id,email')
+            ->orderByDesc('created_at')
+            ->limit(100)
+            ->get()
+            ->map(static function (AdminActivityLog $activity): array {
+                return [
+                    'icon' => match ($activity->action) {
+                        'create' => 'ph ph-plus-circle',
+                        'update' => 'ph ph-pencil-line',
+                        'delete' => 'ph ph-trash',
+                        default => 'ph ph-info',
+                    },
+                    'title' => $activity->title,
+                    'description' => $activity->description ?: 'Perubahan data berhasil tercatat.',
+                    'timestamp' => $activity->created_at,
+                    'type' => $activity->action,
+                    'user' => $activity->user?->email ?: 'Sistem',
+                    'ip' => $activity->ip_address ?: '-',
+                ];
+            })
+            ->values();
 
         $stats = [
-            'total_activities' => 128,
-            'today_activities' => 16,
-            'unique_users' => 8,
-            'failed_attempts' => 2,
+            'total_activities' => AdminActivityLog::count(),
+            'today_activities' => AdminActivityLog::whereDate('created_at', now()->toDateString())->count(),
+            'unique_users' => AdminActivityLog::whereNotNull('user_id')->distinct('user_id')->count('user_id'),
+            'failed_attempts' => 0,
         ];
 
         $pageMeta = [

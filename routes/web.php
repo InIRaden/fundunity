@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\IdentityController as AdminIdentityController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\StakeholderController as AdminStakeholderController;
 use App\Http\Controllers\Admin\AdminUiController;
+use App\Http\Middleware\LogAdminCrudActivity;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,7 @@ Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
 Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
 
 // Super Simple Admin Routes
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', LogAdminCrudActivity::class])->group(function () {
     Route::get('/dashboard', function () {
         // Static dashboard data aligned with React Home component
         $stats = [

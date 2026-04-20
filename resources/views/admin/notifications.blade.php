@@ -14,11 +14,10 @@
         <h3 class="text-lg font-bold text-slate-900">Riwayat Aktivitas</h3>
         <div class="flex gap-3">
           <select onchange="filterByType(this.value)" class="px-3 py-2 border border-slate-200 rounded-xl text-sm">
-            <option value="">Semua Tipe</option>
-            <option value="login">Login</option>
-            <option value="donation">Donasi</option>
-            <option value="campaign">Campaign</option>
-            <option value="user">User</option>
+            <option value="">Semua Aksi</option>
+            <option value="create">Create</option>
+            <option value="update">Update</option>
+            <option value="delete">Delete</option>
           </select>
           <input type="date" onchange="filterByDate(this.value)" class="px-3 py-2 border border-slate-200 rounded-xl text-sm">
         </div>
@@ -26,7 +25,7 @@
     </div>
 
     <div class="divide-y divide-slate-200">
-      @foreach($activities as $activity)
+      @forelse($activities as $activity)
         <div class="p-6 hover:bg-slate-50 transition-colors">
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
@@ -41,14 +40,18 @@
                 <span class="text-xs text-slate-500">{{ \Carbon\Carbon::parse($activity['timestamp'])->diffForHumans() }}</span>
               </div>
               <div class="flex items-center gap-4 mt-2 text-xs text-slate-500">
-                <span>Tipe: {{ $activity['type'] }}</span>
+                <span>Aksi: {{ strtoupper($activity['type']) }}</span>
                 <span>User: {{ $activity['user'] }}</span>
                 <span>IP: {{ $activity['ip'] }}</span>
               </div>
             </div>
           </div>
         </div>
-      @endforeach
+      @empty
+        <div class="p-10 text-center">
+          <p class="text-sm text-slate-500">Belum ada aktivitas CRUD admin yang tercatat.</p>
+        </div>
+      @endforelse
     </div>
   </div>
 
