@@ -51,16 +51,13 @@
 
     <!-- Logout -->
     <div class="px-3 pb-6 pt-3 mt-auto">
-      <form method="POST" action="{{ route('logout') }}" class="w-full">
-        @csrf
-        <button type="submit" class="relative group w-full flex items-center gap-3 py-2.5 rounded-xl text-slate-200 hover:bg-rose-600/10 hover:text-rose-400 transition-all {{ $isSidebarOpen ?? true ? 'px-4' : 'justify-center px-0' }}">
-          <!-- Icon Placeholder -->
-          <i class="ph ph-door-open shrink-0 text-[19px] leading-none"></i>
-          @if($isSidebarOpen ?? true)
-            <span class="text-[13px] font-semibold tracking-wide">Keluar</span>
-          @endif
-        </button>
-      </form>
+      <a href="{{ route('logout.confirm') }}" class="relative group w-full flex items-center gap-3 py-2.5 rounded-xl text-slate-200 hover:bg-rose-600/10 hover:text-rose-400 transition-all {{ $isSidebarOpen ?? true ? 'px-4' : 'justify-center px-0' }}">
+        <!-- Icon Placeholder -->
+        <i class="ph ph-door-open shrink-0 text-[19px] leading-none"></i>
+        @if($isSidebarOpen ?? true)
+          <span class="text-[13px] font-semibold tracking-wide">Keluar</span>
+        @endif
+      </a>
     </div>
 
     <!-- Toggle Button -->

@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $defaults = [
             'site_name' => 'Komunitas Ruang Berbagi',
-            'site_logo' => 'https://via.placeholder.com/50x50/22c55e/ffffff?text=KRB',
+            'site_logo' => asset('images/Logo.png'),
             'newsletter_title' => 'Bergabunglah Bersama Kami',
             'newsletter_description' => 'Dapatkan pembaruan terbaru seputar program, kisah inspiratif, dan kesempatan berkontribusi.',
             'newsletter_cta_text' => 'Berlangganan',

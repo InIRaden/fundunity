@@ -3,60 +3,86 @@
 @section('title', 'Hubungi Kami')
 
 @section('content')
-    <!-- Hero Section -->
-    <main class="p-8">
-        <div class="pt-28 max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
-            <h2 class="text-3xl font-semibold mb-6 text-blue-700 text-center">Contact Us</h2>
-            @if(session('success'))
-                <div class="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    {{ session('success') }}
-                </div>
-            @endif
+<div class="relative min-h-[70vh] bg-white pb-16 pt-24">
+    <div class="absolute right-0 top-0 -z-10 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-slate-50 blur-3xl"></div>
 
-            @if($errors->any())
-                <div class="mb-4 rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                    <ul class="list-disc list-inside space-y-1">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+    <section class="relative overflow-hidden border-t border-slate-100 bg-white py-24">
+        <div class="mx-auto grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
+            <div class="max-w-lg">
+                <span class="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.25em] text-emerald-600">
+                    <i class="ph ph-chat-text text-xl"></i>
+                    Hubungi Kami
+                </span>
+                <h1 class="font-display mb-6 text-4xl font-extrabold leading-tight text-slate-900 md:text-5xl">
+                    Punya Pertanyaan atau <span class="text-emerald-500">Inisiasi Kolaborasi?</span>
+                </h1>
+                <p class="mb-8 text-lg leading-relaxed text-slate-500">
+                    Pesan yang dikirim melalui formulir ini akan langsung diterima oleh kotak masuk admin organisasi. Kami terbuka untuk diskusi program, pelaporan, hingga partnership.
+                </p>
+                <div class="flex gap-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                        <i class="ph ph-envelope-open text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-slate-800">Respon Cepat 1x24 Jam</p>
+                        <p class="text-sm text-slate-500">Tim humas kami terpantau aktif di hari kerja.</p>
+                    </div>
                 </div>
-            @endif
+            </div>
 
-            <form action="{{ route('contact.store') }}" method="POST" class="space-y-5">
-                @csrf
-                <div
-                    class="flex items-center border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-                    <div class="px-3 text-blue-600"><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                            viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z">
-                            </path>
-                        </svg></div><input placeholder="Your Name" class="w-full p-3 outline-none" required=""
-                        type="text" value="{{ old('name') }}" name="name">
-                </div>
-                <div
-                    class="flex items-center border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-                    <div class="px-3 text-blue-600"><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                            viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z">
-                            </path>
-                        </svg></div><input placeholder="Your Email" class="w-full p-3 outline-none" required=""
-                        type="email" value="{{ old('email') }}" name="email">
-                </div>
-                <textarea name="message" rows="5" placeholder="Write your message..."
-                    class="w-full border border-gray-300 rounded-md p-3 resize-none focus:ring-2 focus:ring-blue-500 outline-none"
-                    required="">{{ old('message') }}</textarea><button type="submit"
-                    class="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:brightness-110 text-white font-semibold py-3 rounded-md transition"><svg
-                        stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
-                        width="1em" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z">
-                        </path>
-                    </svg> Send Message</button>
-            </form>
+            <div class="relative rounded-3xl border border-slate-100 bg-white p-8 shadow-xl shadow-slate-200/50 md:p-10">
+                @if(session('success'))
+                    <div class="animate-fade-in py-16 text-center">
+                        <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                            <i class="ph ph-check-circle text-[40px]"></i>
+                        </div>
+                        <h3 class="mb-3 text-2xl font-extrabold text-slate-900">Pesan Terkirim!</h3>
+                        <p class="mx-auto mb-8 max-w-sm text-slate-500">
+                            {{ session('success') }}
+                        </p>
+                        <a href="{{ route('contact') }}" class="border-b-2 border-emerald-600/30 pb-1 font-bold text-emerald-600 transition-colors hover:text-emerald-700">
+                            Kirim Pesan Lainnya
+                        </a>
+                    </div>
+                @else
+                    @if($errors->any())
+                        <div class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                            <ul class="list-inside list-disc space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('contact.store') }}" class="flex flex-col gap-6">
+                        @csrf
+                        <div>
+                            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Nama Pengirim</label>
+                            <div class="relative">
+                                <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+                                <input type="text" name="name" value="{{ old('name') }}" required placeholder="Nama Anda atau Organisasi" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Email Balasan</label>
+                            <div class="relative">
+                                <i class="ph ph-envelope-open absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+                                <input type="email" name="email" value="{{ old('email') }}" required placeholder="alamat@email.com" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Isi Pesan</label>
+                            <textarea name="message" rows="4" required placeholder="Tuliskan tujuan / masalah yang ingin didiskusikan..." class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">{{ old('message') }}</textarea>
+                        </div>
+                        <button type="submit" class="flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-600 py-4 font-bold text-white shadow-lg transition-all hover:bg-emerald-700">
+                            Kirim Pesan
+                            <i class="ph ph-paper-plane-tilt text-xl"></i>
+                        </button>
+                    </form>
+                @endif
+            </div>
         </div>
-    </main>
-
+    </section>
+</div>
 @endsection

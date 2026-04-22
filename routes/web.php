@@ -26,10 +26,25 @@ Route::get('/moregallery', [LandingController::class, 'gallery'])->name('gallery
 Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
 Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
 Route::post('/contact', [LandingController::class, 'submitContact'])->name('contact.store');
-Route::get('/donasi', [LandingController::class, 'donationForm'])->name('donation.form');
+Route::get('/donasi/{campaign?}', [LandingController::class, 'donationForm'])->name('donation.form');
 Route::post('/donasi', [LandingController::class, 'submitDonation'])->name('donation.store');
 Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
 Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
+Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
+
+Route::prefix('landing')->group(function () {
+    Route::get('/', [LandingController::class, 'index']);
+    Route::get('/about', [LandingController::class, 'about']);
+    Route::get('/allprograms', [LandingController::class, 'programs']);
+    Route::get('/focusareas', [LandingController::class, 'focusAreas']);
+    Route::get('/gallery', [LandingController::class, 'gallery']);
+    Route::get('/partners', [LandingController::class, 'partners']);
+    Route::get('/contact', [LandingController::class, 'contact']);
+    Route::get('/faqs', [LandingController::class, 'faq']);
+    Route::get('/getinvolved', [LandingController::class, 'getInvolved']);
+    Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved']);
+    Route::get('/donate/{campaign?}', [LandingController::class, 'donationForm']);
+});
 
 // Super Simple Admin Routes
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
@@ -106,5 +121,9 @@ Route::get('/terms', [LandingController::class, 'terms'])->name('terms');
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/home', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware('auth');
 
 require __DIR__.'/auth.php';

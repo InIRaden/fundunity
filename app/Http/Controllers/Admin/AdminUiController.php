@@ -571,7 +571,7 @@ class AdminUiController extends Controller
             'phone' => $settings->get('phone') ?: '0812-3456-7890',
             'instagramUrl' => $settings->get('instagram_url') ?: 'https://instagram.com/fundunity',
             'address' => $settings->get('address') ?: 'Jl. Kolaborasi Sosial No. 17, Bandung',
-            'logoUrl' => $settings->get('site_logo') ?: 'https://via.placeholder.com/256x256/22c55e/ffffff?text=FU',
+            'logoUrl' => $settings->get('site_logo') ?: asset('images/Logo.png'),
         ];
 
         $pageMeta = [
@@ -586,10 +586,12 @@ class AdminUiController extends Controller
     {
         $tabs = [
             ['key' => 'slider', 'label' => 'Banner Slider', 'route' => 'admin.imageslider'],
+            ['key' => 'campaign', 'label' => 'Campaign Landing', 'route' => 'admin.campaign'],
             ['key' => 'focus', 'label' => 'Fokus Area', 'route' => 'admin.focusareas'],
             ['key' => 'about', 'label' => 'Profil Lembaga', 'route' => 'admin.aboutus'],
             ['key' => 'faqs', 'label' => 'Tanya Jawab', 'route' => 'admin.faqs'],
             ['key' => 'partners', 'label' => 'Mitra Kami', 'route' => 'admin.partners'],
+            ['key' => 'identity', 'label' => 'Website Identity', 'route' => 'admin.identity'],
         ];
 
         $pageMeta = [

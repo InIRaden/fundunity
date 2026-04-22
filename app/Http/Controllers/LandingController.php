@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutUsItem;
+use App\Models\Campaign;
 use App\Models\Donor;
 use App\Models\Faq;
 use App\Models\Message;
@@ -11,7 +12,7 @@ use App\Models\FocusArea;
 use App\Models\GalleryItem;
 use App\Models\ImageSlider;
 use App\Models\Page;
-use App\Models\Program;
+use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -28,31 +29,12 @@ class LandingController extends Controller
             ->limit(8)
             ->get();
 
-        $homePrograms = Program::where('is_active', true)
-            ->orderBy('sort_order')
+        $homeCampaigns = Campaign::where('is_active', true)
+            ->whereIn('status', ['aktif', 'selesai'])
+            ->orderByRaw("case when status = 'aktif' then 0 else 1 end")
+            ->orderBy('deadline')
             ->orderByDesc('created_at')
-            ->limit(6)
-            ->get();
-
-        $homeGallery = GalleryItem::where('is_active', true)
-            ->where('type', 'image')
-            ->orderByDesc('is_featured')
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
-            ->limit(12)
-            ->get();
-
-        $homeVideo = GalleryItem::where('is_active', true)
-            ->where('type', 'video')
-            ->orderByDesc('is_featured')
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
-            ->first();
-
-        $homePartners = Partner::where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
-            ->limit(12)
+            ->limit(3)
             ->get();
 
         $homeFocusAreas = FocusArea::where('is_active', true)
@@ -61,7 +43,26 @@ class LandingController extends Controller
             ->limit(4)
             ->get();
 
-        return view('landing.home', compact('page', 'sliderItems', 'homePrograms', 'homeGallery', 'homeVideo', 'homePartners', 'homeFocusAreas'));
+        $homePartners = Partner::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->limit(12)
+            ->get();
+
+        $impactStats = [
+            'donor_count' => Donor::where('is_active', true)->count(),
+            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
+            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
+        ];
+
+        return view('landing.home', compact(
+            'page',
+            'sliderItems',
+            'homeCampaigns',
+            'homeFocusAreas',
+            'homePartners',
+            'impactStats'
+        ));
     }
 
     public function about()
@@ -122,12 +123,20 @@ class LandingController extends Controller
 
     public function programs()
     {
-        $programs = Program::where('is_active', true)
-            ->orderBy('sort_order')
+        $campaigns = Campaign::where('is_active', true)
+            ->whereIn('status', ['aktif', 'selesai'])
+            ->orderByRaw("case when status = 'aktif' then 0 else 1 end")
+            ->orderBy('deadline')
             ->orderByDesc('created_at')
             ->get();
 
-        return view('landing.programs', compact('programs'));
+        $categories = $campaigns
+            ->pluck('category')
+            ->filter()
+            ->unique()
+            ->values();
+
+        return view('landing.programs', compact('campaigns', 'categories'));
     }
 
     public function focusAreas()
@@ -172,9 +181,11 @@ class LandingController extends Controller
         return view('landing.contact');
     }
 
-    public function donationForm()
+    public function donationForm(?Campaign $campaign = null)
     {
-        return view('landing.donation');
+        return view('landing.donation', [
+            'selectedCampaign' => $campaign,
+        ]);
     }
 
     public function submitDonation(Request $request)
@@ -183,6 +194,7 @@ class LandingController extends Controller
             'name' => ['required', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:190', 'regex:/^[A-Za-z0-9._%+-]+@gmail\.com$/i'],
             'amount' => ['required', 'integer', 'min:1000'],
+            'campaign_id' => ['nullable', 'integer', 'exists:campaigns,id'],
             'note' => ['nullable', 'string', 'max:3000'],
         ], [
             'email.regex' => 'Email donasi harus menggunakan akun Gmail.',
@@ -207,7 +219,22 @@ class LandingController extends Controller
             ]);
         }
 
+        $campaign = null;
+
+        if (! empty($validated['campaign_id'])) {
+            $campaign = Campaign::find($validated['campaign_id']);
+
+            if ($campaign) {
+                $campaign->increment('collected', (int) $validated['amount']);
+            }
+        }
+
         $summary = 'DONASI PUBLIK - Nominal: Rp '.number_format((int) $validated['amount'], 0, ',', '.').'.';
+
+        if ($campaign) {
+            $summary .= ' Campaign: '.$campaign->title.'.';
+        }
+
         $notes = trim((string) ($validated['note'] ?? ''));
 
         Message::create([
@@ -218,7 +245,10 @@ class LandingController extends Controller
             'read_at' => null,
         ]);
 
-        return back()->with('donation_success', 'Donasi berhasil dikirim. Terima kasih atas kontribusi Anda.');
+        return back()
+            ->with('donation_success', 'Donasi berhasil dikirim. Terima kasih atas kontribusi Anda.')
+            ->with('donation_amount', (int) $validated['amount'])
+            ->with('donation_name', $validated['name']);
     }
 
     public function submitContact(Request $request)
@@ -272,6 +302,39 @@ class LandingController extends Controller
         }
 
         return view('landing.get-involved', compact('involvementTypes', 'involvementBenefits'));
+    }
+
+    public function submitGetInvolved(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:150'],
+            'email' => ['required', 'email', 'max:190'],
+            'phone' => ['required', 'string', 'max:30'],
+            'category' => ['required', 'string', 'max:120'],
+            'message' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        Volunteer::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'category' => $validated['category'],
+            'is_verified' => false,
+            'registered_at' => now()->toDateString(),
+            'is_active' => true,
+        ]);
+
+        Message::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'message' => 'PENDAFTARAN RELAWAN - Kategori: '.$validated['category'].'. '
+                .($validated['message'] ? 'Pesan: '.$validated['message'] : 'Tanpa pesan tambahan.')
+                .' No HP: '.$validated['phone'],
+            'is_read' => false,
+            'read_at' => null,
+        ]);
+
+        return back()->with('volunteer_success', 'Pendaftaran relawan berhasil dikirim. Tim kami akan segera menghubungi Anda.');
     }
 
     public function subscribeNewsletter(Request $request)

@@ -1,128 +1,120 @@
-<footer class="relative overflow-hidden bg-[#0f172a] text-white">
-    <div class="relative py-16 border-b border-gray-700 bg-gradient-to-br from-[#1e293b] to-[#334155]">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center transition-all duration-1000 opacity-100 translate-y-0">
-                <div class="inline-flex items-center gap-3 mb-6 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm">
-                    <x-icons.paper-plane class="text-white w-8 h-8" />
-                    <span class="text-sm font-semibold text-white tracking-wider uppercase">Tetap Terhubung</span>
+@php
+    $logoUrl = filled($siteSettings['site_logo'] ?? null) ? $siteSettings['site_logo'] : asset('images/Logo.png');
+    $brandName = $siteSettings['site_short_name'] ?? 'FundUnity';
+@endphp
+
+<footer class="border-t border-slate-800 bg-slate-900 py-16 text-slate-400">
+    <div class="mx-auto max-w-7xl px-6">
+        <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-12 lg:gap-8">
+            <div class="md:col-span-4">
+                <div class="mb-6 flex items-center gap-3">
+                    <img src="{{ $logoUrl }}" alt="{{ $siteSettings['site_name'] ?? $brandName }}" class="h-10 w-10 rounded-xl bg-white object-cover shadow-sm">
+                    <span class="font-display text-2xl font-extrabold text-white">{{ $brandName }}<span class="text-emerald-500">.</span></span>
                 </div>
-                <h2 class="text-4xl font-black mb-4">{{ $siteSettings['newsletter_title'] ?? 'Bergabunglah Bersama Kami' }}</h2>
-                <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-                    {{ $siteSettings['newsletter_description'] ?? 'Dapatkan pembaruan terbaru seputar program, kisah inspiratif, dan kesempatan berkontribusi.' }}
+                <p class="mb-6 leading-relaxed">
+                    {{ $siteSettings['footer_tagline'] ?? 'Platform konektivitas, galang dana, dan transparansi organisasi terpercaya.' }}
                 </p>
+                <div class="flex space-x-4">
+                    <a href="{{ $siteSettings['instagram_url'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-emerald-400 transition-all hover:bg-emerald-500 hover:text-white">
+                        <i class="ph ph-instagram-logo text-xl"></i>
+                    </a>
+                    <a href="{{ $siteSettings['whatsapp_url'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-emerald-400 transition-all hover:bg-emerald-500 hover:text-white">
+                        <i class="ph ph-whatsapp-logo text-xl"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+                <h4 class="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-white">Organisasi</h4>
+                <ul class="space-y-4">
+                    <li><a href="{{ route('about') }}" class="transition-colors hover:text-emerald-400">Tentang Kami</a></li>
+                    <li><a href="{{ route('home') }}#tentang" class="transition-colors hover:text-emerald-400">Visi & Misi</a></li>
+                    <li><a href="{{ route('faq') }}" class="transition-colors hover:text-emerald-400">FAQ</a></li>
+                    <li><a href="{{ route('get-involved') }}" class="transition-colors hover:text-emerald-400">Karir & Relawan</a></li>
+                </ul>
+            </div>
+
+            <div class="md:col-span-3">
+                <h4 class="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-white">Hubungi Kami</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <i class="ph ph-map-pin text-xl text-emerald-500"></i>
+                        <span>{{ $siteSettings['address'] ?? 'Sekretariat Utama FundUnity' }}</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="ph ph-phone text-xl text-emerald-500"></i>
+                        <span>{{ $siteSettings['phone'] ?? '+62 811 2233 4455' }}</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="ph ph-envelope-simple text-xl text-emerald-500"></i>
+                        <span>{{ $siteSettings['email'] ?? 'halo@fundunity.id' }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="md:col-span-3">
+                <h4 class="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-white">Newsletter</h4>
+                <p class="mb-4 text-sm">Dapatkan laporan bulanan dan kabar baik penyaluran dana langsung ke email Anda.</p>
 
                 @if(session('newsletter_success'))
-                    <div class="mb-4 rounded-xl border border-emerald-300 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-200 max-w-xl mx-auto">
+                    <div class="mb-4 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-bold text-emerald-400">
                         {{ session('newsletter_success') }}
                     </div>
                 @endif
 
                 @if(session('newsletter_error'))
-                    <div class="mb-4 rounded-xl border border-rose-300 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-200 max-w-xl mx-auto">
+                    <div class="mb-4 rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-300">
                         {{ session('newsletter_error') }}
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('newsletter.subscribe') }}" class="flex flex-col sm:flex-row items-center gap-4 max-w-xl mx-auto">
+                <form id="newsletterForm" method="POST" action="{{ route('newsletter.subscribe') }}" class="relative">
                     @csrf
                     <input
+                        id="newsletterEmailInput"
                         type="email"
                         name="email"
-                        placeholder="{{ $siteSettings['newsletter_placeholder'] ?? 'Masukkan email Anda' }}"
-                        class="w-full px-6 py-4 rounded-2xl bg-white/10 text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
                         value="{{ old('email') }}"
+                        placeholder="{{ $siteSettings['newsletter_placeholder'] ?? 'Alamat email Anda...' }}"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-800 py-3 pl-4 pr-12 text-white outline-none transition-colors focus:border-emerald-500"
+                        required
                     >
-                    <button
-                        type="submit"
-                        class="px-6 py-4 rounded-2xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-blue-600 to-blue-400"
-                    >
-                        {{ $siteSettings['newsletter_cta_text'] ?? 'Berlangganan' }}
+                    <button id="newsletterSubmitButton" type="submit" class="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-emerald-500 text-white transition-colors hover:bg-emerald-400">
+                        <i id="newsletterSubmitIcon" class="ph ph-paper-plane-tilt text-lg"></i>
                     </button>
                 </form>
             </div>
         </div>
-    </div>
-    <div class="py-16 container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
-        <div class="lg:col-span-2 space-y-6">
-            <h3 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
-                {{ $siteSettings['site_name'] ?? 'Komunitas Ruang Berbagi' }}
-            </h3>
-            <p class="text-gray-400">
-                {{ $siteSettings['footer_tagline'] ?? 'Membantu individu dan organisasi mendukung berbagai aksi nyata demi dunia yang lebih baik.' }}
-            </p>
-            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition">
-                <x-icons.phone class="w-5 h-5 flex-shrink-0" />
-                <span>{{ $siteSettings['phone'] ?? '0821 - 1677 - 1146' }}</span>
+
+        <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 text-sm md:flex-row">
+            <p>&copy; {{ date('Y') }} {{ $siteSettings['footer_copyright'] ?? ($siteSettings['site_name'] ?? 'FundUnity') }}</p>
+            <div class="flex space-x-6">
+                <a href="{{ route('terms') }}" class="transition-colors hover:text-emerald-400">Syarat & Ketentuan</a>
+                <a href="{{ route('privacy') }}" class="transition-colors hover:text-emerald-400">Kebijakan Privasi</a>
             </div>
-            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition">
-                <x-icons.envelope class="w-5 h-5 flex-shrink-0" />
-                <span>{{ $siteSettings['email'] ?? 'komunitasruangberbagi@gmail.com' }}</span>
-            </div>
-            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition">
-                <x-icons.location-dot class="w-5 h-5 flex-shrink-0" />
-                <span>{{ $siteSettings['address'] ?? 'Bandung, Jawa Barat, Indonesia' }}</span>
-            </div>
-        </div>
-        <div>
-            <h4 class="flex items-center gap-2 text-lg font-semibold mb-4">
-                <x-icons.users />
-                Siapa Kami
-            </h4>
-            <ul class="space-y-3 text-gray-400">
-                <li><a href="{{ $siteSettings['nav_about_url'] ?? route('about') }}" class="hover:text-white transition">{{ $siteSettings['nav_about_label'] ?? 'Tentang KRB' }}</a></li>
-                <li><a href="{{ $siteSettings['nav_partners_url'] ?? route('partners') }}" class="hover:text-white transition">{{ $siteSettings['nav_partners_label'] ?? 'Mitra' }}</a></li>
-                <li><a href="{{ $siteSettings['nav_contact_url'] ?? route('contact') }}" class="hover:text-white transition">{{ $siteSettings['nav_contact_label'] ?? 'Hubungi Kami' }}</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="flex items-center gap-2 text-lg font-semibold mb-4">
-                <x-icons.handshake />
-                Bergerak Bersama
-            </h4>
-            <ul class="space-y-3 text-gray-400">
-                <li><a href="{{ $siteSettings['nav_faq_url'] ?? route('faq') }}" class="hover:text-white transition">{{ $siteSettings['nav_faq_label'] ?? 'FAQ' }}</a></li>
-                <li><a href="{{ $siteSettings['nav_get_involved_url'] ?? route('get-involved') }}" class="hover:text-white transition">{{ $siteSettings['nav_get_involved_label'] ?? 'Gabung Bersama Kami' }}</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="flex items-center gap-2 text-lg font-semibold mb-4">
-                <x-icons.bullseye />
-                Apa yang Kami Lakukan
-            </h4>
-            <ul class="space-y-3 text-gray-400">
-                <li><a href="{{ $siteSettings['nav_programs_url'] ?? route('programs') }}" class="hover:text-white transition">{{ $siteSettings['nav_programs_label'] ?? 'Program' }}</a></li>
-                <li><a href="{{ $siteSettings['nav_focus_areas_url'] ?? route('focus-areas') }}" class="hover:text-white transition">{{ $siteSettings['nav_focus_areas_label'] ?? 'Fokus Utama' }}</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="border-t border-gray-700 pt-10 pb-6 text-center">
-        <h4 class="text-xl font-semibold mb-6">Ikuti Kami</h4>
-        <div class="flex justify-center gap-5 mb-8">
-            <a
-                href="{{ $siteSettings['instagram_url'] ?? 'https://instagram.com/komunitasruangberbagi' }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-white w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
-                aria-label="Instagram"
-            >
-                <x-icons.instagram />
-            </a>
-            <a
-                href="{{ $siteSettings['whatsapp_url'] ?? 'https://whatsapp.com/channel/0029VazY3qSFXUuUlnV5VQ0q' }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-white w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
-                aria-label="WhatsApp"
-            >
-                <x-icons.whatsapp />
-            </a>
-        </div>
-        <p class="text-sm text-gray-500 mb-2">© {{ date('Y') }} {{ $siteSettings['footer_copyright'] ?? 'Komunitas Ruang Berbagi. Semua hak dilindungi.' }}</p>
-        <div class="flex justify-center gap-4 text-sm text-gray-500">
-            <a href="{{ route('privacy') }}" class="hover:text-white transition">Kebijakan Privasi</a>
-            <span>|</span>
-            <a href="{{ route('terms') }}" class="hover:text-white transition">Syarat & Ketentuan</a>
         </div>
     </div>
 </footer>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const newsletterForm = document.getElementById('newsletterForm');
+        const newsletterEmailInput = document.getElementById('newsletterEmailInput');
+        const newsletterSubmitButton = document.getElementById('newsletterSubmitButton');
+        const newsletterSubmitIcon = document.getElementById('newsletterSubmitIcon');
+
+        newsletterForm?.addEventListener('submit', function () {
+            if (!newsletterEmailInput?.value?.trim() || !newsletterSubmitButton || !newsletterSubmitIcon) {
+                return;
+            }
+
+            newsletterSubmitButton.disabled = true;
+            newsletterSubmitButton.classList.add('cursor-not-allowed', 'opacity-70');
+            newsletterSubmitButton.classList.remove('hover:bg-emerald-400');
+            newsletterSubmitIcon.classList.remove('ph-paper-plane-tilt');
+            newsletterSubmitIcon.classList.add('ph-spinner', 'animate-spin');
+        });
+    });
+</script>
+@endpush

@@ -36,6 +36,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('logout', [AuthenticatedSessionController::class, 'confirmLogout'])
+        ->name('logout.confirm');
+
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

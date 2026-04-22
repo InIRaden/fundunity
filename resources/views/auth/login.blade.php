@@ -1,57 +1,137 @@
 <x-guest-layout>
-    <div class="text-center mb-8">
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">Masuk ke Akun Anda</h3>
-        <p class="text-gray-600">Silakan masuk untuk mengakses panel admin</p>
-    </div>
+    @php
+        $loginError = $errors->first('email') ?: $errors->first('password') ?: $errors->first();
+    @endphp
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-6" :status="session('status')" />
+    <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <div class="w-full max-w-md">
+            <div class="mb-10 flex flex-col items-center">
+                <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-600 shadow-xl shadow-indigo-200">
+                    <i class="ph ph-shield-check text-[32px] text-white"></i>
+                </div>
+                <h1 class="font-display text-2xl font-black tracking-tight text-slate-900">FundUnity Admin</h1>
+                <p class="mt-1 text-sm font-medium text-slate-500">Panel Manajemen Organisasi Internal</p>
+            </div>
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-6">
-        @csrf
+            <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:p-10">
+                <div class="mb-8">
+                    <h2 class="text-lg font-bold text-slate-800">Masuk ke Akun</h2>
+                    <p class="mt-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Gunakan akses resmi Anda</p>
+                </div>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Alamat Email')" />
-            <x-text-input id="email" class="block mt-2 w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Masukkan email Anda" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+                @if (session('status'))
+                    <div class="mb-6 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-xs font-bold text-emerald-600">
+                        {{ session('status') }}
+                    </div>
+                @endif
 
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Kata Sandi')" />
-            <x-text-input id="password" class="block mt-2 w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+                @if ($loginError)
+                    <div id="loginErrorBox" class="mb-6 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-600">
+                        {{ $loginError }}
+                    </div>
+                @endif
 
-        <!-- Remember Me -->
-        <div class="flex items-center justify-between">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-emerald-600 shadow-sm focus:ring-emerald-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Ingat saya') }}</span>
-            </label>
+                <form method="POST" action="{{ route('login') }}" id="loginForm" class="space-y-5">
+                    @csrf
 
-            @if (Route::has('password.request'))
-                <a class="text-sm text-emerald-600 hover:text-emerald-500 underline" href="{{ route('password.request') }}">
-                    {{ __('Lupa kata sandi?') }}
-                </a>
-            @endif
-        </div>
+                    <div>
+                        <label for="email" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Email Address</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                                <i class="ph ph-envelope-simple text-base text-slate-300"></i>
+                            </div>
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                placeholder="admin@fundunity.org"
+                                required
+                                autofocus
+                                autocomplete="username"
+                                class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                            >
+                        </div>
+                    </div>
 
-        <div class="pt-4">
-            <x-primary-button class="w-full justify-center py-3 bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500">
-                {{ __('Masuk') }}
-            </x-primary-button>
-        </div>
+                    <div>
+                        <label for="password" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Password</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                                <i class="ph ph-lock text-base text-slate-300"></i>
+                            </div>
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                placeholder="........"
+                                required
+                                autocomplete="current-password"
+                                class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                            >
+                        </div>
+                    </div>
 
-        <!-- Register Link -->
-        <div class="text-center pt-4">
-            <p class="text-sm text-gray-600">
-                Belum punya akun?
-                <a href="{{ route('register') }}" class="text-emerald-600 hover:text-emerald-500 font-medium underline">
-                    Daftar sekarang
-                </a>
+                    <div class="flex justify-end pt-1">
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="text-xs font-bold text-indigo-600 transition-colors hover:text-indigo-700">
+                                Lupa Kata Sandi?
+                            </a>
+                        @endif
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="loginSubmitButton"
+                        class="w-full rounded-2xl bg-indigo-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-indigo-100 transition-all active:scale-[0.98] hover:bg-indigo-700"
+                    >
+                        MASUK KE DASHBOARD
+                    </button>
+                </form>
+            </div>
+
+            <p class="mt-12 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                &copy; {{ date('Y') }} FundUnity Foundation • Secure Access Only
             </p>
         </div>
-    </form>
+    </div>
+
+    @push('head')
+    <style>
+        @keyframes login-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        .login-shake {
+            animation: login-shake 0.2s ease-in-out 0s 2;
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('loginForm');
+            const submitButton = document.getElementById('loginSubmitButton');
+            const errorBox = document.getElementById('loginErrorBox');
+
+            if (errorBox) {
+                errorBox.classList.add('login-shake');
+            }
+
+            form?.addEventListener('submit', function () {
+                if (!submitButton) {
+                    return;
+                }
+
+                submitButton.disabled = true;
+                submitButton.textContent = 'MENGOTENTIKASI...';
+                submitButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                submitButton.classList.add('cursor-not-allowed', 'bg-indigo-300');
+            });
+        });
+    </script>
+    @endpush
 </x-guest-layout>
