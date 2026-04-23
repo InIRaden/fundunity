@@ -40,7 +40,7 @@
                         <p class="mx-auto mb-8 max-w-sm text-slate-500">
                             {{ session('success') }}
                         </p>
-                        <a href="{{ route('contact') }}" class="border-b-2 border-emerald-600/30 pb-1 font-bold text-emerald-600 transition-colors hover:text-emerald-700">
+                        <a href="{{ route('landing.contact') }}" class="border-b-2 border-emerald-600/30 pb-1 font-bold text-emerald-600 transition-colors hover:text-emerald-700">
                             Kirim Pesan Lainnya
                         </a>
                     </div>

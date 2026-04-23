@@ -1,39 +1,37 @@
-@extends('layouts.landing')
+<?php $__env->startSection('title', 'Formulir Donasi'); ?>
 
-@section('title', 'Formulir Donasi')
-
-@section('content')
-@php
+<?php $__env->startSection('content'); ?>
+<?php
     $donationErrors = $errors->getBag('donation');
     $activeCampaign = $selectedCampaign ?? null;
     $hasSuccess = session()->has('donation_success');
     $initialAmount = old('amount', '');
-@endphp
+?>
 
 <div class="relative min-h-[70vh] bg-slate-50 pb-12 pt-24">
     <div class="absolute left-0 top-0 -z-10 h-64 w-full bg-slate-900"></div>
 
     <div class="mx-auto max-w-xl px-6 py-12">
-        @if($activeCampaign)
+        <?php if($activeCampaign): ?>
             <div class="mb-6 rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4">
                 <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">Mendonasikan untuk program</p>
-                <h2 class="mt-2 text-lg font-extrabold text-slate-900">{{ $activeCampaign->title }}</h2>
-                <p class="mt-1 text-sm text-slate-600">Target: Rp {{ number_format((int) $activeCampaign->target, 0, ',', '.') }}</p>
+                <h2 class="mt-2 text-lg font-extrabold text-slate-900"><?php echo e($activeCampaign->title); ?></h2>
+                <p class="mt-1 text-sm text-slate-600">Target: Rp <?php echo e(number_format((int) $activeCampaign->target, 0, ',', '.')); ?></p>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @if($donationErrors->any())
+        <?php if($donationErrors->any()): ?>
             <div class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                 <ul class="list-inside list-disc space-y-1">
-                    @foreach($donationErrors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $donationErrors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
-        @endif
+        <?php endif; ?>
 
         <div class="overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-2xl sm:p-10">
-            @if(!$hasSuccess)
+            <?php if(!$hasSuccess): ?>
                 <div class="mb-10 flex justify-center">
                     <div class="flex items-center gap-3">
                         <div data-step-indicator="1" class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white shadow-lg shadow-emerald-500/30">1</div>
@@ -64,11 +62,12 @@
                     <h2 class="mb-6 text-2xl font-extrabold text-slate-900">Pilih Nominal Donasi</h2>
 
                     <div class="mb-6 grid grid-cols-2 gap-4">
-                        @foreach([10000, 50000, 100000, 500000] as $preset)
-                            <button type="button" data-preset="{{ $preset }}" class="donation-preset rounded-xl border-2 border-slate-100 bg-white py-3 font-bold text-slate-500 transition-all hover:border-emerald-200">
-                                Rp {{ number_format($preset, 0, ',', '.') }}
+                        <?php $__currentLoopData = [10000, 50000, 100000, 500000]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <button type="button" data-preset="<?php echo e($preset); ?>" class="donation-preset rounded-xl border-2 border-slate-100 bg-white py-3 font-bold text-slate-500 transition-all hover:border-emerald-200">
+                                Rp <?php echo e(number_format($preset, 0, ',', '.')); ?>
+
                             </button>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
 
                     <div class="mb-8">
@@ -77,7 +76,7 @@
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                                 <span id="donationAmountPrefix" class="font-bold text-slate-500">Rp</span>
                             </div>
-                            <input id="donationAmountInput" type="number" min="1000" value="{{ $initialAmount }}" placeholder="0" class="w-full rounded-xl border-2 border-slate-200 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
+                            <input id="donationAmountInput" type="number" min="1000" value="<?php echo e($initialAmount); ?>" placeholder="0" class="w-full rounded-xl border-2 border-slate-200 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                         </div>
                     </div>
 
@@ -89,7 +88,7 @@
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                                     <i class="ph ph-user text-slate-400"></i>
                                 </div>
-                                <input id="donationNameInput" type="text" value="{{ old('name') }}" placeholder="Nama Anda" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
+                                <input id="donationNameInput" type="text" value="<?php echo e(old('name')); ?>" placeholder="Nama Anda" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                             </div>
                         </div>
                         <div>
@@ -98,12 +97,12 @@
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                                     <i class="ph ph-envelope-simple text-slate-400"></i>
                                 </div>
-                                <input id="donationEmailInput" type="email" value="{{ old('email') }}" placeholder="email@gmail.com" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
+                                <input id="donationEmailInput" type="email" value="<?php echo e(old('email')); ?>" placeholder="email@gmail.com" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                             </div>
                         </div>
                         <div>
                             <label class="mb-2 block text-sm font-bold text-slate-700">Catatan (Opsional)</label>
-                            <textarea id="donationNoteInput" rows="3" placeholder="Tulis catatan atau doa..." class="w-full resize-none rounded-xl border-2 border-slate-100 bg-slate-50 p-4 text-sm text-slate-900 outline-none transition-colors focus:border-emerald-500">{{ old('note') }}</textarea>
+                            <textarea id="donationNoteInput" rows="3" placeholder="Tulis catatan atau doa..." class="w-full resize-none rounded-xl border-2 border-slate-100 bg-slate-50 p-4 text-sm text-slate-900 outline-none transition-colors focus:border-emerald-500"><?php echo e(old('note')); ?></textarea>
                         </div>
                     </div>
 
@@ -161,9 +160,9 @@
                     <div class="mb-8 inline-block rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-2xl shadow-slate-200/50">
                         <div class="relative mx-auto mb-3 flex h-56 w-56 items-center justify-center overflow-hidden rounded-2xl border-4 border-slate-50 bg-slate-50">
                             <div class="grid grid-cols-4 gap-1 opacity-20">
-                                @for($i = 0; $i < 16; $i++)
+                                <?php for($i = 0; $i < 16; $i++): ?>
                                     <div class="h-8 w-8 rounded-sm bg-slate-900"></div>
-                                @endfor
+                                <?php endfor; ?>
                             </div>
                             <div class="absolute rounded-xl border border-slate-100 bg-white p-3 shadow-lg">
                                 <p class="text-[10px] font-black text-slate-900">QRIS CODE</p>
@@ -181,46 +180,47 @@
                         Selesaikan Donasi
                     </button>
                 </div>
-            @else
+            <?php else: ?>
                 <div class="animate-fade-in py-8 text-center">
                     <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-emerald-100 text-emerald-500">
                         <i class="ph ph-check-circle text-[48px]"></i>
                     </div>
-                    <h2 class="mb-2 text-3xl font-extrabold text-slate-900">Terima Kasih, {{ session('donation_name', 'Sahabat Kebaikan') }}!</h2>
+                    <h2 class="mb-2 text-3xl font-extrabold text-slate-900">Terima Kasih, <?php echo e(session('donation_name', 'Sahabat Kebaikan')); ?>!</h2>
                     <p class="mx-auto mb-6 max-w-sm leading-relaxed text-slate-500">
-                        Donasi Anda sebesar <span class="font-bold text-slate-700">Rp {{ number_format((int) session('donation_amount', 0), 0, ',', '.') }}</span> telah berhasil kami terima.
+                        Donasi Anda sebesar <span class="font-bold text-slate-700">Rp <?php echo e(number_format((int) session('donation_amount', 0), 0, ',', '.')); ?></span> telah berhasil kami terima.
                     </p>
                     <div class="mb-8 rounded-2xl border border-slate-100 bg-slate-50 p-6 text-left text-sm text-slate-600">
-                        {{ session('donation_success') }}
+                        <?php echo e(session('donation_success')); ?>
+
                     </div>
-                        <a href="{{ route('landing.programs') }}" class="rounded-xl bg-slate-900 px-8 py-3 font-bold text-white shadow-lg shadow-slate-900/20 transition-all hover:bg-slate-800">
+                        <a href="<?php echo e(route('landing.programs')); ?>" class="rounded-xl bg-slate-900 px-8 py-3 font-bold text-white shadow-lg shadow-slate-900/20 transition-all hover:bg-slate-800">
                         Kembali ke Program
                     </a>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
 
-        @if(!$hasSuccess)
-            <form id="finalDonationForm" method="POST" action="{{ route('donation.store') }}" class="hidden">
-                @csrf
+        <?php if(!$hasSuccess): ?>
+            <form id="finalDonationForm" method="POST" action="<?php echo e(route('donation.store')); ?>" class="hidden">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="name" id="finalDonationName">
                 <input type="hidden" name="email" id="finalDonationEmail">
                 <input type="hidden" name="amount" id="finalDonationAmount">
                 <input type="hidden" name="note" id="finalDonationNote">
-                <input type="hidden" name="campaign_id" value="{{ $activeCampaign?->id }}">
+                <input type="hidden" name="campaign_id" value="<?php echo e($activeCampaign?->id); ?>">
             </form>
-        @endif
+        <?php endif; ?>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
-@if(!$hasSuccess)
+<?php $__env->startPush('scripts'); ?>
+<?php if(!$hasSuccess): ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const pendingDonationKey = 'pendingDonation';
         let currentStep = 1;
-        let selectedAmount = Number(@json((int) $initialAmount));
+        let selectedAmount = Number(<?php echo json_encode((int) $initialAmount, 15, 512) ?>);
         let selectedPreset = null;
         let countdownSeconds = 900;
         let countdownTimer = null;
@@ -626,5 +626,7 @@
         openStep(1);
     });
 </script>
-@endif
-@endpush
+<?php endif; ?>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.landing', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/landing/donation.blade.php ENDPATH**/ ?>

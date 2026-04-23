@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            LandingContentSeeder::class,
             ProgramSeeder::class,
             FocusAreaSeeder::class,
             GalleryItemSeeder::class,

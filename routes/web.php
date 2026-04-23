@@ -32,18 +32,18 @@ Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
 Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
 Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
 
-Route::prefix('landing')->group(function () {
-    Route::get('/', [LandingController::class, 'index']);
-    Route::get('/about', [LandingController::class, 'about']);
-    Route::get('/allprograms', [LandingController::class, 'programs']);
-    Route::get('/focusareas', [LandingController::class, 'focusAreas']);
-    Route::get('/gallery', [LandingController::class, 'gallery']);
-    Route::get('/partners', [LandingController::class, 'partners']);
-    Route::get('/contact', [LandingController::class, 'contact']);
-    Route::get('/faqs', [LandingController::class, 'faq']);
-    Route::get('/getinvolved', [LandingController::class, 'getInvolved']);
-    Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved']);
-    Route::get('/donate/{campaign?}', [LandingController::class, 'donationForm']);
+Route::prefix('landing')->name('landing.')->group(function () {
+    Route::get('/', [LandingController::class, 'index'])->name('home');
+    Route::get('/about', [LandingController::class, 'about'])->name('about');
+    Route::get('/allprograms', [LandingController::class, 'programs'])->name('programs');
+    Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus-areas');
+    Route::get('/gallery', [LandingController::class, 'gallery'])->name('gallery');
+    Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
+    Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
+    Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
+    Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
+    Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
+    Route::get('/donate/{campaign?}', [LandingController::class, 'donationForm'])->name('donate');
 });
 
 // Super Simple Admin Routes

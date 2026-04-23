@@ -124,7 +124,7 @@
         <p class="text-gray-600 text-lg mb-8">
             Mari bersama-sama menciptakan dampak positif yang berkelanjutan untuk masyarakat
         </p>
-        <a href="{{ route('contact') }}" class="inline-block bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition">
+        <a href="{{ route('landing.contact') }}" class="inline-block bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition">
             Hubungi Kami untuk Kemitraan
         </a>
     </div>

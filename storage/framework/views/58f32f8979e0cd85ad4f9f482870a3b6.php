@@ -1,7 +1,16 @@
-<x-guest-layout>
-    @php
+<?php if (isset($component)) { $__componentOriginal69dc84650370d1d4dc1b42d016d7226b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal69dc84650370d1d4dc1b42d016d7226b = $attributes; } ?>
+<?php $component = App\View\Components\GuestLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('guest-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\GuestLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+    <?php
         $loginError = $errors->first('email') ?: $errors->first('password') ?: $errors->first();
-    @endphp
+    ?>
 
     <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 font-sans">
         <div class="w-full max-w-md">
@@ -19,20 +28,22 @@
                     <p class="mt-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Gunakan akses resmi Anda</p>
                 </div>
 
-                @if (session('status'))
+                <?php if(session('status')): ?>
                     <div class="mb-6 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-xs font-bold text-emerald-600">
-                        {{ session('status') }}
-                    </div>
-                @endif
+                        <?php echo e(session('status')); ?>
 
-                @if ($loginError)
+                    </div>
+                <?php endif; ?>
+
+                <?php if($loginError): ?>
                     <div id="loginErrorBox" class="mb-6 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-600">
-                        {{ $loginError }}
-                    </div>
-                @endif
+                        <?php echo e($loginError); ?>
 
-                <form method="POST" action="{{ route('login') }}" id="loginForm" class="space-y-5">
-                    @csrf
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" action="<?php echo e(route('login')); ?>" id="loginForm" class="space-y-5">
+                    <?php echo csrf_field(); ?>
 
                     <div>
                         <label for="email" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Email Address</label>
@@ -44,7 +55,7 @@
                                 id="email"
                                 type="email"
                                 name="email"
-                                value="{{ old('email') }}"
+                                value="<?php echo e(old('email')); ?>"
                                 placeholder="admin@fundunity.org"
                                 required
                                 autofocus
@@ -73,11 +84,11 @@
                     </div>
 
                     <div class="flex justify-end pt-1">
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-xs font-bold text-indigo-600 transition-colors hover:text-indigo-700">
+                        <?php if(Route::has('password.request')): ?>
+                            <a href="<?php echo e(route('password.request')); ?>" class="text-xs font-bold text-indigo-600 transition-colors hover:text-indigo-700">
                                 Lupa Kata Sandi?
                             </a>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
                     <button
@@ -91,12 +102,12 @@
             </div>
 
             <p class="mt-12 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                &copy; {{ date('Y') }} FundUnity Foundation • Secure Access Only
+                &copy; <?php echo e(date('Y')); ?> FundUnity Foundation • Secure Access Only
             </p>
         </div>
     </div>
 
-    @push('head')
+    <?php $__env->startPush('head'); ?>
     <style>
         @keyframes login-shake {
             0%, 100% { transform: translateX(0); }
@@ -108,9 +119,9 @@
             animation: login-shake 0.2s ease-in-out 0s 2;
         }
     </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('loginForm');
@@ -133,5 +144,15 @@
             });
         });
     </script>
-    @endpush
-</x-guest-layout>
+    <?php $__env->stopPush(); ?>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
+<?php $attributes = $__attributesOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
+<?php unset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
+<?php $component = $__componentOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
+<?php unset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
+<?php endif; ?>
+<?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/auth/login.blade.php ENDPATH**/ ?>

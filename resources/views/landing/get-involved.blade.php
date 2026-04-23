@@ -36,7 +36,7 @@
             <p class="mb-8 leading-relaxed text-slate-500">
                 {{ session('volunteer_success') }}
             </p>
-            <a href="{{ route('get-involved') }}" class="rounded-xl bg-slate-100 px-8 py-3 font-bold text-slate-700 transition-colors hover:bg-slate-200">
+            <a href="{{ route('landing.get-involved') }}" class="rounded-xl bg-slate-100 px-8 py-3 font-bold text-slate-700 transition-colors hover:bg-slate-200">
                 Kirim Pendaftaran Lain
             </a>
         </div>

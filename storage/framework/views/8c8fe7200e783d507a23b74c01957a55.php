@@ -1,8 +1,6 @@
-@extends('layouts.landing')
+<?php $__env->startSection('title', optional($page)->meta_title ?? 'Wujudkan Dampak Nyata'); ?>
 
-@section('title', optional($page)->meta_title ?? 'Wujudkan Dampak Nyata')
-
-@push('head')
+<?php $__env->startPush('head'); ?>
 <style>
     .landing-clamp-2,
     .landing-clamp-3 {
@@ -19,10 +17,10 @@
         -webkit-line-clamp: 3;
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
-@php
+<?php $__env->startSection('content'); ?>
+<?php
     $sliderItems = collect($sliderItems ?? []);
     $homeCampaigns = collect($homeCampaigns ?? []);
     $homeFocusAreas = collect($homeFocusAreas ?? []);
@@ -73,11 +71,11 @@
     $heroDonorLabel = $heroDonorCount > 0 ? number_format($heroDonorCount, 0, ',', '.').'+' : '45K+';
     $heroAmountLabel = $heroDistributedAmount > 0 ? $formatCompactRupiah($heroDistributedAmount) : 'Rp 12M';
     $heroProgramLabel = $heroCompletedPrograms > 0 ? number_format($heroCompletedPrograms, 0, ',', '.').'+' : '128';
-@endphp
+?>
 
 <section class="relative flex min-h-screen items-center overflow-hidden bg-slate-900 pb-20 pt-24">
     <div class="absolute inset-0">
-        <img src="{{ $heroImage }}" alt="Hero FundUnity" class="h-full w-full object-cover object-top opacity-40">
+        <img src="<?php echo e($heroImage); ?>" alt="Hero FundUnity" class="h-full w-full object-cover object-top opacity-40">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
     </div>
 
@@ -97,11 +95,11 @@
         </p>
 
         <div class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="{{ route('landing.programs') }}" class="flex w-full items-center justify-center gap-3 rounded-2xl bg-emerald-500 px-8 py-4 text-center text-base font-extrabold text-slate-900 shadow-xl shadow-emerald-500/30 transition-all hover:bg-emerald-400 sm:w-auto">
+            <a href="<?php echo e(route('landing.programs')); ?>" class="flex w-full items-center justify-center gap-3 rounded-2xl bg-emerald-500 px-8 py-4 text-center text-base font-extrabold text-slate-900 shadow-xl shadow-emerald-500/30 transition-all hover:bg-emerald-400 sm:w-auto">
                 Pilih Program Bantuan
                 <i class="ph ph-heart-straight text-xl text-rose-500"></i>
             </a>
-            <a href="{{ route('landing.about') }}" class="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-8 py-4 text-center text-base font-bold text-white backdrop-blur-md transition-all hover:bg-white/20 sm:w-auto">
+            <a href="<?php echo e(route('landing.about')); ?>" class="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-8 py-4 text-center text-base font-bold text-white backdrop-blur-md transition-all hover:bg-white/20 sm:w-auto">
                 <i class="ph ph-play-circle text-2xl"></i>
                 Lihat Profil Kami
             </a>
@@ -109,15 +107,15 @@
 
         <div class="mt-16 flex flex-wrap justify-center gap-8 border-t border-white/10 pt-8 md:gap-16">
             <div class="text-left">
-                <p class="text-4xl font-extrabold text-white">{{ $heroDonorLabel }}</p>
+                <p class="text-4xl font-extrabold text-white"><?php echo e($heroDonorLabel); ?></p>
                 <p class="mt-1 text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">Donatur Aktif</p>
             </div>
             <div class="text-left">
-                <p class="text-4xl font-extrabold text-white">{{ $heroAmountLabel }}</p>
+                <p class="text-4xl font-extrabold text-white"><?php echo e($heroAmountLabel); ?></p>
                 <p class="mt-1 text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">Telah Disalurkan</p>
             </div>
             <div class="text-left">
-                <p class="text-4xl font-extrabold text-white">{{ $heroProgramLabel }}</p>
+                <p class="text-4xl font-extrabold text-white"><?php echo e($heroProgramLabel); ?></p>
                 <p class="mt-1 text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">Program Selesai</p>
             </div>
         </div>
@@ -137,8 +135,8 @@
         </div>
 
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            @forelse($homeFocusAreas as $index => $focusArea)
-                @php
+            <?php $__empty_1 = true; $__currentLoopData = $homeFocusAreas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $focusArea): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php
                     $storedColor = strtolower((string) ($focusArea->color ?? ''));
                     $focusStyle = $focusStyles[$index % count($focusStyles)];
 
@@ -151,19 +149,19 @@
                     } elseif (str_contains($storedColor, 'amber') || str_contains($storedColor, 'orange') || str_contains($storedColor, 'yellow')) {
                         $focusStyle = 'bg-amber-50 text-amber-600 border-amber-200';
                     }
-                @endphp
-                <div class="group rounded-[2rem] border p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl {{ $focusStyle }}">
+                ?>
+                <div class="group rounded-[2rem] border p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl <?php echo e($focusStyle); ?>">
                     <div class="mb-6 text-3xl">
-                        <i class="{{ $focusArea->icon ?: 'ph ph-target' }}"></i>
+                        <i class="<?php echo e($focusArea->icon ?: 'ph ph-target'); ?>"></i>
                     </div>
-                    <h3 class="mb-2 text-lg font-bold text-slate-900">{{ $focusArea->title }}</h3>
-                    <p class="text-sm leading-relaxed text-slate-500">{{ $focusArea->description }}</p>
+                    <h3 class="mb-2 text-lg font-bold text-slate-900"><?php echo e($focusArea->title); ?></h3>
+                    <p class="text-sm leading-relaxed text-slate-500"><?php echo e($focusArea->description); ?></p>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="rounded-[2rem] border border-dashed border-slate-200 bg-slate-50 p-8 text-sm text-slate-500 lg:col-span-4">
                     Belum ada fokus area yang aktif dari halaman admin.
                 </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -182,78 +180,80 @@
                     Pilih program galang dana yang sedang berjalan. Bantuan sekecil apapun dari Anda sangat berarti bagi yang membutuhkan.
                 </p>
             </div>
-            <a href="{{ route('landing.programs') }}" class="flex items-center gap-2 whitespace-nowrap font-bold text-emerald-600 transition-colors hover:text-emerald-700">
+            <a href="<?php echo e(route('landing.programs')); ?>" class="flex items-center gap-2 whitespace-nowrap font-bold text-emerald-600 transition-colors hover:text-emerald-700">
                 Lihat Semua Program
                 <i class="ph ph-arrow-right text-xl"></i>
             </a>
         </div>
 
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            @forelse($homeCampaigns as $campaign)
-                @php
+            <?php $__empty_1 = true; $__currentLoopData = $homeCampaigns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campaign): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php
                     $daysLeft = max(0, now()->diffInDays($campaign->deadline, false));
                     $progress = (int) min(100, round(((int) $campaign->collected / max((int) $campaign->target, 1)) * 100));
                     $isUrgent = $campaign->status === 'aktif' && $daysLeft <= 7;
                     $campaignImage = $campaignFallbackImages[$campaign->category] ?? $campaignFallbackImages['default'];
-                @endphp
+                ?>
 
                 <article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl shadow-slate-200/50 transition-transform duration-300 hover:-translate-y-2">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="{{ $campaignImage }}" alt="{{ $campaign->title }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <img src="<?php echo e($campaignImage); ?>" alt="<?php echo e($campaign->title); ?>" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
                         <div class="absolute left-4 top-4 rounded-lg bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm backdrop-blur-sm">
-                            {{ $campaign->category ?? 'Umum' }}
+                            <?php echo e($campaign->category ?? 'Umum'); ?>
+
                         </div>
-                        @if($isUrgent)
+                        <?php if($isUrgent): ?>
                             <div class="absolute right-4 top-4 rounded-lg bg-rose-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm">
                                 Mendesak
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
                     <div class="flex flex-1 flex-col p-6">
                         <h3 class="landing-clamp-2 mb-4 text-xl font-bold leading-snug text-slate-900 transition-colors group-hover:text-emerald-600">
-                            {{ $campaign->title }}
+                            <?php echo e($campaign->title); ?>
+
                         </h3>
 
                         <div class="mt-auto">
                             <div class="mb-2 flex items-end justify-between">
                                 <div>
                                     <p class="mb-1 text-xs font-medium text-slate-500">Terkumpul</p>
-                                    <p class="text-lg font-bold leading-none text-emerald-600">{{ $formatCurrency($campaign->collected) }}</p>
+                                    <p class="text-lg font-bold leading-none text-emerald-600"><?php echo e($formatCurrency($campaign->collected)); ?></p>
                                 </div>
                                 <div class="text-right">
                                     <p class="mb-1 text-[10px] font-medium uppercase tracking-wider text-slate-400">Target</p>
-                                    <p class="text-sm font-bold leading-none text-slate-600">{{ $formatCurrency($campaign->target) }}</p>
+                                    <p class="text-sm font-bold leading-none text-slate-600"><?php echo e($formatCurrency($campaign->target)); ?></p>
                                 </div>
                             </div>
 
                             <div class="relative mb-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
-                                <div class="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style="width: {{ $progress }}%"></div>
+                                <div class="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style="width: <?php echo e($progress); ?>%"></div>
                             </div>
 
                             <div class="flex items-center justify-between rounded-xl bg-slate-50 p-3 text-xs font-bold text-slate-500">
                                 <div class="flex items-center gap-1.5">
                                     <i class="ph ph-users text-base text-slate-400"></i>
-                                    {{ number_format(max(1, (int) floor(((int) $campaign->collected) / 100000)), 0, ',', '.') }} Donatur
+                                    <?php echo e(number_format(max(1, (int) floor(((int) $campaign->collected) / 100000)), 0, ',', '.')); ?> Donatur
                                 </div>
                                 <div class="flex items-center gap-1.5 text-amber-600">
                                     <i class="ph ph-heartbeat text-base"></i>
-                                    Sisa {{ $daysLeft }} Hari
+                                    Sisa <?php echo e($daysLeft); ?> Hari
                                 </div>
                             </div>
                         </div>
 
-                        <a href="{{ route('landing.donate', ['campaign' => $campaign->id]) }}" class="mt-6 block w-full rounded-xl bg-emerald-500 py-3.5 text-center text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-colors hover:bg-emerald-600">
+                        <a href="<?php echo e(route('landing.donate', ['campaign' => $campaign->id])); ?>" class="mt-6 block w-full rounded-xl bg-emerald-500 py-3.5 text-center text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-colors hover:bg-emerald-600">
                             Donasi Sekarang
                         </a>
                     </div>
                 </article>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="rounded-[2rem] border border-dashed border-slate-200 bg-white p-8 text-sm text-slate-500 lg:col-span-3">
                     Belum ada campaign aktif yang siap ditampilkan dari admin.
                 </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -266,12 +266,12 @@
         </div>
 
         <div class="flex flex-wrap items-center justify-center gap-8 opacity-60 transition-opacity duration-500 hover:opacity-100 md:gap-16">
-            @forelse($homePartners as $partner)
+            <?php $__empty_1 = true; $__currentLoopData = $homePartners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="group relative flex flex-col items-center justify-center grayscale transition-all duration-300 hover:grayscale-0">
-                    <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" class="h-10 object-contain transition-transform duration-300 group-hover:scale-110 md:h-12">
+                    <img src="<?php echo e($partner->logo); ?>" alt="<?php echo e($partner->name); ?>" class="h-10 object-contain transition-transform duration-300 group-hover:scale-110 md:h-12">
                 </div>
-            @empty
-                @php
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <?php
                     $fallbackPartners = [
                         ['name' => 'Mitra Sejati', 'logo' => 'images/partners/partner1.png'],
                         ['name' => 'Komunitas Peduli', 'logo' => 'images/partners/partner2.png'],
@@ -280,14 +280,14 @@
                         ['name' => 'Forum Indonesia', 'logo' => 'images/partners/partner5.png'],
                         ['name' => 'Kolaborasi ID', 'logo' => 'images/partners/partner6.png'],
                     ];
-                @endphp
+                ?>
 
-                @foreach($fallbackPartners as $partner)
+                <?php $__currentLoopData = $fallbackPartners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="group relative flex flex-col items-center justify-center grayscale transition-all duration-300 hover:grayscale-0">
-                        <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}" class="h-10 object-contain transition-transform duration-300 group-hover:scale-110 md:h-12">
+                        <img src="<?php echo e(asset($partner['logo'])); ?>" alt="<?php echo e($partner['name']); ?>" class="h-10 object-contain transition-transform duration-300 group-hover:scale-110 md:h-12">
                     </div>
-                @endforeach
-            @endforelse
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -306,8 +306,8 @@
                 Kami membutuhkan tenaga Anda untuk membantu operasional lapangan, mulai dari pengepakan logistik hingga penyaluran bantuan langsung ke tangan penerima manfaat.
             </p>
             <div class="flex w-full flex-col justify-center gap-4 pt-4 sm:flex-row">
-                <a href="{{ route('landing.get-involved') }}" class="rounded-xl bg-white px-6 py-3 text-center text-sm font-bold text-emerald-800 shadow-md transition hover:bg-slate-50">Gabung Jadi Relawan</a>
-                <a href="{{ route('landing.faq') }}" class="rounded-xl border border-white/40 px-6 py-3 text-center text-sm font-bold text-white transition hover:bg-white/10">Tanya Jawab (FAQ)</a>
+                <a href="<?php echo e(route('landing.get-involved')); ?>" class="rounded-xl bg-white px-6 py-3 text-center text-sm font-bold text-emerald-800 shadow-md transition hover:bg-slate-50">Gabung Jadi Relawan</a>
+                <a href="<?php echo e(route('landing.faq')); ?>" class="rounded-xl border border-white/40 px-6 py-3 text-center text-sm font-bold text-white transition hover:bg-white/10">Tanya Jawab (FAQ)</a>
             </div>
         </div>
     </div>
@@ -340,62 +340,63 @@
         </div>
 
         <div class="relative rounded-3xl border border-slate-100 bg-white p-8 shadow-xl shadow-slate-200/50 md:p-10">
-            @if(session('success'))
+            <?php if(session('success')): ?>
                 <div class="animate-fade-in py-16 text-center">
                     <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                         <i class="ph ph-check-circle text-[40px]"></i>
                     </div>
                     <h3 class="mb-3 text-2xl font-extrabold text-slate-900">Pesan Terkirim!</h3>
                     <p class="mx-auto mb-8 max-w-sm text-slate-500">
-                        {{ session('success') }}
+                        <?php echo e(session('success')); ?>
+
                     </p>
-                    <a href="{{ $landingHomeUrl }}#kontak" class="border-b-2 border-emerald-600/30 pb-1 font-bold text-emerald-600 transition-colors hover:text-emerald-700">
+                    <a href="<?php echo e($landingHomeUrl); ?>#kontak" class="border-b-2 border-emerald-600/30 pb-1 font-bold text-emerald-600 transition-colors hover:text-emerald-700">
                         Kirim Pesan Lainnya
                     </a>
                 </div>
-            @else
-                @if($errors->any())
+            <?php else: ?>
+                <?php if($errors->any()): ?>
                     <div class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                         <ul class="list-inside list-disc space-y-1">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
+                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                <form id="homeContactForm" method="POST" action="{{ route('contact.store') }}" class="flex flex-col gap-6">
-                    @csrf
+                <form id="homeContactForm" method="POST" action="<?php echo e(route('contact.store')); ?>" class="flex flex-col gap-6">
+                    <?php echo csrf_field(); ?>
                     <div>
                         <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Nama Pengirim</label>
                         <div class="relative">
                             <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
-                            <input type="text" name="name" value="{{ old('name') }}" required placeholder="Nama Anda atau Organisasi" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
+                            <input type="text" name="name" value="<?php echo e(old('name')); ?>" required placeholder="Nama Anda atau Organisasi" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
                         </div>
                     </div>
                     <div>
                         <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Email Balasan</label>
                         <div class="relative">
                             <i class="ph ph-envelope-open absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
-                            <input type="email" name="email" value="{{ old('email') }}" required placeholder="alamat@email.com" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
+                            <input type="email" name="email" value="<?php echo e(old('email')); ?>" required placeholder="alamat@email.com" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
                         </div>
                     </div>
                     <div>
                         <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Isi Pesan</label>
-                        <textarea name="message" rows="4" required placeholder="Tuliskan tujuan / masalah yang ingin didiskusikan..." class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">{{ old('message') }}</textarea>
+                        <textarea name="message" rows="4" required placeholder="Tuliskan tujuan / masalah yang ingin didiskusikan..." class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20"><?php echo e(old('message')); ?></textarea>
                     </div>
                     <button id="homeContactSubmitButton" type="submit" class="flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-600 py-4 font-bold text-white shadow-lg transition-all hover:bg-emerald-700">
                         <span id="homeContactSubmitLabel">Kirim Pesan</span>
                         <i id="homeContactSubmitIcon" class="ph ph-paper-plane-tilt text-xl"></i>
                     </button>
                 </form>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const contactForm = document.getElementById('homeContactForm');
@@ -417,4 +418,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.landing', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/landing/home.blade.php ENDPATH**/ ?>
