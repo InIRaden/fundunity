@@ -20,10 +20,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+            User::firstOrCreate(
+                ['email' => 'test@example.com'],
+                [
             'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+                ]
+            );
 
         $this->call([
             LandingContentSeeder::class,

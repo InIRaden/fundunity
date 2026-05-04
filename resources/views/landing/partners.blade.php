@@ -12,9 +12,9 @@
     ];
 
     $sections = [
-        ['key' => 'corporate', 'title' => 'Partner Korporat', 'fallback' => 8],
-        ['key' => 'ngo', 'title' => 'Partner LSM & Organisasi Sosial', 'fallback' => 4],
-        ['key' => 'government', 'title' => 'Partner Pemerintah', 'fallback' => 4],
+           ['key' => 'corporate', 'title' => 'Partner Korporat'],
+           ['key' => 'ngo', 'title' => 'Partner LSM & Organisasi Sosial'],
+           ['key' => 'government', 'title' => 'Partner Pemerintah'],
     ];
 @endphp
 
@@ -59,13 +59,11 @@
                             @endif
                         </div>
                     @empty
-                        @for($i = 1; $i <= $section['fallback']; $i++)
-                            <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition">
-                                <div class="text-center text-gray-400">
-                                    <div class="text-sm font-semibold">Partner Logo {{ $i }}</div>
-                                </div>
+                        <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition col-span-full">
+                            <div class="text-center text-gray-400">
+                                <div class="text-sm font-semibold">Belum ada mitra dalam kategori ini</div>
                             </div>
-                        @endfor
+                        </div>
                     @endforelse
                 </div>
             </div>

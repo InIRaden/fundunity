@@ -5,7 +5,7 @@
         || request()->is('landing/');
     $logoUrl = filled($siteSettings['site_logo'] ?? null) ? $siteSettings['site_logo'] : asset('images/Logo.png');
     $brandName = $siteSettings['site_short_name'] ?? 'Yuk Mari Project';
-    $brandAccent = $siteSettings['site_name'] ?? ' Yuk Mari Project';
+    $brandSuffix = $siteSettings['site_name_suffix'] ?? 'Yuk Mari Project';
     $landingHomeUrl = route('landing.home');
 
     $navMenus = [
@@ -37,35 +37,32 @@
 <header
     id="landingHeader"
     data-home="{{ $isLandingHome ? 'true' : 'false' }}"
-    class="{{ $isLandingHome ? 'bg-transparent py-5' : 'bg-white/90 py-3 shadow-lg border-b border-emerald-100 backdrop-blur-md' }} fixed inset-x-0 top-0 z-[100] transition-all duration-300"
+    class="fixed w-full top-0 z-[100] transition-all duration-300 {{ $isLandingHome ? 'bg-transparent py-5' : 'bg-white/90 backdrop-blur-md py-3 shadow-lg border-b border-emerald-100' }}"
 >
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <a href="{{ route('landing.home') }}" class="flex items-center gap-3">
-            <img src="{{ $logoUrl }}" alt="{{ $brandAccent }}" class="h-10 w-10 rounded-xl bg-white object-cover shadow-sm">
-            <span id="landingHeaderBrand" class="{{ $isLandingHome ? 'text-white' : 'text-slate-900' }} font-display text-xl font-extrabold tracking-tight transition-colors">
-                {{ $brandName }}<span class="text-emerald-500">.</span>
+            <img src="{{ $logoUrl }}" alt="Logo" class="w-10 h-10 rounded-xl shadow-sm">
+            <span id="landingHeaderBrand" class="font-black tracking-tight text-xl {{ $isLandingHome ? 'text-white' : 'text-slate-900' }}">
+                {{ $brandName }}<span class="text-emerald-500">{{ $brandSuffix }}</span>
             </span>
         </a>
 
-        <nav class="hidden items-center gap-6 xl:gap-8 lg:flex">
-            <a href="{{ route('landing.home') }}" class="landing-nav-link {{ $isLandingHome ? 'text-white/80 hover:text-white' : 'text-slate-600 hover:text-emerald-600' }} text-sm font-bold transition-colors">
+        <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
+            <a href="{{ route('landing.home') }}" class="font-bold text-sm transition-colors {{ $isLandingHome ? 'text-white/80 hover:text-white' : 'text-slate-600 hover:text-emerald-600' }}">
                 Beranda
             </a>
 
             @foreach($navMenus as $index => $menu)
-                <div class="group relative">
-                    <button
-                        type="button"
-                        class="landing-nav-link {{ $isLandingHome ? 'text-white/80 group-hover:text-white' : 'text-slate-600 group-hover:text-emerald-600' }} flex items-center gap-1.5 text-sm font-bold transition-colors"
-                    >
+                <div class="relative group">
+                    <button type="button" class="flex items-center gap-1.5 font-bold text-sm transition-colors {{ $isLandingHome ? 'text-white/80 group-hover:text-white' : 'text-slate-600 group-hover:text-emerald-600' }}">
                         {{ $menu['title'] }}
-                        <i class="ph ph-caret-down text-xs transition-transform duration-200 group-hover:rotate-180"></i>
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="transition-transform duration-200 group-hover:rotate-180" height="12" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"></path></svg>
                     </button>
 
-                    <div class="invisible absolute left-1/2 top-full z-10 w-56 -translate-x-1/2 translate-y-2 pt-5 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                        <div class="flex flex-col gap-1 overflow-hidden rounded-3xl border border-slate-100 bg-white p-2 shadow-soft">
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 transition-all duration-200 w-56 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+                        <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-2 overflow-hidden flex flex-col gap-1">
                             @foreach($menu['links'] as $link)
-                                <a href="{{ $link['url'] }}" class="rounded-2xl px-4 py-3 text-sm font-bold text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">
+                                <a href="{{ $link['url'] }}" class="px-4 py-2.5 text-sm font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all">
                                     {{ $link['label'] }}
                                 </a>
                             @endforeach
@@ -75,8 +72,8 @@
             @endforeach
         </nav>
 
-        <div class="hidden items-center gap-4 lg:flex">
-            <a href="{{ route('landing.donate') }}" class="rounded-full bg-emerald-500 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-colors hover:bg-emerald-600">
+        <div class="hidden lg:flex items-center gap-4">
+            <a href="{{ route('landing.donate') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-full transition-colors shadow-lg shadow-emerald-500/20">
                 Donasi Sekarang
             </a>
         </div>
@@ -84,24 +81,24 @@
         <button
             type="button"
             id="landingMenuToggle"
-            class="rounded-xl p-2 lg:hidden"
+            class="lg:hidden p-2"
             aria-label="Toggle menu"
             aria-expanded="false"
         >
-            <i id="landingMenuIcon" class="ph {{ $isLandingHome ? 'ph-list text-white' : 'ph-list text-slate-900' }} text-2xl transition-colors"></i>
+            <svg id="landingMenuIcon" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="{{ $isLandingHome ? 'text-white' : 'text-slate-900' }}" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M228,128a12,12,0,0,1-12,12H40a12,12,0,0,1,0-24H216A12,12,0,0,1,228,128ZM40,76H216a12,12,0,0,0,0-24H40a12,12,0,0,0,0,24ZM216,180H40a12,12,0,0,0,0,24H216a12,12,0,0,0,0-24Z"></path></svg>
         </button>
     </div>
 
-    <div id="landingMobileMenu" class="absolute left-0 top-full hidden w-full border-b border-slate-100 bg-white shadow-2xl lg:hidden">
-        <div class="flex max-h-[85vh] flex-col gap-6 overflow-y-auto p-6">
-            <a href="{{ route('landing.home') }}" class="text-lg font-extrabold text-slate-900">Beranda</a>
+    <div id="landingMobileMenu" class="absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-2xl lg:hidden hidden max-h-[85vh] overflow-y-auto animate-fade-in">
+        <div class="p-6 flex flex-col gap-6">
+            <a href="{{ route('landing.home') }}" class="font-extrabold text-slate-900 text-lg">Beranda</a>
 
             @foreach($navMenus as $menu)
                 <div class="flex flex-col gap-3">
-                    <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ $menu['title'] }}</h4>
-                    <div class="flex flex-col gap-3 border-l-2 border-slate-100 pl-3">
+                    <h4 class="font-bold text-slate-400 text-xs uppercase tracking-wider">{{ $menu['title'] }}</h4>
+                    <div class="flex flex-col gap-3 pl-3 border-l-2 border-slate-100">
                         @foreach($menu['links'] as $link)
-                            <a href="{{ $link['url'] }}" class="font-bold text-slate-700 transition-colors hover:text-emerald-600">
+                            <a href="{{ $link['url'] }}" class="font-bold text-slate-700 hover:text-emerald-600">
                                 {{ $link['label'] }}
                             </a>
                         @endforeach
@@ -109,10 +106,8 @@
                 </div>
             @endforeach
 
-            <div class="border-t border-slate-100 pt-6">
-                <a href="{{ route('landing.donate') }}" class="block w-full rounded-2xl bg-emerald-500 py-3 text-center text-sm font-bold text-white shadow-lg shadow-emerald-500/20">
-                    Donasi Sekarang
-                </a>
+            <div class="flex flex-col gap-3 pt-6 border-t border-slate-100">
+                <a href="{{ route('landing.donate') }}" class="w-full py-3 text-center font-bold text-white bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/20">Donasi Sekarang</a>
             </div>
         </div>
     </div>
@@ -127,6 +122,19 @@
         const icon = document.getElementById('landingMenuIcon');
         const mobileMenu = document.getElementById('landingMobileMenu');
         const isHome = header?.dataset.home === 'true';
+        const menuIconPaths = {
+            open: 'M228,128a12,12,0,0,1-12,12H40a12,12,0,0,1,0-24H216A12,12,0,0,1,228,128ZM40,76H216a12,12,0,0,0,0-24H40a12,12,0,0,0,0,24ZM216,180H40a12,12,0,0,0,0,24H216a12,12,0,0,0,0-24Z',
+            close: 'M205.66,192.34,142.83,128l62.83-64.34a8,8,0,0,0-11.32-11.32L128,116.69,61.66,52.34A8,8,0,0,0,50.34,63.66L113.17,128,50.34,192.34a8,8,0,1,0,11.32,11.32L128,139.31l62.34,64.35a8,8,0,0,0,11.32-11.32Z',
+        };
+
+        function setMenuIcon(isOpen) {
+            if (!icon) {
+                return;
+            }
+
+            const path = isOpen ? menuIconPaths.close : menuIconPaths.open;
+            icon.innerHTML = `<path d="${path}"></path>`;
+        }
 
         function setHeaderState() {
             if (!header || !brand || !icon) {
@@ -158,8 +166,7 @@
 
             mobileMenu.classList.add('hidden');
             toggle.setAttribute('aria-expanded', 'false');
-            icon.classList.remove('ph-x');
-            icon.classList.add('ph-list');
+            setMenuIcon(false);
             setHeaderState();
         }
 
@@ -169,8 +176,7 @@
 
                 mobileMenu.classList.toggle('hidden');
                 toggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-                icon.classList.toggle('ph-list', !isHidden);
-                icon.classList.toggle('ph-x', isHidden);
+                setMenuIcon(isHidden);
                 setHeaderState();
             });
 
@@ -180,6 +186,7 @@
         }
 
         window.addEventListener('scroll', setHeaderState, { passive: true });
+        setMenuIcon(false);
         setHeaderState();
     });
 </script>

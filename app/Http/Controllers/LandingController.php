@@ -283,7 +283,6 @@ class LandingController extends Controller
     public function getInvolved()
     {
         $involvementTypes = collect();
-        $involvementBenefits = collect();
 
         if (Schema::hasTable('involvement_types')) {
             $involvementTypes = DB::table('involvement_types')
@@ -291,8 +290,17 @@ class LandingController extends Controller
                 ->orderBy('sort_order')
                 ->orderByDesc('created_at')
                 ->get();
+            } else {
+                // Provide default categories if table doesn't exist
+                $involvementTypes = collect([
+                    (object) ['title' => 'Acara Sosial', 'id' => 1],
+                    (object) ['title' => 'Relawan Lapangan', 'id' => 2],
+                    (object) ['title' => 'Digital Media', 'id' => 3],
+                    (object) ['title' => 'Kemitraan', 'id' => 4],
+                ]);
         }
 
+            $involvementBenefits = collect();
         if (Schema::hasTable('involvement_benefits')) {
             $involvementBenefits = DB::table('involvement_benefits')
                 ->where('is_active', true)

@@ -15,10 +15,14 @@
 
     <div class="mx-auto max-w-xl px-6 py-12">
         @if($activeCampaign)
-            <div class="mb-6 rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4">
-                <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">Mendonasikan untuk program</p>
-                <h2 class="mt-2 text-lg font-extrabold text-slate-900">{{ $activeCampaign->title }}</h2>
-                <p class="mt-1 text-sm text-slate-600">Target: Rp {{ number_format((int) $activeCampaign->target, 0, ',', '.') }}</p>
+            <div class="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center gap-4">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center shrink-0">
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM164,84H92a8,8,0,0,0,0,16h72a8,8,0,0,0,0-16Zm0,40H92a8,8,0,0,0,0,16h72a8,8,0,0,0,0-16Z"></path></svg>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-500">Mendonasikan untuk program:</p>
+                    <p class="text-lg font-extrabold text-slate-900 leading-tight">{{ $activeCampaign->title }}</p>
+                </div>
             </div>
         @endif
 
@@ -48,7 +52,7 @@
                     <div id="donationResumePrompt" class="mb-6 hidden rounded-xl border border-amber-200 bg-amber-50 p-4">
                         <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
                             <div class="flex items-center gap-3">
-                                <i class="ph ph-warning-circle text-2xl text-amber-500"></i>
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="24" width="24" xmlns="http://www.w3.org/2000/svg" class="text-amber-500"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24Zm0,32a12,12,0,1,1-12,12A12,12,0,0,1,128,56Zm12,120a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Z"></path></svg>
                                 <div>
                                     <p class="font-bold text-slate-800">Anda memiliki donasi yang tertunda</p>
                                     <p class="text-sm text-slate-600">Lanjutkan transaksi sebelumnya?</p>
@@ -87,18 +91,18 @@
                             <label class="mb-2 block text-sm font-bold text-slate-700">Nama Lengkap</label>
                             <div class="relative">
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                                    <i class="ph ph-user text-slate-400"></i>
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="text-slate-400"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
                                 </div>
                                 <input id="donationNameInput" type="text" value="{{ old('name') }}" placeholder="Nama Anda" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                             </div>
                         </div>
                         <div>
-                            <label class="mb-2 block text-sm font-bold text-slate-700">Email (Gmail)</label>
+                            <label class="mb-2 block text-sm font-bold text-slate-700">Email / No WhatsApp</label>
                             <div class="relative">
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                                    <i class="ph ph-envelope-simple text-slate-400"></i>
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="text-slate-400"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"></path></svg>
                                 </div>
-                                <input id="donationEmailInput" type="email" value="{{ old('email') }}" placeholder="email@gmail.com" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
+                                <input id="donationEmailInput" type="text" value="{{ old('email') }}" placeholder="Email atau No WA (untuk bukti donasi)" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                             </div>
                         </div>
                         <div>
@@ -109,18 +113,18 @@
 
                     <button type="button" id="donationNextToConfirm" class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 py-4 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:bg-emerald-600">
                         Lanjutkan Pembayaran
-                        <i class="ph ph-arrow-right"></i>
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
                     </button>
                 </div>
 
                 <div data-step-panel="2" class="hidden text-center">
                     <button type="button" id="donationBackToForm" class="mb-6 flex items-center gap-2 font-bold text-slate-500 transition-colors hover:text-slate-900">
-                        <i class="ph ph-arrow-left"></i>
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M224,128a8,8,0,0,1-8,8H59.31l46.35,46.34a8,8,0,0,1-11.32,11.32l-60-60a8,8,0,0,1,0-11.32l60-60a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
                         Kembali
                     </button>
 
                     <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                        <i class="ph ph-money text-[40px]"></i>
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="40" width="40" xmlns="http://www.w3.org/2000/svg"><path d="M200,56H56A16,16,0,0,0,40,72V184a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V72A16,16,0,0,0,200,56Zm0,128H56V72H200ZM88,112a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm0,32a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H96A8,8,0,0,1,88,144Z"></path></svg>
                     </div>
 
                     <h2 class="mb-2 text-2xl font-extrabold text-slate-900">Konfirmasi Donasi</h2>
@@ -139,8 +143,9 @@
 
                     <button type="button" id="donationNextToPayment" class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 py-4 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:bg-emerald-600">
                         Lanjutkan ke QRIS
-                        <i class="ph ph-arrow-right"></i>
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
                     </button>
+                    <p class="mt-4 text-[10px] text-slate-400 font-medium">Dengan menekan tombol di atas, Anda menyetujui syarat dan ketentuan donasi FundUnity.</p>
                 </div>
 
                 <div data-step-panel="3" class="hidden text-center">
@@ -150,7 +155,7 @@
                             <p id="paymentTransactionId" class="font-extrabold text-slate-900">-</p>
                         </div>
                         <div class="flex shrink-0 items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-amber-600">
-                            <i class="ph ph-clock"></i>
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm44-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v32h36A8,8,0,0,1,172,128Z"></path></svg>
                             <span id="paymentCountdown" class="text-sm font-bold">15:00</span>
                         </div>
                     </div>
@@ -182,19 +187,42 @@
                     </button>
                 </div>
             @else
-                <div class="animate-fade-in py-8 text-center">
-                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-emerald-100 text-emerald-500">
-                        <i class="ph ph-check-circle text-[48px]"></i>
+                <div class="animate-fade-in text-center py-8">
+                    <div class="w-24 h-24 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
                     </div>
-                    <h2 class="mb-2 text-3xl font-extrabold text-slate-900">Terima Kasih, {{ session('donation_name', 'Sahabat Kebaikan') }}!</h2>
-                    <p class="mx-auto mb-6 max-w-sm leading-relaxed text-slate-500">
-                        Donasi Anda sebesar <span class="font-bold text-slate-700">Rp {{ number_format((int) session('donation_amount', 0), 0, ',', '.') }}</span> telah berhasil kami terima.
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Terima Kasih, {{ session('donation_name', 'Sahabat Kebaikan') }}!</h2>
+                    <p class="text-slate-500 mb-6 max-w-sm mx-auto leading-relaxed">
+                        Donasi Anda sebesar <span class="font-bold text-slate-700">Rp {{ number_format((int) session('donation_amount', 0), 0, ',', '.') }}</span> telah berhasil diverifikasi.
                     </p>
-                    <div class="mb-8 rounded-2xl border border-slate-100 bg-slate-50 p-6 text-left text-sm text-slate-600">
-                        {{ session('donation_success') }}
+
+                    <div class="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100 text-left">
+                        <h4 class="font-bold text-slate-900 mb-4 border-b border-slate-200 pb-2">Rincian Transaksi</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">ID Transaksi</span>
+                                <span class="font-bold text-slate-700">{{ session('donation_transaction', 'DON-LOCAL') }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Metode</span>
+                                <span class="font-bold text-slate-700">QRIS (Otomatis)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Status</span>
+                                <span class="font-bold text-emerald-600">Berhasil</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Waktu</span>
+                                <span class="font-bold text-slate-700">{{ now()->format('d/m/Y H:i') }}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-200 text-xs text-slate-500">
+                            Tanda terima dan link live tracking program telah dikirim ke <b>{{ session('donation_email', 'email Anda') }}</b>. Terima kasih atas kepedulian Anda.
+                        </div>
                     </div>
-                        <a href="{{ route('landing.programs') }}" class="rounded-xl bg-slate-900 px-8 py-3 font-bold text-white shadow-lg shadow-slate-900/20 transition-all hover:bg-slate-800">
-                        Kembali ke Program
+
+                    <a href="{{ route('landing.programs') }}" class="px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all shadow-lg shadow-slate-900/20">
+                        Kembali ke Beranda
                     </a>
                 </div>
             @endif
@@ -318,6 +346,7 @@
                 item.classList.toggle('border-emerald-500', active);
                 item.classList.toggle('bg-emerald-50', active);
                 item.classList.toggle('text-emerald-700', active);
+                item.classList.toggle('shadow-sm', active);
                 item.classList.toggle('border-slate-100', !active);
                 item.classList.toggle('bg-white', !active);
                 item.classList.toggle('text-slate-500', !active);

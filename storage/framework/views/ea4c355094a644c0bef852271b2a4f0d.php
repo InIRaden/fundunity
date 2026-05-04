@@ -42,6 +42,14 @@
             animation: landing-fade-up 0.7s ease-out both;
         }
 
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-out both;
+        }
+
+        .animate-slide-up {
+            animation: slide-up 0.7s ease-out both;
+        }
+
         @keyframes landing-fade-up {
             from {
                 opacity: 0;
@@ -53,12 +61,37 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
     <?php echo $__env->yieldPushContent('head'); ?>
 </head>
-<body class="font-sans antialiased">
-    <?php if (isset($component)) { $__componentOriginal07378711808f32dedec5e6e0492d9127 = $component; } ?>
+<body>
+    <div class="bg-white text-slate-900 font-sans min-h-screen flex flex-col">
+        <?php if (isset($component)) { $__componentOriginal07378711808f32dedec5e6e0492d9127 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal07378711808f32dedec5e6e0492d9127 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.landing.navbar','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('landing.navbar'); ?>
@@ -79,11 +112,11 @@
 <?php unset($__componentOriginal07378711808f32dedec5e6e0492d9127); ?>
 <?php endif; ?>
 
-    <main>
-        <?php echo $__env->yieldContent('content'); ?>
-    </main>
+        <main class="flex-1">
+            <?php echo $__env->yieldContent('content'); ?>
+        </main>
 
-    <?php if (isset($component)) { $__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb = $component; } ?>
+        <?php if (isset($component)) { $__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.landing.footer','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('landing.footer'); ?>
@@ -103,6 +136,7 @@
 <?php $component = $__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb; ?>
 <?php unset($__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb); ?>
 <?php endif; ?>
+    </div>
 
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>

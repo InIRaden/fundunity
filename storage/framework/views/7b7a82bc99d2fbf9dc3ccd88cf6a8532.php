@@ -12,13 +12,13 @@
         $loginError = $errors->first('email') ?: $errors->first('password') ?: $errors->first();
     ?>
 
-    <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+    <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 font-sans">
         <div class="w-full max-w-md">
             <div class="mb-10 flex flex-col items-center">
                 <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-600 shadow-xl shadow-indigo-200">
                     <i class="ph ph-shield-check text-[32px] text-white"></i>
                 </div>
-                <h1 class="font-display text-2xl font-black tracking-tight text-slate-900">FundUnity Admin</h1>
+                <h1 class="text-2xl font-black tracking-tight text-slate-900">FundUnity Admin</h1>
                 <p class="mt-1 text-sm font-medium text-slate-500">Panel Manajemen Organisasi Internal</p>
             </div>
 
@@ -75,7 +75,7 @@
                                 id="password"
                                 type="password"
                                 name="password"
-                                placeholder="........"
+                                placeholder="••••••••"
                                 required
                                 autocomplete="current-password"
                                 class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"

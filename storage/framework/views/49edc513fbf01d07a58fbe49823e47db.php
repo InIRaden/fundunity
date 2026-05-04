@@ -38,7 +38,7 @@
             <div class="flex min-h-screen flex-col items-center justify-center bg-slate-100 px-4 py-6">
                 <div class="w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
                     <div class="border-b border-slate-100 px-8 py-6 text-center">
-                        <a href="<?php echo e(route('home')); ?>" class="font-display text-2xl font-extrabold tracking-tight text-slate-900">
+                        <a href="<?php echo e(route('landing.home')); ?>" class="font-display text-2xl font-extrabold tracking-tight text-slate-900">
                             <?php echo e(config('app.name', 'FundUnity')); ?><span class="text-emerald-500">.</span>
                         </a>
                     </div>

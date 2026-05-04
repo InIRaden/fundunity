@@ -13,6 +13,7 @@ class Campaign extends Model
         'target',
         'deadline',
         'category',
+        'image',
         'status',
         'is_active',
     ];

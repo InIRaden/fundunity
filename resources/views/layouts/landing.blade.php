@@ -42,6 +42,14 @@
             animation: landing-fade-up 0.7s ease-out both;
         }
 
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-out both;
+        }
+
+        .animate-slide-up {
+            animation: slide-up 0.7s ease-out both;
+        }
+
         @keyframes landing-fade-up {
             from {
                 opacity: 0;
@@ -53,18 +61,44 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
     @stack('head')
 </head>
-<body class="font-sans antialiased">
-    <x-landing.navbar />
+<body>
+    <div class="bg-white text-slate-900 font-sans min-h-screen flex flex-col">
+        <x-landing.navbar />
 
-    <main>
-        @yield('content')
-    </main>
+        <main class="flex-1">
+            @yield('content')
+        </main>
 
-    <x-landing.footer />
+        <x-landing.footer />
+    </div>
 
     @stack('scripts')
 </body>

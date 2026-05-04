@@ -12,9 +12,6 @@
     ['route' => 'admin.imageslider', 'icon' => 'ph ph-slideshow', 'label' => 'Banner Slider'],
     ['route' => 'admin.partners', 'icon' => 'ph ph-handshake', 'label' => 'Mitra Kami'],
     ['route' => 'admin.faqs', 'icon' => 'ph ph-chats-circle', 'label' => 'Tanya Jawab'],
-    ['route' => 'admin.identity', 'icon' => 'ph ph-globe', 'label' => 'Website Identity'],
-    ['route' => 'admin.landing-manager', 'icon' => 'ph ph-squares-four', 'label' => 'Landing Manager'],
-    ['route' => 'admin.notifications', 'icon' => 'ph ph-bell', 'label' => 'Log Aktivitas'],
     ['route' => 'admin.settings', 'icon' => 'ph ph-gear-six', 'label' => 'Akun & Sistem'],
   ];
 ?>

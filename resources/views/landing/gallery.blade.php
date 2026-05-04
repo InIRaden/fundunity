@@ -4,22 +4,22 @@
 
 @push('head')
 <style>
-    @keyframes gallery-scroll {
+    @keyframes scroll {
         0% { transform: translateX(0); }
         100% { transform: translateX(calc(-250px * 10 - 1rem * 10)); }
     }
 
-    @keyframes gallery-scroll-reverse {
+    @keyframes scroll-reverse {
         0% { transform: translateX(calc(-250px * 10 - 1rem * 10)); }
         100% { transform: translateX(0); }
     }
 
-    .animate-gallery-scroll {
-        animation: gallery-scroll 40s linear infinite;
+    .animate-infinite-scroll {
+        animation: scroll 40s linear infinite;
     }
 
-    .animate-gallery-scroll-reverse {
-        animation: gallery-scroll-reverse 45s linear infinite;
+    .animate-infinite-scroll-reverse {
+        animation: scroll-reverse 45s linear infinite;
     }
 </style>
 @endpush
@@ -28,39 +28,20 @@
 @php
     $galleryItems = collect($galleryItems ?? [])->filter(fn ($item) => $item->type === 'image');
 
-    $fallbackImages = collect([
-            'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800',
-            'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800',
-            'https://images.unsplash.com/photo-1541544741938-0af808871cc0?q=80&w=800',
-            'https://images.unsplash.com/photo-1454165833767-027508496739?q=80&w=800',
-            'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=800',
-            'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800',
-            'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=800',
-            'https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=800',
-            'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=800',
-            'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800',
-    ]);
+        $categories = $galleryItems->pluck('category')->filter()->unique()->values();
 
-    $fallbackCategories = ['Pendidikan', 'Kesehatan', 'Komunitas'];
 
-    $galleryEntries = $galleryItems->map(function ($item, $index) use ($fallbackCategories) {
+        $galleryEntries = $galleryItems->map(function ($item, $index) {
         return [
             'image' => $item->thumbnail ?: $item->url,
             'title' => $item->title ?: 'Momen Kebersamaan Di Lapangan',
             'label' => 'Penyaluran',
-            'category' => $item->category ?: $fallbackCategories[$index % count($fallbackCategories)],
+                'category' => $item->category ?: 'Lainnya',
         ];
     })->filter(fn ($entry) => filled($entry['image']))->values();
 
     if ($galleryEntries->isEmpty()) {
-        $galleryEntries = $fallbackImages->values()->map(function ($image, $index) use ($fallbackCategories) {
-            return [
-                'image' => $image,
-                'title' => 'Momen Kebersamaan Di Lapangan',
-                'label' => 'Penyaluran',
-                'category' => $fallbackCategories[$index % count($fallbackCategories)],
-            ];
-        });
+        // Show message if no gallery items
     }
 
     $marqueeImages = $galleryEntries->pluck('image')->take(10)->values();
@@ -72,9 +53,9 @@
 @endphp
 
 <div class="min-h-screen bg-slate-50 pb-20">
-    <div class="relative flex h-[400px] items-center justify-center overflow-hidden bg-slate-900">
+    <div class="relative h-[400px] flex items-center justify-center overflow-hidden bg-slate-900">
         <div class="absolute inset-0 opacity-40">
-            <div class="flex animate-gallery-scroll">
+            <div class="flex animate-infinite-scroll">
                 <div class="flex shrink-0 gap-4 p-4">
                     @foreach($marqueeImages as $img)
                         <img src="{{ $img }}" alt="" class="h-40 w-64 rounded-3xl object-cover">
@@ -84,7 +65,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="mt-4 flex animate-gallery-scroll-reverse">
+            <div class="mt-4 flex animate-infinite-scroll-reverse">
                 <div class="flex shrink-0 gap-4 p-4">
                     @foreach($marqueeReverseImages as $img)
                         <img src="{{ $img }}" alt="" class="h-40 w-64 rounded-3xl object-cover">
@@ -96,25 +77,25 @@
             </div>
         </div>
 
-        <div class="relative z-10 px-6 text-center">
-            <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/20 px-4 py-2 text-sm font-bold text-emerald-400 backdrop-blur-md">
-                <i class="ph ph-images-square text-lg"></i>
+        <div class="relative z-10 text-center px-6">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-bold mb-6">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M216,48H40A16,16,0,0,0,24,64V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,64H216V192H40ZM92,96a12,12,0,1,1,12,12A12,12,0,0,1,92,96Zm96,16a8,8,0,0,1-8,8H76a8,8,0,0,1,0-16H180A8,8,0,0,1,188,112Zm0,32a8,8,0,0,1-8,8H76a8,8,0,0,1,0-16H180A8,8,0,0,1,188,144Z"></path></svg>
                 Galeri Aktivitas FundUnity
             </div>
-            <h1 class="font-display mb-6 text-4xl font-black text-white md:text-6xl">Satu Gambar Beribu<br><span class="text-emerald-500">Cerita Perubahan.</span></h1>
-            <p class="mx-auto max-w-2xl text-lg text-slate-300">Setiap rupiah yang Anda berikan menjadi bukti nyata kebahagiaan bagi mereka yang membutuhkan. Dokumentasi ini adalah bentuk transparansi kami.</p>
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-6">Satu Gambar Beribu<br><span class="text-emerald-500">Cerita Perubahan.</span></h1>
+            <p class="text-slate-300 max-w-2xl mx-auto text-lg">Setiap rupiah yang Anda berikan menjadi bukti nyata kegembiraan bagi mereka yang membutuhkan. Dokumentasi ini adalah bentuk transparansi kami.</p>
         </div>
     </div>
 
     <div class="relative z-20 mx-auto -mt-10 max-w-7xl px-6">
-        <div class="rounded-[40px] border border-slate-100 bg-white p-8 shadow-2xl md:p-12">
-            <div class="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div class="bg-white rounded-[40px] shadow-2xl p-8 md:p-12 border border-slate-100">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
-                    <h2 class="text-3xl font-black italic text-slate-900">Timeline Kegiatan</h2>
-                    <p class="mt-1 font-bold text-slate-500">Kami terus bergerak menebar manfaat setiap harinya.</p>
+                    <h2 class="text-3xl font-black text-slate-900 italic">Timeline Kegiatan</h2>
+                    <p class="text-slate-500 font-bold mt-1">Kami terus bergerak menebar manfaat setiap harinya.</p>
                 </div>
 
-                <div id="galleryFilterControls" class="flex w-full gap-2 overflow-x-auto rounded-2xl bg-slate-100 p-1 md:w-auto">
+                <div id="galleryFilterControls" class="flex gap-2 p-1 bg-slate-100 rounded-2xl">
                     @foreach($categoryTabs as $tab)
                         <button
                             type="button"
@@ -127,7 +108,7 @@
                 </div>
             </div>
 
-            <div id="galleryGrid" class="grid auto-rows-[200px] grid-cols-2 gap-6 lg:grid-cols-4">
+            <div id="galleryGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[200px]">
                 @foreach($galleryEntries as $index => $entry)
                     @php
                         $extraClass = '';
@@ -163,7 +144,7 @@
             </div>
 
             <div id="galleryLoadMoreWrap" class="mt-16 text-center">
-                <button id="galleryLoadMore" type="button" class="rounded-3xl bg-slate-900 px-10 py-4 font-extrabold text-white shadow-xl shadow-slate-900/20 transition-all hover:bg-emerald-600 active:scale-95">
+                <button id="galleryLoadMore" type="button" class="px-10 py-4 bg-slate-900 text-white font-extrabold rounded-3xl hover:bg-emerald-600 transition-all shadow-xl shadow-slate-900/20 active:scale-95">
                     Load More Story
                 </button>
             </div>
@@ -172,10 +153,10 @@
 
     <div id="galleryLightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-900/95 p-6 backdrop-blur-md">
         <div class="relative w-full max-w-5xl">
-            <img id="galleryLightboxImage" src="" alt="Preview Galeri" class="h-auto max-h-[85vh] w-full rounded-[40px] border-4 border-white/10 object-contain shadow-2xl">
-            <button type="button" id="closeGalleryLightbox" class="absolute -top-12 right-0 flex items-center gap-2 font-bold text-white transition-colors hover:text-emerald-400">
+            <img id="galleryLightboxImage" src="" alt="Preview Galeri" class="w-full h-auto max-h-[85vh] object-contain rounded-[40px] shadow-2xl border-4 border-white/10">
+            <button type="button" id="closeGalleryLightbox" class="absolute -top-12 right-0 text-white hover:text-emerald-400 transition-colors font-bold flex items-center gap-2">
                 Tutup
-                <i class="ph ph-arrow-left rotate-90"></i>
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="rotate-90"><path d="M224,128a8,8,0,0,1-8,8H59.31l46.35,46.34a8,8,0,0,1-11.32,11.32l-60-60a8,8,0,0,1,0-11.32l60-60a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
             </button>
         </div>
     </div>

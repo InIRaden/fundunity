@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\AboutUsController as AdminAboutUsController;
 use App\Http\Controllers\Admin\ImageSliderController as AdminImageSliderController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
-use App\Http\Controllers\Admin\IdentityController as AdminIdentityController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\StakeholderController as AdminStakeholderController;
 use App\Http\Controllers\Admin\AdminUiController;
@@ -73,7 +72,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/messages/{message}', [AdminMessageController::class, 'update'])->name('messages.update');
     Route::delete('/messages/{message}', [AdminMessageController::class, 'destroy'])->name('messages.destroy');
 
-    Route::get('/notifications', [AdminUiController::class, 'notifications'])->name('notifications');
 
     Route::get('/aboutus', [AdminUiController::class, 'aboutUs'])->name('aboutus');
     Route::post('/aboutus', [AdminAboutUsController::class, 'store'])->name('aboutus.store');
@@ -103,9 +101,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'update'])->name('imageslider.update');
     Route::delete('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
 
-    Route::get('/identity', [AdminUiController::class, 'websiteIdentity'])->name('identity');
-    Route::put('/identity', [AdminIdentityController::class, 'update'])->name('identity.update');
-    Route::get('/landing-manager', [AdminUiController::class, 'landingManager'])->name('landing-manager');
 
     Route::resource('programs', AdminProgramController::class)->except(['show']);
     Route::resource('focus-areas', AdminFocusAreaController::class)->except(['show']);
