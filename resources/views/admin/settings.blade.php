@@ -108,19 +108,19 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
             <div class="space-y-5">
-              <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Nama Bank</label><input id="bankName" type="text" value="{{ $payment['bankName'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
-              <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Nomor Rekening</label><input id="bankAccount" type="text" value="{{ $payment['bankAccount'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" required></div>
-              <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Atas Nama</label><input id="bankHolder" type="text" value="{{ $payment['bankHolder'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
+              <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Bank</label><input id="bankName" type="text" value="{{ $payment['bankName'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
+              <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nomor Rekening</label><input id="bankAccount" type="text" value="{{ $payment['bankAccount'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" required></div>
+              <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Atas Nama</label><input id="bankHolder" type="text" value="{{ $payment['bankHolder'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
             </div>
             <div class="space-y-4">
-              <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Master QRIS Foundation</label>
+              <label class="block text-xs font-bold text-slate-500 mb-1.5">Master QRIS Foundation</label>
               <div class="relative group cursor-pointer" id="qrisTrigger">
                 <input id="qrisInput" type="file" accept="image/*" class="hidden">
                 <div class="w-full aspect-square md:w-56 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[32px] flex flex-col items-center justify-center p-6 overflow-hidden shadow-inner">
                   <img id="qrisPreview" class="{{ !empty($payment['qrisUrl']) ? '' : 'hidden' }} w-full h-full object-contain" alt="QRIS" @if(!empty($payment['qrisUrl'])) src="{{ $payment['qrisUrl'] }}" @endif>
                   <div id="qrisPlaceholder" class="{{ !empty($payment['qrisUrl']) ? 'hidden' : 'contents' }}">
                     <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-50 mb-3"><i class="ph ph-image text-2xl"></i></div>
-                    <p class="text-[10px] font-bold text-slate-400 text-center uppercase tracking-wider">Tap untuk Upload QRIS</p>
+                    <p class="text-[10px] font-bold text-slate-400 text-center">Tap untuk Upload QRIS</p>
                   </div>
                 </div>
               </div>
@@ -136,11 +136,11 @@
         <form id="seoPane" class="hidden setting-pane space-y-8 animate-fade-in">
           <div><h3 class="text-base font-bold text-slate-900 mb-1">SEO & Pengaturan Global</h3><p class="text-xs text-slate-400">Optimasi pencarian Google dan status operasional website.</p></div>
           <div class="space-y-5">
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Meta Description (SEO)</label><textarea id="seoMetaDescription" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">{{ $seo['metaDescription'] ?? '' }}</textarea></div>
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Copyright Text Footer</label><input id="seoFooterCopyright" type="text" value="{{ $seo['footerCopyright'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Meta Description (SEO)</label><textarea id="seoMetaDescription" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">{{ $seo['metaDescription'] ?? '' }}</textarea></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Copyright Text Footer</label><input id="seoFooterCopyright" type="text" value="{{ $seo['footerCopyright'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
             <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50 flex items-center justify-between">
               <div><p class="text-sm font-bold text-rose-900">Mode Pemeliharaan (Maintenance)</p><p class="text-xs text-rose-600">Pengunjung tidak dapat mengakses landing page saat aktif.</p></div>
-              <button type="button" id="maintenanceToggle" class="px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all">Nonaktif</button>
+              <button type="button" id="maintenanceToggle" class="px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all">Nonaktif</button>
             </div>
           </div>
           <div class="flex justify-end pt-4 border-t border-slate-50"><button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 flex items-center gap-1.5"><i class="ph ph-floppy-disk text-base"></i> Simpan Pengaturan</button></div>
@@ -203,7 +203,7 @@
   function setMaintenanceButton() {
     const btn = document.getElementById('maintenanceToggle');
     btn.textContent = ss.maintenance ? 'Aktif' : 'Nonaktif';
-    btn.className = 'px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ' + (ss.maintenance ? 'bg-rose-600 text-white' : 'bg-white border border-rose-200 text-rose-500 hover:bg-rose-50');
+    btn.className = 'px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all' + (ss.maintenance ? 'bg-rose-600 text-white' : 'bg-white border border-rose-200 text-rose-500 hover:bg-rose-50');
   }
 
   function syncTabs() {

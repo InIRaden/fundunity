@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Mitra Kami')
+@section('title', 'Mitra & Kolaborasi')
 
 @section('content')
 @php
@@ -12,119 +12,134 @@
     ];
 
     $sections = [
-           ['key' => 'corporate', 'title' => 'Partner Korporat'],
-           ['key' => 'ngo', 'title' => 'Partner LSM & Organisasi Sosial'],
-           ['key' => 'government', 'title' => 'Partner Pemerintah'],
+        ['key' => 'corporate', 'title' => 'Mitra Korporasi', 'icon' => 'ph ph-buildings'],
+        ['key' => 'ngo', 'title' => 'LSM & Organisasi Sosial', 'icon' => 'ph ph-users-three'],
+        ['key' => 'government', 'title' => 'Lembaga Pemerintah', 'icon' => 'ph ph-landmark'],
+        ['key' => 'other', 'title' => 'Mitra Strategis Lainnya', 'icon' => 'ph ph-handshake'],
     ];
 @endphp
 
-<section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Mitra Kami</h1>
-        <p class="text-xl text-white/90">Bersama mewujudkan perubahan positif</p>
-    </div>
-</section>
+<div class="min-h-screen bg-slate-50 pb-20">
+    <!-- Header Section -->
+    <div class="bg-[#022c22] pt-32 pb-24 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-orange-500/10 rounded-full blur-[100px] translate-y-1/2"></div>
 
-<section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                Kami bangga berkolaborasi dengan berbagai organisasi, perusahaan, dan lembaga yang berbagi visi yang sama
-                untuk menciptakan dampak positif bagi masyarakat.
-            </p>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <span class="text-orange-400 font-bold text-xs tracking-[0.2em] uppercase mb-4 block">Ekosistem Kebaikan</span>
+            <h1 class="text-3xl md:text-5xl font-black text-white mb-6">Jaringan <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-orange-300">Mitra & Kolaborasi.</span></h1>
+            <p class="text-emerald-50/60 text-base md:text-lg max-w-2xl">Bersama berbagai lembaga dan perusahaan, kami bersinergi untuk menciptakan dampak sosial yang lebih luas dan berkelanjutan.</p>
         </div>
+    </div>
 
+    <!-- Content Section -->
+    <div class="max-w-7xl mx-auto px-6 mt-16">
         @foreach($sections as $section)
             @php
                 $partnersInSection = collect($partnerGroups[$section['key']] ?? []);
             @endphp
 
-            <div class="mb-16">
-                <h2 class="text-2xl font-bold mb-8">{{ $section['title'] }}</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    @forelse($partnersInSection as $partner)
-                        <div class="bg-gray-50 rounded-lg p-6 flex flex-col items-center justify-center aspect-square hover:shadow-lg transition border border-slate-100">
-                            @if(!empty($partner->logo))
-                                <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" class="max-h-20 w-auto object-contain">
-                            @else
-                                <div class="text-center text-gray-400 text-sm font-semibold">Logo Mitra</div>
-                            @endif
-
-                            <p class="mt-4 text-sm font-semibold text-slate-700 text-center line-clamp-2">{{ $partner->name }}</p>
-
-                            @if(!empty($partner->website_url))
-                                <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="mt-2 text-xs font-semibold text-green-700 hover:text-green-800">
-                                    Kunjungi situs
-                                </a>
-                            @endif
+            @if($partnersInSection->isNotEmpty())
+                <div class="mb-20">
+                    <div class="flex items-center gap-3 mb-10">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm">
+                            <i class="{{ $section['icon'] }} text-2xl"></i>
                         </div>
-                    @empty
-                        <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center aspect-square hover:shadow-lg transition col-span-full">
-                            <div class="text-center text-gray-400">
-                                <div class="text-sm font-semibold">Belum ada mitra dalam kategori ini</div>
+                        <h2 class="text-2xl font-extrabold text-slate-900">{{ $section['title'] }}</h2>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        @foreach($partnersInSection as $partner)
+                            <div class="group bg-white rounded-[2rem] p-8 flex flex-col items-center justify-center aspect-square border border-slate-100 shadow-xl shadow-slate-200/40 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                @if(!empty($partner->logo))
+                                    <div class="relative z-10 w-full h-full flex items-center justify-center p-4">
+                                        <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" class="max-h-24 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-500">
+                                    </div>
+                                @else
+                                    <div class="relative z-10 text-center text-slate-300 group-hover:text-emerald-300 transition-colors">
+                                        <i class="ph ph-image-square text-5xl mb-2"></i>
+                                        <p class="text-[10px] font-black tracking-widest uppercase">No Logo</p>
+                                    </div>
+                                @endif
+
+                                <div class="absolute bottom-6 left-0 right-0 px-6 text-center transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                    <p class="text-xs font-bold text-slate-900 line-clamp-1 mb-2">{{ $partner->name }}</p>
+                                    @if(!empty($partner->website_url))
+                                        <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest text-emerald-600 hover:text-emerald-700 uppercase">
+                                            Visit Website
+                                            <i class="ph ph-arrow-square-out font-bold"></i>
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                    @endforelse
+                        @endforeach
+                    </div>
                 </div>
-            </div>
+            @endif
         @endforeach
+
+        @if(collect($partnerGroups)->flatten()->isEmpty())
+            <div class="bg-white rounded-[3rem] p-16 text-center border border-dashed border-slate-200 shadow-xl shadow-slate-200/30">
+                <div class="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-300 mx-auto mb-6">
+                    <i class="ph ph-handshake text-5xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Belum ada mitra yang ditampilkan</h3>
+                <p class="text-slate-500 max-w-sm mx-auto text-sm">Data mitra sedang dalam proses verifikasi dan akan segera muncul di halaman ini.</p>
+            </div>
+        @endif
     </div>
-</section>
+</div>
 
-<!-- Partnership Benefits -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-center mb-12">Keuntungan Bermitra dengan Kami</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white rounded-lg p-8 shadow-lg">
-                <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Dampak Sosial Nyata</h3>
-                <p class="text-gray-600">
-                    Kontribusi Anda langsung membantu ribuan keluarga dan menciptakan perubahan positif di masyarakat.
+<!-- Partnership CTA -->
+<section class="py-24 bg-slate-50 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-16">
+            <div class="max-w-2xl text-center lg:text-left">
+                <span class="text-orange-500 font-bold text-xs tracking-[0.2em] uppercase mb-4 block">Jadilah Bagian dari Perubahan</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-6 leading-tight">Tertarik Bermitra dengan <span class="text-emerald-600">FundUnity?</span></h2>
+                <p class="text-slate-500 text-lg mb-10 leading-relaxed">
+                    Mari bersama-sama menciptakan dampak positif yang berkelanjutan melalui kolaborasi strategis dan program yang transparan. Kami membuka pintu bagi setiap lembaga yang ingin berkontribusi.
                 </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="{{ route('landing.contact') }}" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl transition-all shadow-xl shadow-emerald-600/20 text-center">
+                        Hubungi Kemitraan
+                    </a>
+                    <a href="{{ route('landing.about') }}" class="px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-2xl border border-slate-200 transition-all text-center">
+                        Pelajari Profil Kami
+                    </a>
+                </div>
             </div>
 
-            <div class="bg-white rounded-lg p-8 shadow-lg">
-                <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:w-auto">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/30">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-4">
+                        <i class="ph ph-chart-line-up text-2xl"></i>
+                    </div>
+                    <h4 class="text-slate-900 font-bold mb-2 text-sm">Impact Report</h4>
+                    <p class="text-slate-500 text-xs leading-relaxed">Laporan dampak terperinci untuk setiap kolaborasi.</p>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Transparansi & Akuntabilitas</h3>
-                <p class="text-gray-600">
-                    Laporan rutin dan dokumentasi lengkap tentang penggunaan kontribusi dan dampak program.
-                </p>
-            </div>
-
-            <div class="bg-white rounded-lg p-8 shadow-lg">
-                <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/30">
+                    <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-4">
+                        <i class="ph ph-shield-check text-2xl"></i>
+                    </div>
+                    <h4 class="text-slate-900 font-bold mb-2 text-sm">Transparan</h4>
+                    <p class="text-slate-500 text-xs leading-relaxed">Audit dana publik yang dapat dipantau real-time.</p>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Jaringan Kolaborasi</h3>
-                <p class="text-gray-600">
-                    Terhubung dengan jaringan luas organisasi dan individu yang peduli pada isu sosial.
-                </p>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/30 sm:col-span-2">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="ph ph-users-four text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-slate-900 font-bold text-sm">Community Network</h4>
+                            <p class="text-slate-500 text-xs">Akses ke jaringan relawan dan donatur luas.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="py-16 bg-white">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold mb-4">Tertarik Bermitra dengan Kami?</h2>
-        <p class="text-gray-600 text-lg mb-8">
-            Mari bersama-sama menciptakan dampak positif yang berkelanjutan untuk masyarakat
-        </p>
-        <a href="{{ route('landing.contact') }}" class="inline-block bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition">
-            Hubungi Kami untuk Kemitraan
-        </a>
     </div>
 </section>
 

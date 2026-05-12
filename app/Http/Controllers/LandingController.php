@@ -8,6 +8,7 @@ use App\Models\Donor;
 use App\Models\Faq;
 use App\Models\Message;
 use App\Models\Partner;
+use App\Models\TeamMember;
 use App\Models\FocusArea;
 use App\Models\GalleryItem;
 use App\Models\ImageSlider;
@@ -30,8 +31,7 @@ class LandingController extends Controller
             ->get();
 
         $homeCampaigns = Campaign::where('is_active', true)
-            ->whereIn('status', ['aktif', 'selesai'])
-            ->orderByRaw("case when status = 'aktif' then 0 else 1 end")
+            ->where('status', 'aktif')
             ->orderBy('deadline')
             ->orderByDesc('created_at')
             ->limit(3)
@@ -53,6 +53,7 @@ class LandingController extends Controller
             'donor_count' => Donor::where('is_active', true)->count(),
             'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
             'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
+            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
         ];
 
         return view('landing.home', compact(
@@ -75,57 +76,36 @@ class LandingController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $strukturData = AboutUsItem::where('section', 'structure')
-            ->where('is_active', true)
+        $homePartners = Partner::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->limit(12)
+            ->get();
+
+        $impactStats = [
+            'donor_count' => Donor::where('is_active', true)->count(),
+            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
+            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
+            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
+        ];
+
+        return view('landing.about', compact('page', 'generalProfile', 'homePartners', 'impactStats'));
+    }
+
+    public function team()
+    {
+        $teamMembers = TeamMember::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
             ->get();
 
-        $missionItems = collect();
-        $organizationValues = collect();
-        $teamMembers = collect();
-        $impactStats = collect();
-
-        if (Schema::hasTable('mission_items')) {
-            $missionItems = DB::table('mission_items')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderByDesc('created_at')
-                ->get();
-        }
-
-        if (Schema::hasTable('organization_values')) {
-            $organizationValues = DB::table('organization_values')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderByDesc('created_at')
-                ->get();
-        }
-
-        if (Schema::hasTable('team_members')) {
-            $teamMembers = DB::table('team_members')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderByDesc('created_at')
-                ->get();
-        }
-
-        if (Schema::hasTable('impact_stats')) {
-            $impactStats = DB::table('impact_stats')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderByDesc('created_at')
-                ->get();
-        }
-
-        return view('landing.about', compact('page', 'generalProfile', 'strukturData', 'missionItems', 'organizationValues', 'teamMembers', 'impactStats'));
+        return view('landing.team', compact('teamMembers'));
     }
 
     public function programs()
     {
         $campaigns = Campaign::where('is_active', true)
-            ->whereIn('status', ['aktif', 'selesai'])
-            ->orderByRaw("case when status = 'aktif' then 0 else 1 end")
+            ->where('status', 'aktif')
             ->orderBy('deadline')
             ->orderByDesc('created_at')
             ->get();
@@ -146,7 +126,16 @@ class LandingController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('landing.focus-areas', compact('focusAreas'));
+        $impactStats = [
+            'donor_count' => Donor::where('is_active', true)->count(),
+            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
+            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
+            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
+        ];
+
+        $activeCampaignCount = Campaign::where('is_active', true)->where('status', 'aktif')->count();
+
+        return view('landing.focus-areas', compact('focusAreas', 'impactStats', 'activeCampaignCount'));
     }
 
     public function gallery()
@@ -173,7 +162,14 @@ class LandingController extends Controller
             'other' => $partners->where('type', 'other')->values(),
         ];
 
-        return view('landing.partners', compact('partners', 'partnerGroups'));
+        $impactStats = [
+            'donor_count' => Donor::where('is_active', true)->count(),
+            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
+            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
+            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
+        ];
+
+        return view('landing.partners', compact('partnerGroups', 'impactStats'));
     }
 
     public function contact()

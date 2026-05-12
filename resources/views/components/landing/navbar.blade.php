@@ -13,19 +13,19 @@
             'title' => 'Siapa Kami',
             'links' => [
                 ['label' => 'Tentang Kami', 'url' => route('landing.about')],
-                ['label' => 'Mitra & Donatur', 'url' => $landingHomeUrl.'#mitra'],
+                ['label' => 'Struktur Pengurus', 'url' => route('team')],
             ],
         ],
         [
-            'title' => 'Apa Yang Kami Lakukan',
+            'title' => 'Program Kami',
             'links' => [
-                ['label' => 'Pilar Fokus Program', 'url' => $landingHomeUrl.'#pilar'],
+                ['label' => 'Pilar Fokus Program', 'url' => route('landing.focus-areas')],
                 ['label' => 'Program Galang Dana', 'url' => route('landing.programs')],
                 ['label' => 'Galeri Dokumentasi', 'url' => route('landing.gallery')],
             ],
         ],
         [
-            'title' => 'Bergerak Bersama',
+            'title' => 'Ikut Terlibat',
             'links' => [
                 ['label' => 'FAQ (Tanya Jawab)', 'url' => route('landing.faq')],
                 ['label' => 'Pendaftaran Relawan', 'url' => route('landing.get-involved')],
@@ -43,18 +43,18 @@
         <a href="{{ route('landing.home') }}" class="flex items-center gap-3">
             <img src="{{ $logoUrl }}" alt="Logo" class="w-10 h-10 rounded-xl shadow-sm">
             <span id="landingHeaderBrand" class="font-black tracking-tight text-xl {{ $isLandingHome ? 'text-white' : 'text-slate-900' }}">
-                {{ $brandName }}<span class="text-emerald-500">{{ $brandSuffix }}</span>
+                {{ $brandName }}<span class="text-emerald-500"></span>
             </span>
         </a>
 
         <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-            <a href="{{ route('landing.home') }}" class="font-bold text-sm transition-colors {{ $isLandingHome ? 'text-white/80 hover:text-white' : 'text-slate-600 hover:text-emerald-600' }}">
+            <a href="{{ route('landing.home') }}" data-nav-link data-nav-link-type="link" class="font-bold text-sm transition-colors {{ $isLandingHome ? 'text-white/80' : 'text-slate-600' }}">
                 Beranda
             </a>
 
             @foreach($navMenus as $index => $menu)
                 <div class="relative group">
-                    <button type="button" class="flex items-center gap-1.5 font-bold text-sm transition-colors {{ $isLandingHome ? 'text-white/80 group-hover:text-white' : 'text-slate-600 group-hover:text-emerald-600' }}">
+                    <button type="button" data-nav-link data-nav-link-type="button" class="flex items-center gap-1.5 font-bold text-sm transition-colors {{ $isLandingHome ? 'text-white/80' : 'text-slate-600' }}">
                         {{ $menu['title'] }}
                         <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="transition-transform duration-200 group-hover:rotate-180" height="12" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"></path></svg>
                     </button>
@@ -95,7 +95,7 @@
 
             @foreach($navMenus as $menu)
                 <div class="flex flex-col gap-3">
-                    <h4 class="font-bold text-slate-400 text-xs uppercase tracking-wider">{{ $menu['title'] }}</h4>
+                    <h4 class="font-bold text-slate-400 text-xs">{{ $menu['title'] }}</h4>
                     <div class="flex flex-col gap-3 pl-3 border-l-2 border-slate-100">
                         @foreach($menu['links'] as $link)
                             <a href="{{ $link['url'] }}" class="font-bold text-slate-700 hover:text-emerald-600">
@@ -157,6 +157,17 @@
 
             icon.classList.toggle('text-white', !shouldBeSolid);
             icon.classList.toggle('text-slate-900', shouldBeSolid);
+
+            // Update desktop nav link & button colors
+            header.querySelectorAll('[data-nav-link]').forEach(function (el) {
+                const isButton = el.dataset.navLinkType === 'button';
+
+                // Toggle base color
+                el.classList.toggle('text-white/80', !shouldBeSolid);
+                el.classList.toggle('text-slate-600', shouldBeSolid);
+
+    
+            });
         }
 
         function closeMenu() {

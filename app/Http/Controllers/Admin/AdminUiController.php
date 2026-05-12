@@ -14,6 +14,7 @@ use App\Models\ImageSlider;
 use App\Models\Message;
 use App\Models\Partner;
 use App\Models\SiteSetting;
+use App\Models\TeamMember;
 use App\Models\Volunteer;
 use Illuminate\View\View;
 
@@ -100,28 +101,37 @@ class AdminUiController extends Controller
             })
             ->values();
 
-        $strukturData = AboutUsItem::where('section', 'structure')
-            ->where('is_active', true)
+        $pageMeta = [
+            'title' => 'Visi & Misi',
+            'subtitle' => 'Kelola pernyataan visi dan misi utama organisasi',
+        ];
+
+        return view('admin.aboutus', compact('generalProfile', 'pageMeta'));
+    }
+
+    public function members(): View
+    {
+        $members = TeamMember::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
             ->get()
-            ->map(static function (AboutUsItem $item): array {
+            ->map(static function (TeamMember $member): array {
                 return [
-                    'id' => $item->id,
-                    'jabatan' => $item->position,
-                    'nama' => $item->title,
-                    'description' => $item->description,
-                    'imageUrl' => $item->image_url,
+                    'id' => $member->id,
+                    'jabatan' => $member->position,
+                    'nama' => $member->name,
+                    'description' => $member->bio,
+                    'imageUrl' => $member->photo,
                 ];
             })
             ->values();
 
         $pageMeta = [
-            'title' => 'Profil Lembaga',
-            'subtitle' => 'Kelola identitas, visi, misi, dan tim organisasi',
+            'title' => 'Anggota Organisasi',
+            'subtitle' => 'Kelola profil tim dan pengurus organisasi',
         ];
 
-        return view('admin.aboutus', compact('generalProfile', 'strukturData', 'pageMeta'));
+        return view('admin.members', compact('members', 'pageMeta'));
     }
 
     public function campaign(): View
@@ -422,62 +432,73 @@ class AdminUiController extends Controller
                 $amount = (int) $donor->total_donation;
 
                 return [
-                    'id' => $donor->id,
-                    'nama' => $donor->name,
+                    'id'       => $donor->id,
+                    'nama'     => $donor->name,
                     'category' => $mappedCampaign?->title ?: ($mappedCampaign?->category ?: 'Donasi Umum'),
-                    'notes' => $amount > 0
+                    'notes'    => $amount > 0
                         ? 'Sinkron otomatis dari database donatur.'
                         : 'Menunggu pembaruan nominal donasi.',
-                    'amount' => $amount,
-                    'status' => $amount > 0 ? 'berhasil' : 'pending',
-                    'date' => ($donor->last_donation ?? $donor->created_at)?->format('Y-m-d'),
+                    'amount'   => $amount,
+                    'status'   => $amount > 0 ? 'berhasil' : 'pending',
+                    'date'     => ($donor->last_donation ?? $donor->created_at)?->format('Y-m-d'),
                 ];
             })
             ->values()
             ->all();
 
-        $totalCampaignIncome = (int) $campaigns->sum('collected');
-        $totalDistributed = (int) Beneficiary::sum('assistance_value');
-        $distributionRatio = $totalCampaignIncome > 0
-            ? min(1, $totalDistributed / $totalCampaignIncome)
-            : 0;
+        // Ambil data penyaluran REAL dari tabel beneficiaries (bukan estimasi ratio)
+        $beneficiariesByProgram = Beneficiary::query()
+            ->select('program_name', 'name', 'location', 'assistance_value')
+            ->orderByDesc('created_at')
+            ->get()
+            ->groupBy('program_name');
 
-        $beneficiaryByProgram = Beneficiary::query()
-            ->selectRaw('program_name, COUNT(*) as total')
-            ->groupBy('program_name')
-            ->pluck('total', 'program_name');
+        $beneficiaryValueByProgram = $beneficiariesByProgram->map(
+            fn ($group) => $group->sum('assistance_value')
+        );
 
         $laporanItems = $campaigns
-            ->map(function (Campaign $campaign) use ($distributionRatio, $beneficiaryByProgram): array {
-                $pemasukan = (int) $campaign->collected;
-                $disalurkan = $campaign->status === 'selesai'
-                    ? $pemasukan
-                    : (int) round($pemasukan * $distributionRatio);
+            ->map(function (Campaign $campaign) use ($beneficiariesByProgram, $beneficiaryValueByProgram): array {
+                $pemasukan   = (int) $campaign->collected;
+                // Tersalurkan = total nilai penyaluran ke penerima manfaat (data real dari tabel beneficiaries)
+                $disalurkan  = (int) ($beneficiaryValueByProgram[$campaign->title] ?? 0);
+                $sisa        = max($pemasukan - $disalurkan, 0);
+                $penerima    = isset($beneficiariesByProgram[$campaign->title])
+                    ? $beneficiariesByProgram[$campaign->title]->count()
+                    : 0;
 
-                $sisa = max($pemasukan - $disalurkan, 0);
+                // Detail list penerima untuk modal
+                $penerimaList = isset($beneficiariesByProgram[$campaign->title])
+                    ? $beneficiariesByProgram[$campaign->title]->map(fn ($b) => [
+                        'nama'   => $b->name,
+                        'lokasi' => $b->location,
+                        'nilai'  => (int) $b->assistance_value,
+                    ])->values()->all()
+                    : [];
 
                 return [
-                    'program' => $campaign->title,
-                    'kategori' => $campaign->category ?: 'Umum',
-                    'pemasukan' => $pemasukan,
-                    'disalurkan' => $disalurkan,
-                    'sisa' => $sisa,
-                    'penerima' => (int) ($beneficiaryByProgram[$campaign->title] ?? 0),
-                    'periode' => $campaign->deadline
+                    'program'      => $campaign->title,
+                    'kategori'     => $campaign->category ?: 'Umum',
+                    'pemasukan'    => $pemasukan,
+                    'disalurkan'   => $disalurkan,
+                    'sisa'         => $sisa,
+                    'penerima'     => $penerima,
+                    'penerimaList' => $penerimaList,
+                    'periode'      => $campaign->deadline
                         ? date('M Y', strtotime((string) $campaign->deadline))
                         : ($campaign->created_at ? date('M Y', strtotime((string) $campaign->created_at)) : null),
-                    'status' => $campaign->status === 'selesai' ? 'selesai' : 'berjalan',
+                    'status'       => $campaign->status === 'selesai' ? 'selesai' : 'berjalan',
                 ];
             })
             ->values()
             ->all();
 
-        $totalPemasukanGlobal = collect($laporanItems)->sum('pemasukan');
+        $totalPemasukanGlobal  = collect($laporanItems)->sum('pemasukan');
         $totalDisalurkanGlobal = collect($laporanItems)->sum('disalurkan');
-        $totalSisaGlobal = collect($laporanItems)->sum('sisa');
+        $totalSisaGlobal       = collect($laporanItems)->sum('sisa');
 
         $pageMeta = [
-            'title' => 'Keuangan Transparansi',
+            'title'    => 'Keuangan Transparansi',
             'subtitle' => 'Pantau pemasukan, penyaluran, dan laporan dana',
         ];
 

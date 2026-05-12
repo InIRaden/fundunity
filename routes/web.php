@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ImageSliderController as AdminImageSliderControll
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\StakeholderController as AdminStakeholderController;
+use App\Http\Controllers\Admin\TeamMemberController as AdminTeamMemberController;
 use App\Http\Controllers\Admin\AdminUiController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\LandingController;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 // Landing Page Routes
 Route::get('/', [LandingController::class, 'index'])->name('home');
 Route::get('/about', [LandingController::class, 'about'])->name('about');
+Route::get('/team', [LandingController::class, 'team'])->name('team');
 Route::get('/allprograms', [LandingController::class, 'programs'])->name('programs');
 Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus-areas');
 Route::get('/moregallery', [LandingController::class, 'gallery'])->name('gallery');
@@ -34,10 +36,11 @@ Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->na
 Route::prefix('landing')->name('landing.')->group(function () {
     Route::get('/', [LandingController::class, 'index'])->name('home');
     Route::get('/about', [LandingController::class, 'about'])->name('about');
+    Route::get('/team', [LandingController::class, 'team'])->name('team');          // Fix: route hilang
     Route::get('/allprograms', [LandingController::class, 'programs'])->name('programs');
     Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus-areas');
     Route::get('/gallery', [LandingController::class, 'gallery'])->name('gallery');
-    Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
+    Route::get('/partners', [LandingController::class, 'partners'])->name('partners'); // Fix: route hilang
     Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
     Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
     Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
@@ -61,6 +64,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/campaign/{campaign}', [AdminCampaignController::class, 'update'])->name('campaign.update');
     Route::delete('/campaign/{campaign}', [AdminCampaignController::class, 'destroy'])->name('campaign.destroy');
 
+    Route::get('/identity', [AdminUiController::class, 'websiteIdentity'])->name('identity'); // Fix: route hilang
+
     Route::get('/keuangantransparansi', [AdminUiController::class, 'keuanganTransparansi'])->name('keuangantransparansi');
     Route::get('/databasestakeholder', [AdminUiController::class, 'databaseStakeholder'])->name('databasestakeholder');
     Route::post('/databasestakeholder/{type}', [AdminStakeholderController::class, 'store'])->name('databasestakeholder.store');
@@ -78,10 +83,15 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/aboutus/{aboutUsItem}', [AdminAboutUsController::class, 'update'])->name('aboutus.update');
     Route::delete('/aboutus/{aboutUsItem}', [AdminAboutUsController::class, 'destroy'])->name('aboutus.destroy');
 
+    Route::get('/members', [AdminUiController::class, 'members'])->name('members');
+    Route::post('/members', [AdminTeamMemberController::class, 'store'])->name('members.store');
+    Route::put('/members/{teamMember}', [AdminTeamMemberController::class, 'update'])->name('members.update');
+    Route::delete('/members/{teamMember}', [AdminTeamMemberController::class, 'destroy'])->name('members.destroy');
+
     Route::get('/focusareas', [AdminUiController::class, 'focusAreas'])->name('focusareas');
-    Route::post('/focusareas', [AdminFocusAreaController::class, 'storeFromAdminPage'])->name('focusareas.store');
-    Route::put('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'updateFromAdminPage'])->name('focusareas.update');
-    Route::delete('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'destroyFromAdminPage'])->name('focusareas.destroy');
+    Route::post('/focusareas', [AdminFocusAreaController::class, 'store'])->name('focusareas.store');
+    Route::put('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'update'])->name('focusareas.update');
+    Route::delete('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'destroy'])->name('focusareas.destroy');
 
     Route::get('/faqs', [AdminUiController::class, 'faqs'])->name('faqs');
     Route::post('/faqs', [AdminFaqController::class, 'store'])->name('faqs.store');
@@ -100,11 +110,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/imageslider', [AdminImageSliderController::class, 'store'])->name('imageslider.store');
     Route::put('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'update'])->name('imageslider.update');
     Route::delete('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
-
-
-    Route::resource('programs', AdminProgramController::class)->except(['show']);
-    Route::resource('focus-areas', AdminFocusAreaController::class)->except(['show']);
-    Route::resource('gallery-items', AdminGalleryItemController::class)->except(['show']);
 });
 
 // Newsletter & Legal Routes

@@ -47,27 +47,78 @@
 
     $displayPillars = $focusAreas->isNotEmpty()
         ? $focusAreas->values()->map(function ($item, $index) {
+            $storedColor = strtolower((string) ($item->color ?? ''));
+            $style = 'bg-emerald-50 text-emerald-600 border-emerald-200';
+
+            if (str_contains($storedColor, 'blue') || str_contains($storedColor, 'teal')) {
+                $style = 'bg-teal-50 text-teal-600 border-teal-200';
+            } elseif (str_contains($storedColor, 'rose') || str_contains($storedColor, 'red')) {
+                $style = 'bg-rose-50 text-rose-600 border-rose-200';
+            } elseif (str_contains($storedColor, 'emerald') || str_contains($storedColor, 'green')) {
+                $style = 'bg-emerald-50 text-emerald-600 border-emerald-200';
+            } elseif (str_contains($storedColor, 'amber') || str_contains($storedColor, 'orange') || str_contains($storedColor, 'yellow')) {
+                $style = 'bg-amber-50 text-amber-600 border-amber-200';
+            }
+
             return [
                 'title' => $item->title,
                 'description' => $item->description,
                 'icon' => $item->icon ?: 'ph ph-target',
-                'style' => $item->color ?? 'bg-emerald-50 text-emerald-600 border-emerald-200',
+                'style' => $style,
             ];
         })
-        : $defaultPillars;
+        : $defaultPillars->map(function($p) {
+            if (str_contains($p['style'], 'blue')) {
+                $p['style'] = 'bg-teal-50 text-teal-600 border-teal-200';
+            }
+            return $p;
+        });
+
+    $statsDonorCount = (int) ($impactStats['donor_count'] ?? 0);
+    $statsProgramCount = (int) ($impactStats['completed_programs'] ?? 0);
+    $statsVolunteerCount = (int) ($impactStats['volunteer_count'] ?? 0);
+
+    $labelDonor = $statsDonorCount > 0 ? number_format($statsDonorCount, 0, ',', '.') : '10K+';
+    $labelProgram = $statsProgramCount > 0 ? $statsProgramCount : '50+';
+    $labelVolunteer = $statsVolunteerCount > 0 ? $statsVolunteerCount : '300+';
 @endphp
 
-<div class="min-h-screen bg-white pb-20 pt-24">
-    <section class="relative overflow-hidden bg-slate-900 pb-24 pt-32">
-        <div class="absolute right-0 top-0 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-emerald-500/10 blur-[100px]"></div>
-        <div class="relative z-10 mx-auto max-w-7xl px-6">
-            <span class="mb-6 inline-block rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Pilar Program</span>
-            <h1 class="font-display mb-6 text-4xl font-black text-white md:text-6xl">
-                Fokus Area <span class="text-emerald-500">Kebaikan.</span>
-            </h1>
-            <p class="max-w-3xl text-lg text-slate-400">
-                Setiap kontribusi Anda disalurkan secara spesifik sesuai pilar pergerakan utama kami untuk menciptakan dampak yang terukur dan berkelanjutan.
-            </p>
+<div class="min-h-screen bg-white pb-16 pt-16">
+
+    <!-- Transparansi Flow Section -->
+    <section class="bg-emerald-100 py-20 border-b border-slate-100">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="text-center mb-16">
+                <span class="mb-3 block text-md font-bold tracking-widest text-emerald-600">Alur Transparansi</span>
+                <h2 class="font-display text-2xl font-extrabold text-slate-900 md:text-4xl">Bagaimana Dana Disalurkan?</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200 border-t-2 border-dashed border-slate-300"></div>
+
+                <div class="relative flex flex-col items-center text-center">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-xl shadow-slate-200/50 flex items-center justify-center text-emerald-500 mb-6 relative z-10 border border-slate-100">
+                        <i class="ph ph-magnifying-glass text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">1. Kurasi & Verifikasi</h3>
+                    <p class="text-slate-500 text-sm max-w-xs">Tim kami memverifikasi langsung kebutuhan di lapangan untuk memastikan bantuan tepat sasaran.</p>
+                </div>
+
+                <div class="relative flex flex-col items-center text-center">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-xl shadow-slate-200/50 flex items-center justify-center text-emerald-500 mb-6 relative z-10 border border-slate-100">
+                        <i class="ph ph-hand-coins text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">2. Penggalangan Dana</h3>
+                    <p class="text-slate-500 text-sm max-w-xs">Pengumpulan dana dilakukan secara terbuka dengan update nominal yang dapat dipantau setiap saat.</p>
+                </div>
+
+                <div class="relative flex flex-col items-center text-center">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-xl shadow-slate-200/50 flex items-center justify-center text-emerald-500 mb-6 relative z-10 border border-slate-100">
+                        <i class="ph ph-truck text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">3. Distribusi Terpantau</h3>
+                    <p class="text-slate-500 text-sm max-w-xs">Dana disalurkan dan didokumentasikan dalam bentuk laporan yang dikirimkan ke email donatur.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -75,23 +126,25 @@
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-16 md:flex md:items-end md:justify-between md:gap-10">
                 <div class="max-w-2xl">
-                    <span class="mb-3 block text-sm font-bold uppercase tracking-[0.25em] text-emerald-600">Area Prioritas</span>
-                    <h2 class="font-display mb-4 text-3xl font-extrabold leading-tight text-slate-900 md:text-5xl">
+                    <span class="mb-3 block text-md font-bold tracking-widest text-emerald-600">Area Prioritas</span>
+                    <h2 class="font-display mb-4 text-2xl font-extrabold leading-tight text-slate-900 md:text-4xl">
                         Pilar Program Berdampak
                     </h2>
-                    <p class="text-lg text-slate-500">Seluruh pilar ini dikelola langsung dari halaman admin dan ditampilkan otomatis ke publik.</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                 @foreach($displayPillars as $pillar)
-                    <article class="group rounded-[2rem] border p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl {{ $pillar['style'] }}">
-                        <div class="mb-6 text-3xl">
+                    <article class="group rounded-[2rem] border p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden {{ $pillar['style'] }}">
+                        <div class="absolute right-0 top-0 -translate-y-4 translate-x-4 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-10 text-[100px]">
                             <i class="{{ $pillar['icon'] }}"></i>
                         </div>
-                        <h3 class="mb-2 text-lg font-bold text-slate-900">{{ $pillar['title'] }}</h3>
-                        <p class="focus-clamp-3 text-sm leading-relaxed text-slate-500">{{ $pillar['description'] }}</p>
-                        <a href="{{ route('programs', ['category' => $pillar['title']]) }}" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 transition-colors hover:text-emerald-600">
+                        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">
+                            <div class="text-2xl text-emerald-600"><i class="{{ $pillar['icon'] }}"></i></div>
+                        </div>
+                        <h3 class="mb-2 text-lg font-bold text-slate-900 relative z-10">{{ $pillar['title'] }}</h3>
+                        <p class="focus-clamp-3 text-sm leading-relaxed text-slate-500 relative z-10">{{ $pillar['description'] }}</p>
+                        <a href="{{ route('programs', ['category' => $pillar['title']]) }}" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 transition-colors hover:text-emerald-600 relative z-10">
                             Lihat Program
                             <i class="ph ph-arrow-right"></i>
                         </a>
@@ -100,5 +153,41 @@
             </div>
         </div>
     </section>
+
+    <!-- Impact Stats Section -->
+    <section class="bg-[#022c22] py-24 relative overflow-hidden">
+        <div class="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[100px] pointer-events-none"></div>
+        <div class="absolute right-1/4 bottom-0 h-[300px] w-[300px] bg-orange-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+        <div class="mx-auto max-w-7xl px-6 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
+                <div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-2">{{ $labelDonor }}<span class="text-orange-400">+</span></div>
+                    <p class="text-emerald-50/60 font-medium">Penerima Manfaat</p>
+                </div>
+                <div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-2">{{ $labelProgram }}<span class="text-orange-400">+</span></div>
+                    <p class="text-emerald-50/60 font-medium">Program Selesai</p>
+                </div>
+                <div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-2">{{ $activeCampaignCount ?? 0 }}<span class="text-orange-400">+</span></div>
+                    <p class="text-emerald-50/60 font-medium">Program Berjalan</p>
+                </div>
+                <div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-2">{{ $labelVolunteer }}<span class="text-orange-400">+</span></div>
+                    <p class="text-emerald-50/60 font-medium">Relawan Aktif</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Banner -->
+    <x-landing.cta
+        title="Mulai Berdampak Hari Ini"
+        description="Pilih program yang paling sesuai dengan kepedulian Anda, atau gabung bersama kami di lapangan."
+        buttonText="Gabung Jadi Relawan"
+        buttonUrl="{{ route('landing.get-involved') }}"
+        secondaryButtonText="Lihat Program Berjalan"
+        secondaryButtonUrl="{{ route('landing.programs') }}"
+    />
 </div>
 @endsection

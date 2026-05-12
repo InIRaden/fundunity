@@ -53,7 +53,7 @@
 @endphp
 
 <div class="min-h-screen bg-slate-50 pb-20">
-    <div class="relative h-[400px] flex items-center justify-center overflow-hidden bg-slate-900">
+    <div class="relative h-[400px] flex items-center justify-center overflow-hidden bg-emerald-950">
         <div class="absolute inset-0 opacity-40">
             <div class="flex animate-infinite-scroll">
                 <div class="flex shrink-0 gap-4 p-4">
@@ -78,12 +78,11 @@
         </div>
 
         <div class="relative z-10 text-center px-6">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-bold mb-6">
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M216,48H40A16,16,0,0,0,24,64V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,64H216V192H40ZM92,96a12,12,0,1,1,12,12A12,12,0,0,1,92,96Zm96,16a8,8,0,0,1-8,8H76a8,8,0,0,1,0-16H180A8,8,0,0,1,188,112Zm0,32a8,8,0,0,1-8,8H76a8,8,0,0,1,0-16H180A8,8,0,0,1,188,144Z"></path></svg>
-                Galeri Aktivitas FundUnity
+            <div class="inline-flex items-center gap-2 px-4 py-2 font-bold mb-6">
+
             </div>
-            <h1 class="text-4xl md:text-6xl font-black text-white mb-6">Satu Gambar Beribu<br><span class="text-emerald-500">Cerita Perubahan.</span></h1>
-            <p class="text-slate-300 max-w-2xl mx-auto text-lg">Setiap rupiah yang Anda berikan menjadi bukti nyata kegembiraan bagi mereka yang membutuhkan. Dokumentasi ini adalah bentuk transparansi kami.</p>
+            <h1 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-orange-300 to-emerald-400 mb-6">Satu Gambar Beribu Cerita Perubahan</h1>
+            <p class="text-slate-300 max-w-2xl mx-auto text-md">Setiap momen ini adalah bukti nyata dari kepercayaan dan kebaikan yang Anda salurkan. Dokumentasi ini adalah bentuk transparansi kami kepada seluruh donatur.</p>
         </div>
     </div>
 
@@ -92,7 +91,7 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <h2 class="text-3xl font-black text-slate-900 italic">Timeline Kegiatan</h2>
-                    <p class="text-slate-500 font-bold mt-1">Kami terus bergerak menebar manfaat setiap harinya.</p>
+                    <p class="text-slate-500 text-sm font-bold mt-1">Dokumentasi kegiatan lapangan kami yang terus diperbarui.</p>
                 </div>
 
                 <div id="galleryFilterControls" class="flex gap-2 p-1 bg-slate-100 rounded-2xl">
@@ -129,10 +128,18 @@
                         class="group relative overflow-hidden rounded-[32px] shadow-lg transition-all active:scale-95 hover:shadow-emerald-500/20 {{ $extraClass }}"
                     >
                         <img src="{{ $entry['image'] }}" alt="{{ $entry['title'] }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 flex items-end bg-gradient-to-t from-slate-900/60 via-transparent to-transparent p-6 opacity-0 transition-opacity group-hover:opacity-100">
-                            <div class="text-left text-white">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-emerald-400">{{ $entry['label'] }}</p>
-                                <p class="text-sm font-bold">{{ $entry['title'] }}</p>
+                        <div class="absolute inset-0 flex items-end bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            {{-- View Icon in Center --}}
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="bg-white/20 backdrop-blur-md rounded-full p-3 text-white transform translate-y-4 opacity-0 transition-all duration-500 delay-100 group-hover:translate-y-0 group-hover:opacity-100 shadow-xl border border-white/30">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112ZM144,112a8,8,0,0,1-8,8H120v16a8,8,0,0,1-16,0V120H88a8,8,0,0,1,0-16h16V88a8,8,0,0,1,16,0v16h16A8,8,0,0,1,144,112Z"></path></svg>
+                                </div>
+                            </div>
+                            
+                            {{-- Text Details --}}
+                            <div class="text-left text-white relative z-10 transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0 w-full">
+                                <p class="text-[10px] font-black text-emerald-400 mb-0.5 tracking-wider uppercase">{{ $entry['label'] }}</p>
+                                <p class="text-sm font-bold leading-snug line-clamp-2">{{ $entry['title'] }}</p>
                             </div>
                         </div>
                     </button>
@@ -145,7 +152,7 @@
 
             <div id="galleryLoadMoreWrap" class="mt-16 text-center">
                 <button id="galleryLoadMore" type="button" class="px-10 py-4 bg-slate-900 text-white font-extrabold rounded-3xl hover:bg-emerald-600 transition-all shadow-xl shadow-slate-900/20 active:scale-95">
-                    Load More Story
+                    Muat Lebih Banyak
                 </button>
             </div>
         </div>
@@ -160,6 +167,8 @@
             </button>
         </div>
     </div>
+    
+    <x-landing.cta />
 </div>
 @endsection
 

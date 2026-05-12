@@ -16,7 +16,7 @@
             <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:p-10">
                 <div class="mb-8">
                     <h2 class="text-lg font-bold text-slate-800">Masuk ke Akun</h2>
-                    <p class="mt-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Gunakan akses resmi Anda</p>
+                    <p class="mt-1 text-xs font-bold tracking-[0.25em] text-slate-400">Gunakan akses resmi Anda</p>
                 </div>
 
                 @if (session('status'))
@@ -35,7 +35,7 @@
                     @csrf
 
                     <div>
-                        <label for="email" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Email Address</label>
+                        <label for="email" class="mb-2 ml-1 block text-[11px] font-black tracking-[0.25em] text-slate-400">Email Address</label>
                         <div class="relative">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                                 <i class="ph ph-envelope-simple text-base text-slate-300"></i>
@@ -55,7 +55,7 @@
                     </div>
 
                     <div>
-                        <label for="password" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Password</label>
+                        <label for="password" class="mb-2 ml-1 block text-[11px] font-black tracking-[0.25em] text-slate-400">Password</label>
                         <div class="relative">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                                 <i class="ph ph-lock text-base text-slate-300"></i>
@@ -90,7 +90,7 @@
                 </form>
             </div>
 
-            <p class="mt-12 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <p class="mt-12 text-center text-[10px] font-bold tracking-[0.2em] text-slate-400">
                 &copy; {{ date('Y') }} FundUnity Foundation • Secure Access Only
             </p>
         </div>

@@ -6,7 +6,7 @@
   <!-- Banner Section -->
   <div class="relative bg-gradient-to-br from-emerald-800 to-emerald-900 rounded-[2rem] p-8 md:p-12 overflow-hidden shadow-2xl shadow-emerald-900/30 flex flex-col justify-center">
     <div class="relative z-10 max-w-2xl">
-      <span class="text-orange-400 font-bold text-xs tracking-widest uppercase mb-3 block">Dashboard Supervisor</span>
+      <span class="text-orange-400 font-bold text-xs mb-3 block">Dashboard Supervisor</span>
       <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight leading-tight">
         Tinjauan Penggalangan <span class="text-orange-400">Dana & Penyaluran</span>
       </h2>
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div>
-          <h3 class="text-slate-400 text-[11px] font-bold uppercase tracking-wider">{{ $stat['title'] }}</h3>
+          <h3 class="text-slate-400 text-[11px] font-bold">{{ $stat['title'] }}</h3>
           <p class="text-2xl font-black text-slate-900 mt-1">{{ $stat['value'] }}</p>
         </div>
       </div>
@@ -100,7 +100,7 @@
             <div class="pb-4">
               <p class="text-sm font-bold text-slate-800 leading-tight mb-1 group-hover:text-emerald-600 transition-colors">{{ $item['event'] }}</p>
               <p class="text-xs font-medium text-slate-500 mb-2">{{ $item['detail'] }}</p>
-              <span class="text-[10px] uppercase tracking-wider font-bold text-slate-400">{{ $item['time'] }}</span>
+              <span class="text-[10px] font-bold text-slate-400">{{ $item['time'] }}</span>
             </div>
           </div>
         @endforeach

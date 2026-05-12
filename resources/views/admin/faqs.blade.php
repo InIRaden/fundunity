@@ -17,10 +17,10 @@
       <table class="w-full border-collapse">
         <thead>
           <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-center text-[11px] font-medium text-white uppercase tracking-widest border-b border-emerald-100/50 w-16">No</th>
-            <th class="py-4 px-6 text-left text-[11px] font-medium text-white uppercase tracking-widest border-b border-emerald-100/50">Pertanyaan (Q)</th>
-            <th class="py-4 px-6 text-left text-[11px] font-medium text-white uppercase tracking-widest border-b border-emerald-100/50">Jawaban (A)</th>
-            <th class="py-4 px-6 text-center text-[11px] font-medium text-white uppercase tracking-widest border-b border-emerald-100/50">Aksi</th>
+            <th class="py-4 px-6 text-center text-[11px] font-medium text-white border-b border-emerald-100/50 w-16">No</th>
+            <th class="py-4 px-6 text-left text-[11px] font-medium text-white border-b border-emerald-100/50">Pertanyaan (Q)</th>
+            <th class="py-4 px-6 text-left text-[11px] font-medium text-white border-b border-emerald-100/50">Jawaban (A)</th>
+            <th class="py-4 px-6 text-center text-[11px] font-medium text-white border-b border-emerald-100/50">Aksi</th>
           </tr>
         </thead>
         <tbody id="faqRows" class="divide-y divide-slate-100"></tbody>

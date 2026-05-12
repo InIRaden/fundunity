@@ -9,7 +9,7 @@
     <section class="relative overflow-hidden border-t border-slate-100 bg-white py-24">
         <div class="mx-auto grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
             <div class="max-w-lg">
-                <span class="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.25em] text-emerald-600">
+                <span class="mb-4 flex items-center gap-2 text-sm font-bold tracking-[0.25em] text-emerald-600">
                     <i class="ph ph-chat-text text-xl"></i>
                     Hubungi Kami
                 </span>
@@ -58,21 +58,21 @@
                     <form method="POST" action="{{ route('contact.store') }}" class="flex flex-col gap-6">
                         @csrf
                         <div>
-                            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Nama Pengirim</label>
+                            <label class="mb-1.5 block text-xs font-bold text-slate-500">Nama Pengirim</label>
                             <div class="relative">
                                 <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
                                 <input type="text" name="name" value="{{ old('name') }}" required placeholder="Nama Anda atau Organisasi" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
                             </div>
                         </div>
                         <div>
-                            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Email Balasan</label>
+                            <label class="mb-1.5 block text-xs font-bold text-slate-500">Email Balasan</label>
                             <div class="relative">
                                 <i class="ph ph-envelope-open absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
                                 <input type="email" name="email" value="{{ old('email') }}" required placeholder="alamat@email.com" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">
                             </div>
                         </div>
                         <div>
-                            <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Isi Pesan</label>
+                            <label class="mb-1.5 block text-xs font-bold text-slate-500">Isi Pesan</label>
                             <textarea name="message" rows="4" required placeholder="Tuliskan tujuan / masalah yang ingin didiskusikan..." class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none transition-all focus:ring-2 focus:ring-emerald-500/20">{{ old('message') }}</textarea>
                         </div>
                         <button type="submit" class="flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-600 py-4 font-bold text-white shadow-lg transition-all hover:bg-emerald-700">

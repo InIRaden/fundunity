@@ -17,10 +17,10 @@
       <table class="w-full border-collapse">
         <thead>
           <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest">Pratinjau Media</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest">Informasi Konten</th>
-            <th class="py-4 px-6 text-center text-[11px] font-semibold text-white uppercase tracking-widest w-24">Urutan</th>
-            <th class="py-4 px-6 text-center text-[11px] font-semibold text-white uppercase tracking-widest">Aksi</th>
+            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white">Pratinjau Media</th>
+            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white">Informasi Konten</th>
+            <th class="py-4 px-6 text-center text-[11px] font-semibold text-white w-24">Urutan</th>
+            <th class="py-4 px-6 text-center text-[11px] font-semibold text-white">Aksi</th>
           </tr>
         </thead>
         <tbody id="slider-body" class="divide-y divide-slate-100"></tbody>
@@ -50,21 +50,10 @@
         <textarea id="sliderDesc" rows="3" required placeholder="Masukkan penjelasan singkat..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
       </div>
       <div>
-        <label class="block text-xs text-slate-500 mb-2">Media Gambar</label>
-        <div class="space-y-3">
-          <div class="grid grid-cols-2 gap-2">
-            <button id="sliderSourceUrl" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold border border-emerald-600 bg-emerald-600 text-white">Gunakan URL</button>
-            <button id="sliderSourceUpload" type="button" class="px-4 py-2 rounded-xl text-xs font-semibold border border-slate-200 bg-white text-slate-600">Upload File</button>
-          </div>
-
-          <div id="sliderUrlWrap">
-            <input id="sliderImageUrl" type="url" placeholder="https://..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" />
-          </div>
-
-          <div id="sliderFileWrap" class="hidden border-2 border-dashed border-slate-200 rounded-2xl p-5 bg-slate-50">
-            <input id="sliderImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 file:font-semibold">
-            <p class="text-xs font-semibold text-slate-400 mt-2">Format: JPG, PNG, WEBP. Maksimal 4MB.</p>
-          </div>
+        <label class="block text-xs text-slate-500 mb-2">Media Gambar (Upload)</label>
+        <div class="border-2 border-dashed border-slate-200 rounded-2xl p-5 bg-slate-50">
+          <input id="sliderImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 file:font-semibold">
+          <p class="text-xs font-semibold text-slate-400 mt-2">Format: JPG, PNG, WEBP. Maksimal 4MB.</p>
         </div>
       </div>
     </div>
@@ -110,7 +99,6 @@
     deletingId: null,
     isSubmitting: false,
     isDeleting: false,
-    sourceType: 'url',
   };
 
   async function requestSlider(url, method, payload, isFormData = false) {
@@ -140,33 +128,6 @@
     }
 
     return json;
-  }
-
-  function setSliderSourceType(type) {
-    sliderState.sourceType = type;
-
-    const urlButton = document.getElementById('sliderSourceUrl');
-    const uploadButton = document.getElementById('sliderSourceUpload');
-    const urlWrap = document.getElementById('sliderUrlWrap');
-    const fileWrap = document.getElementById('sliderFileWrap');
-
-    const activeClass = ['border-emerald-600', 'bg-emerald-600', 'text-white'];
-    const inactiveClass = ['border-slate-200', 'bg-white', 'text-slate-600'];
-
-    urlButton.classList.remove(...activeClass, ...inactiveClass);
-    uploadButton.classList.remove(...activeClass, ...inactiveClass);
-
-    if (type === 'upload') {
-      uploadButton.classList.add(...activeClass);
-      urlButton.classList.add(...inactiveClass);
-      fileWrap.classList.remove('hidden');
-      urlWrap.classList.add('hidden');
-    } else {
-      urlButton.classList.add(...activeClass);
-      uploadButton.classList.add(...inactiveClass);
-      urlWrap.classList.remove('hidden');
-      fileWrap.classList.add('hidden');
-    }
   }
 
   function setSliderSubmitLoading(loading) {
@@ -224,14 +185,11 @@
       document.getElementById('sliderModalTitle').textContent = 'Ubah Banner';
       document.getElementById('sliderTitle').value = item.title;
       document.getElementById('sliderDesc').value = item.description;
-      document.getElementById('sliderImageUrl').value = item.imageUrl || '';
       document.getElementById('sliderImageFile').value = '';
-      setSliderSourceType('url');
     } else {
       sliderState.editingId = null;
       document.getElementById('sliderModalTitle').textContent = 'Tambah Banner';
       document.getElementById('sliderForm').reset();
-      setSliderSourceType('url');
     }
 
     setSliderSubmitLoading(false);
@@ -290,8 +248,6 @@
   document.getElementById('openSliderModal').addEventListener('click', () => openSliderModal());
   document.getElementById('closeSliderModal').addEventListener('click', closeSliderModal);
   document.getElementById('cancelSliderModal').addEventListener('click', closeSliderModal);
-  document.getElementById('sliderSourceUrl').addEventListener('click', () => setSliderSourceType('url'));
-  document.getElementById('sliderSourceUpload').addEventListener('click', () => setSliderSourceType('upload'));
 
   document.getElementById('sliderForm').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -304,16 +260,9 @@
     formData.append('title', document.getElementById('sliderTitle').value);
     formData.append('description', document.getElementById('sliderDesc').value);
 
-    if (sliderState.sourceType === 'upload') {
-      const file = document.getElementById('sliderImageFile').files?.[0];
-      if (file) {
-        formData.append('image_file', file);
-      }
-    } else {
-      const imageUrl = document.getElementById('sliderImageUrl').value.trim();
-      if (imageUrl) {
-        formData.append('image_url', imageUrl);
-      }
+    const file = document.getElementById('sliderImageFile').files?.[0];
+    if (file) {
+      formData.append('image_file', file);
     }
 
     sliderState.isSubmitting = true;

@@ -13,10 +13,10 @@
     <section class="py-24 bg-slate-50 border-t border-slate-100">
         <div class="mx-auto max-w-4xl px-6">
             <div class="mb-16 text-center">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
-                    Pertanyaan yang Sering <span class="text-emerald-500">Diajukan</span>
+                <h1 class="text-2xl md:text-4xl font-bold text-emerald-600 leading-tight mb-4">
+                    Pertanyaan yang Sering Diajukan</span>
                 </h1>
-                <p class="text-slate-500 text-lg">Kami merangkum jawaban jujur dari pertanyaan-pertanyaan donatur untuk menghapus keraguan Anda.</p>
+                <p class="text-slate-500 text-md">Kami kumpulkan pertanyaan yang paling sering ditanyakan oleh donatur dan relawan untuk memudahkan Anda memahami cara kerja platform kami.</p>
             </div>
 
             <div class="space-y-4">
@@ -36,12 +36,14 @@
                     </article>
                 @empty
                     <div class="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
-                        FAQ belum tersedia dari admin.
+                        Belum ada pertanyaan yang tersedia. Silakan <a href="{{ $siteSettings['whatsapp_url'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 font-bold hover:underline">hubungi kami via WhatsApp</a>.
                     </div>
                 @endforelse
             </div>
         </div>
     </section>
+    
+    <x-landing.cta />
 </div>
 @endsection
 

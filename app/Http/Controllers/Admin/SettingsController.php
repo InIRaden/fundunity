@@ -66,13 +66,16 @@ class SettingsController extends Controller
 
         $validated = $request->validate([
             'displayName' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'email' => ['nullable', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'photo_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
 
+        // Keep existing email if not provided
+        $newEmail = filled($validated['email'] ?? null) ? $validated['email'] : $user->email;
+
         $user->update([
             'name' => $validated['displayName'],
-            'email' => $validated['email'],
+            'email' => $newEmail,
         ]);
 
         $currentPhoto = SiteSetting::query()->where('key', 'admin_profile_photo')->value('value');

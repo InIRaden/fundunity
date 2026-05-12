@@ -6,23 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PartnerController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:200'],
-            'image_url' => ['required', 'url', 'max:500'],
+            'name'        => ['required', 'string', 'max:200'],
+            'image_file'  => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image_url'   => ['nullable', 'url', 'max:500'],
             'website_url' => ['nullable', 'url', 'max:500'],
-            'type' => ['nullable', 'in:corporate,ngo,government,other'],
+            'type'        => ['nullable', 'in:corporate,ngo,government,other'],
             'description' => ['nullable', 'string'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'sort_order'  => ['nullable', 'integer', 'min:0'],
         ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->store('partners', 'public');
+            $imagePath = Storage::url($path);
+        } elseif ($request->filled('image_url')) {
+            $imagePath = $request->string('image_url')->toString();
+        }
 
         $partner = Partner::create([
             'name' => $validated['name'],
-            'logo' => $validated['image_url'],
+            'logo' => $imagePath,
             'website_url' => $validated['website_url'] ?? null,
             'type' => $validated['type'] ?? 'other',
             'description' => $validated['description'] ?? null,
@@ -40,16 +51,25 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:200'],
-            'image_url' => ['required', 'url', 'max:500'],
+            'image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'website_url' => ['nullable', 'url', 'max:500'],
             'type' => ['nullable', 'in:corporate,ngo,government,other'],
             'description' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ]);
 
+        $imagePath = $partner->logo;
+        if ($request->hasFile('image_file')) {
+            if ($imagePath && Str::startsWith($imagePath, '/storage/')) {
+                Storage::disk('public')->delete(Str::after($imagePath, '/storage/'));
+            }
+            $path = $request->file('image_file')->store('partners', 'public');
+            $imagePath = Storage::url($path);
+        }
+
         $partner->update([
             'name' => $validated['name'],
-            'logo' => $validated['image_url'],
+            'logo' => $imagePath,
             'website_url' => $validated['website_url'] ?? $partner->website_url,
             'type' => $validated['type'] ?? $partner->type,
             'description' => $validated['description'] ?? $partner->description,
@@ -64,6 +84,9 @@ class PartnerController extends Controller
 
     public function destroy(Partner $partner): JsonResponse
     {
+        if ($partner->logo && Str::startsWith($partner->logo, '/storage/')) {
+            Storage::disk('public')->delete(Str::after($partner->logo, '/storage/'));
+        }
         $partner->delete();
 
         return response()->json([

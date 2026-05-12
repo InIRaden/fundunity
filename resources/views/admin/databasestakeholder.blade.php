@@ -44,11 +44,11 @@
         <table class="w-full">
           <thead class="bg-slate-50 border-b border-slate-100">
             <tr>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Entitas Penerima</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Program Terkait</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Lokasi</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Nilai Bantuan</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Aksi</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Entitas Penerima</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Program Terkait</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Lokasi</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Nilai Bantuan</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Aksi</th>
             </tr>
           </thead>
           <tbody id="penerimaRows" class="divide-y divide-slate-100"></tbody>
@@ -58,11 +58,11 @@
         <table class="w-full">
           <thead class="bg-slate-50 border-b border-slate-100">
             <tr>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Nama Relawan</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Email / Kontak</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Bidang Keahlian</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Status Verif</th>
-              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest">Aksi</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Nama Relawan</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Email / Kontak</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Bidang Keahlian</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Status Verif</th>
+              <th class="py-4 px-6 text-left text-[11px] font-bold text-slate-500">Aksi</th>
             </tr>
           </thead>
           <tbody id="relawanRows" class="divide-y divide-slate-100"></tbody>
@@ -266,7 +266,7 @@
         <h3 class="font-semibold text-slate-900 text-lg mb-1">${d.nama || '-'}</h3>
         <p class="text-xs text-slate-500 flex items-center gap-1.5 mb-5"><i class="ph ph-envelope-simple text-sm"></i>${d.email || '-'}</p>
         <div class="pt-4 border-t border-slate-100/80 flex justify-between items-end gap-3">
-          <div><p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Kontribusi</p><p class="font-bold text-emerald-600 text-lg">${rp(d.totalDonasi)}</p></div>
+          <div><p class="text-[10px] font-semibold text-slate-400 mb-1">Total Kontribusi</p><p class="font-bold text-emerald-600 text-lg">${rp(d.totalDonasi)}</p></div>
           <div class="flex items-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-semibold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditStake(${d.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-semibold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteStake(${d.id}, this)">Hapus</button></div>
         </div>
       </div>

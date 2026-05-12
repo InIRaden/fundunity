@@ -132,11 +132,11 @@
 
                     <div class="mb-8 space-y-3 rounded-2xl border border-slate-100 bg-slate-50 p-6 text-left">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold uppercase text-slate-400">Nama Donatur</span>
+                            <span class="text-xs font-bold text-slate-400">Nama Donatur</span>
                             <span id="confirmName" class="font-bold text-slate-800">-</span>
                         </div>
                         <div class="flex items-center justify-between border-t border-slate-200/50 pt-3">
-                            <span class="text-xs font-bold uppercase text-slate-400">Total Donasi</span>
+                            <span class="text-xs font-bold text-slate-400">Total Donasi</span>
                             <span id="confirmAmount" class="text-xl font-extrabold text-emerald-600">Rp 0</span>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                 <div data-step-panel="3" class="hidden text-center">
                     <div class="mb-6 flex items-start justify-between text-left">
                         <div>
-                            <p class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-500">ID Transaksi</p>
+                            <p class="mb-1 text-xs font-bold text-slate-500">ID Transaksi</p>
                             <p id="paymentTransactionId" class="font-extrabold text-slate-900">-</p>
                         </div>
                         <div class="flex shrink-0 items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-amber-600">
@@ -174,7 +174,7 @@
                                 <p class="text-[10px] font-black text-slate-900">QRIS CODE</p>
                             </div>
                         </div>
-                        <p class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Berlaku untuk semua e-wallet & bank</p>
+                        <p class="text-[11px] font-bold text-slate-400">Berlaku untuk semua e-wallet & bank</p>
                     </div>
 
                     <div class="mb-8 flex items-center justify-between border-t border-slate-100 pt-6">

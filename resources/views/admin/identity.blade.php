@@ -24,7 +24,7 @@
         <p id="identityPreviewShortName" class="text-sm text-slate-400 mt-1 font-medium">{{ $identity['shortName'] }}</p>
 
         <div class="mt-8 pt-8 border-t border-slate-100 w-full">
-          <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-4">Preview Sidebar</p>
+          <p class="text-[11px] text-slate-400 font-bold mb-4">Preview Sidebar</p>
           <div class="bg-emerald-600 rounded-xl p-4 flex items-center gap-3 text-left">
             <div class="w-8 h-8 bg-white/20 rounded-md flex items-center justify-center"><i class="ph ph-globe text-sm"></i></div>
             <span id="identitySidebarShortName" class="text-xs font-bold text-white truncate">{{ $identity['shortName'] }}</span>
@@ -50,22 +50,22 @@
         <div class="p-8 space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Lengkap Organisasi</label>
+              <label class="block text-xs font-bold text-slate-500">Nama Lengkap Organisasi</label>
               <input id="identityOrgName" type="text" value="{{ $identity['orgName'] }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
             </div>
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Pendek</label>
+              <label class="block text-xs font-bold text-slate-500">Nama Pendek</label>
               <input id="identityShortName" type="text" value="{{ $identity['shortName'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
             </div>
           </div>
 
           <div class="space-y-2">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Tagline Utama</label>
+            <label class="block text-xs font-bold text-slate-500">Tagline Utama</label>
             <input id="identityTagline" type="text" value="{{ $identity['tagline'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
           </div>
 
           <div class="space-y-2">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Logo URL</label>
+            <label class="block text-xs font-bold text-slate-500">Logo URL</label>
             <input id="identityLogoUrl" type="url" value="{{ $identity['logoUrl'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" placeholder="https://example.com/logo.png" />
           </div>
         </div>
@@ -77,19 +77,19 @@
         <div class="p-8 space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Email Publik</label>
+              <label class="block text-xs font-bold text-slate-500">Email Publik</label>
               <input id="identityEmail" type="email" value="{{ $identity['email'] }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
             </div>
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">WhatsApp/Telepon</label>
+              <label class="block text-xs font-bold text-slate-500">WhatsApp/Telepon</label>
               <input id="identityPhone" type="text" value="{{ $identity['phone'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
             </div>
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Instagram URL</label>
+              <label class="block text-xs font-bold text-slate-500">Instagram URL</label>
               <input id="identityInstagramUrl" type="url" value="{{ $identity['instagramUrl'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" placeholder="https://instagram.com/username" />
             </div>
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Alamat / Sekretariat</label>
+              <label class="block text-xs font-bold text-slate-500">Alamat / Sekretariat</label>
               <input id="identityAddress" type="text" value="{{ $identity['address'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
             </div>
           </div>

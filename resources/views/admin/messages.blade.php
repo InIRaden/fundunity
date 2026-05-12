@@ -28,10 +28,10 @@
           <thead>
             <tr class="bg-emerald-600">
               <th class="w-10 px-6 py-4 border-b border-emerald-100/50"></th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Pengirim</th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Cuplikan Pesan</th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white uppercase tracking-widest text-right border-b border-emerald-100/50">Tanggal Masuk</th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white uppercase tracking-widest text-center border-b border-emerald-100/50">Aksi</th>
+              <th class="px-6 py-4 text-[11px] font-semibold text-white border-b border-emerald-100/50">Pengirim</th>
+              <th class="px-6 py-4 text-[11px] font-semibold text-white border-b border-emerald-100/50">Cuplikan Pesan</th>
+              <th class="px-6 py-4 text-[11px] font-semibold text-white text-right border-b border-emerald-100/50">Tanggal Masuk</th>
+              <th class="px-6 py-4 text-[11px] font-semibold text-white text-center border-b border-emerald-100/50">Aksi</th>
             </tr>
           </thead>
           <tbody id="messageRows" class="divide-y divide-slate-100"></tbody>
@@ -47,14 +47,14 @@
   <div id="modalBackdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
   <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-fade-in flex flex-col max-h-[90vh]">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
-      <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wider"><i class="ph ph-envelope-open text-emerald-600 text-lg"></i> Detail Pesan Masuk</h2>
+      <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2"><i class="ph ph-envelope-open text-emerald-600 text-lg"></i> Detail Pesan Masuk</h2>
       <button id="closeMessageModal" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
     </div>
 
     <div class="p-8 space-y-6 overflow-y-auto">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
         <div class="flex items-center gap-4">
-          <div id="modalInitial" class="w-12 h-12 bg-emerald-100 text-emerald-700 font-bold rounded-full flex items-center justify-center text-lg uppercase shrink-0"></div>
+          <div id="modalInitial" class="w-12 h-12 bg-emerald-100 text-emerald-700 font-bold rounded-full flex items-center justify-center text-lg shrink-0"></div>
           <div>
             <h3 id="modalName" class="text-lg font-bold text-slate-900 leading-tight"></h3>
             <a id="modalEmail" href="#" class="text-sm text-emerald-600 hover:underline"></a>
