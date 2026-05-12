@@ -1,3 +1,6 @@
+@php
+    $isAuthStandalonePage = request()->routeIs('login') || request()->routeIs('logout.confirm');
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -5,26 +8,47 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'FundUnity') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|sora:600,700,800&display=swap" rel="stylesheet" />
 
-        <!-- Tailwind CSS CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <h2 class="text-2xl font-bold text-gray-800">{{ config('app.name', 'Laravel') }}</h2>
-                </a>
-            </div>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                            display: ['"Sora"', 'sans-serif'],
+                        },
+                    },
+                },
+            };
+        </script>
+        <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+        @stack('head')
+    </head>
+    <body class="font-sans antialiased text-slate-900">
+        @if ($isAuthStandalonePage)
+            {{ $slot }}
+        @else
+            <div class="flex min-h-screen flex-col items-center justify-center bg-slate-100 px-4 py-6">
+                <div class="w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
+                    <div class="border-b border-slate-100 px-8 py-6 text-center">
+                        <a href="{{ route('landing.home') }}" class="font-display text-2xl font-extrabold tracking-tight text-slate-900">
+                            {{ config('app.name', 'FundUnity') }}<span class="text-emerald-500">.</span>
+                        </a>
+                    </div>
+
+                    <div class="px-6 py-8 sm:px-8">
+                        {{ $slot }}
+                    </div>
+                </div>
             </div>
-        </div>
+        @endif
+
+        @stack('scripts')
     </body>
 </html>

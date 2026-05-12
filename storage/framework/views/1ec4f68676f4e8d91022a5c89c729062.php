@@ -12,9 +12,6 @@
     ['route' => 'admin.imageslider', 'icon' => 'ph ph-slideshow', 'label' => 'Banner Slider'],
     ['route' => 'admin.partners', 'icon' => 'ph ph-handshake', 'label' => 'Mitra Kami'],
     ['route' => 'admin.faqs', 'icon' => 'ph ph-chats-circle', 'label' => 'Tanya Jawab'],
-    ['route' => 'admin.identity', 'icon' => 'ph ph-globe', 'label' => 'Website Identity'],
-    ['route' => 'admin.landing-manager', 'icon' => 'ph ph-squares-four', 'label' => 'Landing Manager'],
-    ['route' => 'admin.notifications', 'icon' => 'ph ph-bell', 'label' => 'Log Aktivitas'],
     ['route' => 'admin.settings', 'icon' => 'ph ph-gear-six', 'label' => 'Akun & Sistem'],
   ];
 ?>
@@ -51,16 +48,13 @@
 
     <!-- Logout -->
     <div class="px-3 pb-6 pt-3 mt-auto">
-      <form method="POST" action="<?php echo e(route('logout')); ?>" class="w-full">
-        <?php echo csrf_field(); ?>
-        <button type="submit" class="relative group w-full flex items-center gap-3 py-2.5 rounded-xl text-slate-200 hover:bg-rose-600/10 hover:text-rose-400 transition-all <?php echo e($isSidebarOpen ?? true ? 'px-4' : 'justify-center px-0'); ?>">
-          <!-- Icon Placeholder -->
-          <i class="ph ph-door-open shrink-0 text-[19px] leading-none"></i>
-          <?php if($isSidebarOpen ?? true): ?>
-            <span class="text-[13px] font-semibold tracking-wide">Keluar</span>
-          <?php endif; ?>
-        </button>
-      </form>
+      <a href="<?php echo e(route('logout.confirm')); ?>" class="relative group w-full flex items-center gap-3 py-2.5 rounded-xl text-slate-200 hover:bg-rose-600/10 hover:text-rose-400 transition-all <?php echo e($isSidebarOpen ?? true ? 'px-4' : 'justify-center px-0'); ?>">
+        <!-- Icon Placeholder -->
+        <i class="ph ph-door-open shrink-0 text-[19px] leading-none"></i>
+        <?php if($isSidebarOpen ?? true): ?>
+          <span class="text-[13px] font-semibold tracking-wide">Keluar</span>
+        <?php endif; ?>
+      </a>
     </div>
 
     <!-- Toggle Button -->

@@ -115,11 +115,11 @@
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Donatur</label>
-          <input type="text" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="Hamba Allah...">
+          <input id="manualDonorName" type="text" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="Hamba Allah...">
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Campaign</label>
-          <select class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors">
+          <select id="manualCampaign" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors">
             <option>Bantuan Banjir Demak</option>
             <option>Beasiswa Yatim</option>
             <option>Infaq Umum (Kas)</option>
@@ -128,11 +128,11 @@
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-500 mb-1.5">Nominal (Rp)</label>
-        <input type="number" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+        <input id="manualAmount" type="number" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="0">
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-500 mb-1.5">Pesan Bukti/Catatan (Opsional)</label>
-        <textarea rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="Bukti transfer via BCA an..."></textarea>
+        <textarea id="manualNotes" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="Bukti transfer via BCA an..."></textarea>
       </div>
     </div>
     <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
@@ -150,6 +150,9 @@
 </style>
 
 <script>
+  const manualIncomeStoreUrl = @json(route('admin.databasestakeholder.store', ['type' => 'donatur']));
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
   const state = {
     activeTab: 'pemasukan',
     incomeFilter: 'semua',
@@ -259,10 +262,75 @@
     modal.classList.remove('flex');
   }
 
+  function resetManualIncomeForm() {
+    document.getElementById('manualDonorName').value = '';
+    document.getElementById('manualAmount').value = '';
+    document.getElementById('manualNotes').value = '';
+    document.getElementById('manualCampaign').selectedIndex = 0;
+  }
+
+  async function saveManualIncome() {
+    const donorName = document.getElementById('manualDonorName').value.trim();
+    const campaign = document.getElementById('manualCampaign').value.trim();
+    const amount = Number(document.getElementById('manualAmount').value || 0);
+    const notes = document.getElementById('manualNotes').value.trim();
+
+    if (!donorName) {
+      window.alert('Nama donatur wajib diisi.');
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      window.alert('Nominal donasi harus lebih dari 0.');
+      return;
+    }
+
+    try {
+      const response = await fetch(manualIncomeStoreUrl, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken,
+        },
+        body: JSON.stringify({
+          nama: donorName,
+          email: null,
+          totalDonasi: amount,
+          lastDonasi: new Date().toISOString().slice(0, 10),
+        }),
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const firstValidation = result.errors ? Object.values(result.errors)[0]?.[0] : null;
+        throw new Error(firstValidation || result.message || 'Gagal menyimpan transaksi manual.');
+      }
+
+      const donor = result.data || {};
+      state.incomes.unshift({
+        id: donor.id || Date.now(),
+        nama: donor.nama || donorName,
+        category: campaign || 'Donasi Umum',
+        notes,
+        amount,
+        status: 'berhasil',
+        date: donor.lastDonasi || new Date().toISOString().slice(0, 10),
+      });
+
+      renderIncomeRows();
+      hideIncomeModal();
+      resetManualIncomeForm();
+      window.alert(result.message || 'Transaksi manual berhasil disimpan.');
+    } catch (error) {
+      window.alert(error.message);
+    }
+  }
+
   document.getElementById('openIncomeModal').addEventListener('click', showIncomeModal);
   document.getElementById('closeIncomeModal').addEventListener('click', hideIncomeModal);
   document.getElementById('cancelIncomeModal').addEventListener('click', hideIncomeModal);
-  document.getElementById('saveIncomeModal').addEventListener('click', () => { hideIncomeModal(); alert('Transaksi manual tersimpan.'); });
+  document.getElementById('saveIncomeModal').addEventListener('click', saveManualIncome);
   document.getElementById('downloadAudit').addEventListener('click', () => alert('Mengunduh laporan... File CSV Transparansi Audit akan otomatis ter-download ke perangkat Anda.'));
 
   paintKpi();

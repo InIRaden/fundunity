@@ -6,7 +6,7 @@
     @foreach($tabs as $tab)
       <a href="{{ route($tab['route']) }}" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-500 hover:bg-slate-50 hover:text-slate-900">
         <span class="inline-flex items-center">
-          <i class="{{ $tab['key'] === 'slider' ? 'ph ph-slideshow' : ($tab['key'] === 'focus' ? 'ph ph-crosshair' : ($tab['key'] === 'about' ? 'ph ph-users-four' : ($tab['key'] === 'faqs' ? 'ph ph-chats-circle' : 'ph ph-handshake'))) }} text-sm"></i>
+          <i class="{{ $tab['key'] === 'slider' ? 'ph ph-slideshow' : ($tab['key'] === 'campaign' ? 'ph ph-megaphone' : ($tab['key'] === 'focus' ? 'ph ph-crosshair' : ($tab['key'] === 'about' ? 'ph ph-users-four' : ($tab['key'] === 'faqs' ? 'ph ph-chats-circle' : ($tab['key'] === 'identity' ? 'ph ph-globe' : 'ph ph-handshake'))))) }} text-sm"></i>
         </span>
         {{ $tab['label'] }}
       </a>

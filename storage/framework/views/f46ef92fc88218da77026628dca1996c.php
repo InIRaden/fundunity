@@ -83,13 +83,9 @@
       </div>
 
       <?php
-        $feedItems = [
-          ['event' => 'Donasi Masuk (Rp 500k)', 'detail' => 'Dari Hamba Allah - Campaign Yatim', 'time' => 'Baru saja', 'type' => 'in'],
-          ['event' => 'Donasi Masuk (Rp 2 Juta)', 'detail' => 'Dari PT Samudra - Sumur Bor NTT', 'time' => '15 mnt lalu', 'type' => 'in'],
-          ['event' => 'Penyaluran (Rp 15 Juta)', 'detail' => 'Untuk Bantuan Banjir Demak', 'time' => '1 jam lalu', 'type' => 'out'],
-          ['event' => 'Campaign Dibuat', 'detail' => 'Program: Beasiswa Pelosok Negeri', 'time' => '3 jam lalu', 'type' => 'sys'],
-          ['event' => 'Donatur Baru Mendaftar', 'detail' => 'Bapak Budi Santoso (VIP)', 'time' => '5 jam lalu', 'type' => 'sys'],
-        ];
+        $feedItems = collect($feedItems ?? [
+          ['event' => 'Belum ada aktivitas terbaru', 'detail' => 'Data akan tampil otomatis setelah ada transaksi.', 'time' => 'Baru saja', 'type' => 'sys'],
+        ]);
       ?>
 
       <div class="space-y-6 flex-1">
