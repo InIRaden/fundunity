@@ -115,7 +115,7 @@
       </div>
       <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
         <button type="button" id="cancelMemberAdd" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
-        <button id="addMemberSubmitBtn" type="submit" class="px-6 py-2 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800">Simpan Data Baru</button>
+        <button id="addMemberSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Data Baru</button>
       </div>
     </form>
   </div>

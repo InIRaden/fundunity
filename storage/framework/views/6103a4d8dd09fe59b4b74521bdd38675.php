@@ -333,7 +333,8 @@
   }
 
   async function deleteCampaign(id, button) {
-    if (window.confirm('Hapus campaign ini secara permanen?')) {
+    const confirmDelete = await customConfirm('Hapus Campaign?', 'Apakah Anda yakin ingin menghapus campaign ini secara permanen?');
+    if (confirmDelete) {
       const originalHtml = button?.innerHTML;
 
       if (button) {
@@ -348,8 +349,9 @@
         campaignState.campaigns = campaignState.campaigns.filter(c => c.id !== id);
         renderStats();
         renderRows();
+        customAlert('Berhasil', 'Campaign telah dihapus.');
       } catch (error) {
-        window.alert(error.message);
+        customAlert('Kesalahan', error.message, 'error');
       } finally {
         if (button) {
           button.disabled = false;
@@ -396,6 +398,16 @@
       formData.append('image_file', fileInput.files[0]);
     }
 
+    const deadlineInput = document.getElementById('fDeadline').value;
+    const deadlineDate = new Date(deadlineInput);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (deadlineDate < today) {
+      await customAlert('Tanggal Tidak Valid', 'Deadline campaign tidak boleh di masa lalu. Silakan pilih tanggal hari ini atau mendatang.', 'error');
+      return;
+    }
+
     campaignState.isSubmitting = true;
     setSubmitLoading(true);
 
@@ -412,8 +424,9 @@
       closeCampaignModal();
       renderStats();
       renderRows();
+      customAlert('Berhasil', campaignState.editingId ? 'Campaign berhasil diperbarui.' : 'Campaign berhasil ditambahkan.');
     } catch (error) {
-      window.alert(error.message);
+      customAlert('Kesalahan', error.message, 'error');
     } finally {
       campaignState.isSubmitting = false;
       setSubmitLoading(false);

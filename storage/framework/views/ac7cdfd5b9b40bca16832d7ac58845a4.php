@@ -33,10 +33,10 @@
         ?: '';
 
     $focusStyles = [
-        'bg-emerald-50 text-emerald-600 border-emerald-200',
-        'bg-rose-50 text-rose-600 border-rose-200',
-        'bg-teal-50 text-teal-600 border-teal-200',
-        'bg-amber-50 text-amber-600 border-amber-200',
+        'text-blue-600',
+        'text-rose-600',
+        'text-emerald-600',
+        'text-amber-600',
     ];
 
     $formatCurrency = static fn ($value) => 'Rp '.number_format((int) $value, 0, ',', '.');
@@ -147,24 +147,21 @@
                     if (!str_starts_with($areaIcon, 'ph ')) $areaIcon = 'ph ph-target';
 
                     if (str_contains($storedColor, 'blue') || str_contains($storedColor, 'teal')) {
-                        $focusStyle = 'bg-teal-50 text-teal-600 border-teal-200';
+                        $focusStyle = 'text-blue-600';
                     } elseif (str_contains($storedColor, 'rose') || str_contains($storedColor, 'red')) {
-                        $focusStyle = 'bg-rose-50 text-rose-600 border-rose-200';
+                        $focusStyle = 'text-rose-600';
                     } elseif (str_contains($storedColor, 'emerald') || str_contains($storedColor, 'green')) {
-                        $focusStyle = 'bg-emerald-50 text-emerald-600 border-emerald-200';
+                        $focusStyle = 'text-emerald-600';
                     } elseif (str_contains($storedColor, 'amber') || str_contains($storedColor, 'orange') || str_contains($storedColor, 'yellow')) {
-                        $focusStyle = 'bg-amber-50 text-amber-600 border-amber-200';
+                        $focusStyle = 'text-amber-600';
                     }
                 ?>
-                <div class="rounded-[2rem] p-8 border <?php echo e($focusStyle); ?> transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group relative overflow-hidden">
-                    <div class="absolute right-0 top-0 -translate-y-4 translate-x-4 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-10 text-[100px]">
+                <div class="flex h-full flex-col bg-white p-8 md:p-10 rounded-[40px] shadow-xl shadow-slate-200/50 border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="mb-5 text-[40px] <?php echo e($focusStyle); ?>">
                         <i class="<?php echo e($areaIcon); ?>"></i>
                     </div>
-                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">
-                        <div class="text-2xl text-emerald-600"><i class="<?php echo e($areaIcon); ?>"></i></div>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-lg mb-2 relative z-10"><?php echo e($focusArea->title); ?></h3>
-                    <p class="text-slate-500 text-sm leading-relaxed relative z-10"><?php echo e($focusArea->description); ?></p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-4"><?php echo e($focusArea->title); ?></h3>
+                    <p class="text-slate-600 leading-relaxed flex-1"><?php echo e($focusArea->description); ?></p>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="rounded-[1rem] border border-dashed border-slate-200 bg-slate-50 p-8 text-sm text-slate-500 lg:col-span-4">

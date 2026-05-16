@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'FundUnity') }} - Lupa Kata Sandi</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo e(config('app.name', 'FundUnity')); ?> - Lupa Kata Sandi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 </head>
@@ -34,22 +34,22 @@
             <div class="w-full max-w-md">
                 <div class="mb-10 text-center lg:text-left">
                     <div class="mb-6 flex justify-center lg:justify-start">
-                        <img src="{{ $siteSettings['site_logo'] ?? asset('images/Logo.png') }}" alt="FundUnity CMS" class="h-20 object-contain" />
+                        <img src="<?php echo e(asset('images/Logo.png')); ?>" alt="FundUnity CMS" class="h-20 object-contain" />
                     </div>
                     <h1 class="text-3xl font-black tracking-tight text-slate-900">Lupa Kata Sandi?</h1>
                     <p class="mt-2 text-sm font-medium text-slate-600">Masukkan email Anda untuk menerima link reset kata sandi.</p>
                 </div>
 
                 <!-- Session Status -->
-                @if (session('status'))
+                <?php if(session('status')): ?>
                     <div class="mb-6 flex items-start gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3">
                         <i class="ph ph-check-circle text-emerald-600 text-lg mt-0.5 flex-shrink-0"></i>
-                        <p class="text-xs font-bold text-emerald-700">{{ session('status') }}</p>
+                        <p class="text-xs font-bold text-emerald-700"><?php echo e(session('status')); ?></p>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('password.email')); ?>" class="space-y-5">
+                    <?php echo csrf_field(); ?>
 
                     <!-- Email Address -->
                     <div>
@@ -58,16 +58,16 @@
                             id="email"
                             type="email"
                             name="email"
-                            value="{{ old('email') }}"
+                            value="<?php echo e(old('email')); ?>"
                             placeholder="nama@contoh.com"
                             required
                             autofocus
                             autocomplete="username"
-                            class="w-full rounded-xl border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white' }} py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 placeholder:text-slate-400"
+                            class="w-full rounded-xl border <?php echo e($errors->has('email') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white'); ?> py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 placeholder:text-slate-400"
                         >
-                        @if ($errors->has('email'))
-                            <p class="mt-2 text-xs font-medium text-red-600">{{ $errors->first('email') }}</p>
-                        @endif
+                        <?php if($errors->has('email')): ?>
+                            <p class="mt-2 text-xs font-medium text-red-600"><?php echo e($errors->first('email')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <button
@@ -80,13 +80,13 @@
                     <div class="flex flex-col gap-3 pt-6 border-t border-slate-100">
                         <p class="text-center text-sm text-slate-600 font-medium">
                             Ingat kata sandi Anda?
-                            <a href="{{ route('login') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                            <a href="<?php echo e(route('login')); ?>" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
                                 Masuk di sini
                             </a>
                         </p>
                         <p class="text-center text-sm text-slate-600 font-medium">
                             Belum punya akun?
-                            <a href="{{ route('register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                            <a href="<?php echo e(route('register')); ?>" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
                                 Daftar sekarang
                             </a>
                         </p>
@@ -94,10 +94,11 @@
                 </form>
 
                 <p class="mt-12 text-center text-xs font-bold tracking-[0.2em] text-slate-400 lg:text-left">
-                    &copy; {{ date('Y') }} FundUnity Foundation
+                    &copy; <?php echo e(date('Y')); ?> FundUnity Foundation
                 </p>
             </div>
         </div>
     </div>
 </body>
 </html>
+<?php /**PATH E:\coding\intern yukmari\fundunity\resources\views/auth/forgot-password.blade.php ENDPATH**/ ?>

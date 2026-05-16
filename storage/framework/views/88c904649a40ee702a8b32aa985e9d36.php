@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="h-80 w-full mt-4 bg-slate-50 rounded-xl flex items-center justify-center">
-        <p class="text-slate-500">Chart placeholder - Integrasikan chart untuk menyamai panel React.</p>
+        <canvas id="donationTrendChart"></canvas>
       </div>
     </div>
 
@@ -113,9 +113,11 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   let filterOpen = <?php echo e($filterOpen ? 'true' : 'false'); ?>;
   let selectedFilter = '<?php echo e($selectedFilter); ?>';
+  let donationChart = null;
 
   function toggleFilter() {
     filterOpen = !filterOpen;
@@ -126,7 +128,110 @@
     selectedFilter = option;
     filterOpen = false;
     // Update UI and reload data if needed
+    loadDonationChart();
   }
+
+  async function loadDonationChart() {
+    try {
+      const response = await fetch('<?php echo e(route("admin.api.donation-trend")); ?>');
+      const result = await response.json();
+
+      if (!result.success) {
+        console.error('Failed to fetch donation data');
+        return;
+      }
+
+      const ctx = document.getElementById('donationTrendChart').getContext('2d');
+      const amounts = result.data.map(d => d.amount);
+      const labels = result.data.map(d => d.month);
+
+      // Destroy existing chart if it exists
+      if (donationChart) {
+        donationChart.destroy();
+      }
+
+      donationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Pemasukan Donasi Bersih (Rp)',
+              data: amounts,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.05)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 6,
+              pointBackgroundColor: '#10b981',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointHoverRadius: 8,
+              pointHoverBackgroundColor: '#059669',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                font: { size: 12, weight: 'bold' },
+                color: '#334155',
+                padding: 15,
+              },
+            },
+            tooltip: {
+              backgroundColor: '#1e293b',
+              padding: 12,
+              titleFont: { size: 14, weight: 'bold' },
+              bodyFont: { size: 12 },
+              borderColor: '#64748b',
+              borderWidth: 1,
+              callbacks: {
+                label: (context) => {
+                  const value = context.parsed.y;
+                  return 'Rp ' + value.toLocaleString('id-ID', { useGrouping: true });
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                font: { size: 11, weight: 'bold' },
+                color: '#64748b',
+                callback: (value) => 'Rp ' + (value / 1000000).toFixed(0) + 'M',
+              },
+              grid: {
+                color: 'rgba(100, 116, 139, 0.1)',
+                drawBorder: false,
+              },
+            },
+            x: {
+              ticks: {
+                font: { size: 11, weight: 'bold' },
+                color: '#64748b',
+              },
+              grid: {
+                display: false,
+                drawBorder: false,
+              },
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Error loading donation chart:', error);
+    }
+  }
+
+  // Load chart on page ready
+  document.addEventListener('DOMContentLoaded', loadDonationChart);
 </script>
 <?php $__env->stopSection(); ?>
 

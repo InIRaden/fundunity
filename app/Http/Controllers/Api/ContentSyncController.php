@@ -36,6 +36,8 @@ class ContentSyncController extends Controller
             'newsletter_description',
             'newsletter_cta_text',
             'newsletter_placeholder',
+            'legal_privacy_policy',
+            'legal_terms_conditions',
         ];
 
         $settings = SiteSetting::query()

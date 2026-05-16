@@ -339,6 +339,41 @@
     document.getElementById('manualCampaign').selectedIndex = 0;
   }
 
+  function downloadCSV() {
+    if (state.laporan.length === 0) {
+      customAlert('Peringatan', 'Tidak ada data untuk diunduh.', 'error');
+      return;
+    }
+
+    const headers = ['Program', 'Kategori', 'Pemasukan', 'Disalurkan', 'Sisa', 'Penerima', 'Periode', 'Status'];
+    const rows = state.laporan.map(l => [
+      l.program,
+      l.kategori,
+      l.pemasukan,
+      l.disalurkan,
+      l.sisa,
+      l.penerima,
+      l.periode,
+      l.status
+    ]);
+
+    let csvContent = "data:text/csv;charset=utf-8," 
+      + headers.join(",") + "\n"
+      + rows.map(e => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Laporan_Transparansi_FundUnity_" + new Date().toISOString().slice(0,10) + ".csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    customAlert('Berhasil', 'Laporan transparansi berhasil diunduh.');
+  }
+
+  document.getElementById('downloadAudit').addEventListener('click', downloadCSV);
+
   async function saveManualIncome() {
     const donorName = document.getElementById('manualDonorName').value.trim();
     const campaign = document.getElementById('manualCampaign').value.trim();
@@ -346,12 +381,12 @@
     const notes = document.getElementById('manualNotes').value.trim();
 
     if (!donorName) {
-      window.alert('Nama donatur wajib diisi.');
+      customAlert('Input Tidak Lengkap', 'Nama donatur wajib diisi.', 'error');
       return;
     }
 
     if (!Number.isFinite(amount) || amount <= 0) {
-      window.alert('Nominal donasi harus lebih dari 0.');
+      customAlert('Input Tidak Valid', 'Nominal donasi harus lebih dari 0.', 'error');
       return;
     }
 
@@ -391,9 +426,9 @@
       renderIncomeRows();
       hideIncomeModal();
       resetManualIncomeForm();
-      window.alert(result.message || 'Transaksi manual berhasil disimpan.');
+      customAlert('Berhasil', result.message || 'Transaksi manual berhasil disimpan.');
     } catch (error) {
-      window.alert(error.message);
+      customAlert('Kesalahan', error.message, 'error');
     }
   }
 
@@ -401,7 +436,6 @@
   document.getElementById('closeIncomeModal').addEventListener('click', hideIncomeModal);
   document.getElementById('cancelIncomeModal').addEventListener('click', hideIncomeModal);
   document.getElementById('saveIncomeModal').addEventListener('click', saveManualIncome);
-  document.getElementById('downloadAudit').addEventListener('click', () => alert('Mengunduh laporan... File CSV Transparansi Audit akan otomatis ter-download ke perangkat Anda.'));
 
   // ---- Detail Modal Logic ----
   function openDetailModal(idx) {

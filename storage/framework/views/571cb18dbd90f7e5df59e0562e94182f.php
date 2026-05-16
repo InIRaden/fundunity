@@ -26,7 +26,7 @@
         <?php echo $__env->make('layouts.admin.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <!-- Main Content -->
-        <div style="margin-left: <?php echo e($sidebarWidth ?? '256px'); ?>; width: calc(100% - <?php echo e($sidebarWidth ?? '256px'); ?>); transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out; min-height: 100vh;">
+        <div id="mainContent" class="lg:ml-56 w-full lg:w-[calc(100%-224px)] transition-all duration-300 ease-in-out min-h-100vh">
             <?php echo $__env->make('layouts.admin.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             <main class="p-8">
                 <?php echo $__env->yieldContent('admin-content'); ?>
@@ -34,26 +34,58 @@
         </div>
     </div>
 
+    <?php echo $__env->make('components.admin-modals', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
     <!-- JavaScript -->
     <script>
-        // Sidebar toggle functionality
+        // Sidebar toggle functionality (desktop collapse)
         function toggleSidebar() {
-            const sidebar = document.querySelector('.fixed.top-0.left-0');
-            const mainContent = document.querySelector('div[style*="margin-left"]');
-            const isOpen = sidebar.classList.contains('w-56');
+            const sidebar = document.getElementById('adminSidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleIcon = document.getElementById('toggleIcon');
 
-            if (isOpen) {
-                sidebar.classList.remove('w-56');
-                sidebar.classList.add('w-[72px]');
-                mainContent.style.marginLeft = '72px';
-                mainContent.style.width = 'calc(100% - 72px)';
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebar.classList.remove('sidebar-collapsed');
+                mainContent.classList.remove('lg:ml-[72px]', 'lg:w-[calc(100%-72px)]');
+                mainContent.classList.add('lg:ml-56', 'lg:w-[calc(100%-224px)]');
+                toggleIcon.classList.remove('ph-caret-right');
+                toggleIcon.classList.add('ph-caret-left');
             } else {
-                sidebar.classList.remove('w-[72px]');
-                sidebar.classList.add('w-56');
-                mainContent.style.marginLeft = '256px';
-                mainContent.style.width = 'calc(100% - 256px)';
+                sidebar.classList.add('sidebar-collapsed');
+                mainContent.classList.remove('lg:ml-56', 'lg:w-[calc(100%-224px)]');
+                mainContent.classList.add('lg:ml-[72px]', 'lg:w-[calc(100%-72px)]');
+                toggleIcon.classList.remove('ph-caret-left');
+                toggleIcon.classList.add('ph-caret-right');
             }
         }
+
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            sidebar.classList.toggle('translate-x-0');
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('translate-x-0');
+            backdrop.classList.add('hidden');
+        }
+
+        // Close mobile sidebar when clicking menu items
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    closeMobileSidebar();
+                }
+            });
+        });
     </script>
 </body>
 </html>

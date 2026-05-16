@@ -104,6 +104,10 @@
     })),
   };
 
+  function getSharedImage() {
+    return aboutState.data.find(v => v.imageUrl)?.imageUrl || '';
+  }
+
   function currentItem() {
     if (aboutState.active === 'visi') {
        return aboutState.data.find(v => v.nama.toLowerCase().includes('visi')) || aboutState.data[0] || { id: 'new_visi', nama: 'Visi Organisasi', description: '', imageUrl: '' };
@@ -121,7 +125,7 @@
     if (item) {
       document.getElementById('displayTitle').textContent = item.nama;
       document.getElementById('displayDesc').textContent = item.description;
-      document.getElementById('displayImage').src = item.imageUrl || '';
+      document.getElementById('displayImage').src = getSharedImage();
     }
   }
 
@@ -132,8 +136,18 @@
     document.getElementById('editNama').value = item.nama;
     document.getElementById('editDesc').value = item.description;
     document.getElementById('editImageFile').value = '';
-    document.getElementById('imagePreviewWrap').classList.add('hidden');
-    document.getElementById('imagePreviewEl').src = '';
+
+    const wrap = document.getElementById('imagePreviewWrap');
+    const preview = document.getElementById('imagePreviewEl');
+    const currentImg = getSharedImage();
+    if (currentImg) {
+      preview.src = currentImg;
+      wrap.classList.remove('hidden');
+    } else {
+      wrap.classList.add('hidden');
+      preview.src = '';
+    }
+
     setSubmitLoading(false);
     document.getElementById('aboutEditModal').classList.remove('hidden');
     document.getElementById('aboutEditModal').classList.add('flex');
@@ -225,11 +239,19 @@
           imageUrl: json.data.imageUrl
         } : v);
       }
+
+      // Sync image for all general items if image was uploaded
+      if (fileInput.files[0]) {
+        aboutState.data = aboutState.data.map(v => ({
+          ...v,
+          imageUrl: json.data.imageUrl
+        }));
+      }
       
       closeEdit();
       paintTabs(); // Re-render dengan data terbaru
     } catch (err) {
-      alert('Gagal menyimpan: ' + err.message);
+      customAlert('Gagal', 'Gagal menyimpan: ' + err.message, 'error');
       setSubmitLoading(false);
     }
   });

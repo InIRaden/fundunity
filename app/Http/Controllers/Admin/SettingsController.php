@@ -197,6 +197,21 @@ class SettingsController extends Controller
         ]);
     }
 
+    public function updateLegal(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'privacyPolicy' => ['nullable', 'string', 'max:10000'],
+            'termsConditions' => ['nullable', 'string', 'max:10000'],
+        ]);
+
+        $this->upsertSetting('legal_privacy_policy', $this->nullableString($validated['privacyPolicy'] ?? null), 'textarea', 'legal', 'Privacy Policy');
+        $this->upsertSetting('legal_terms_conditions', $this->nullableString($validated['termsConditions'] ?? null), 'textarea', 'legal', 'Terms & Conditions');
+
+        return response()->json([
+            'message' => 'Kebijakan dan Syarat & Ketentuan berhasil disimpan.',
+        ]);
+    }
+
     public function updateSecurity(Request $request): JsonResponse
     {
         $validated = $request->validate([

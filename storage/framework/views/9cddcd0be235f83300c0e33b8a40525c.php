@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'FundUnity') }} - Daftar Akun</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo e(config('app.name', 'FundUnity')); ?> - Daftar Akun</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 </head>
@@ -17,12 +17,12 @@
                 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-200 blur-[80px]"></div>
                 <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-300 blur-[100px]"></div>
             </div>
-
+            
             <div class="relative z-10 text-center mb-10 max-w-lg">
                 <h2 class="text-3xl font-black text-slate-800 mb-4">Empowering Community Funding</h2>
                 <p class="text-slate-600 font-medium">Bergabunglah dalam mengelola inisiatif amal yang transparan dan berdampak bagi komunitas.</p>
             </div>
-            <img src="{{ asset('images/fundunity_login_illustration.png') }}" alt="Community Funding" class="relative z-10 w-full max-w-md object-contain drop-shadow-xl" />
+            <img src="<?php echo e(asset('images/fundunity_login_illustration.png')); ?>" alt="Community Funding" class="relative z-10 w-full max-w-md object-contain drop-shadow-xl" />
         </div>
 
         <!-- Right Side: Register Form -->
@@ -30,14 +30,14 @@
             <div class="w-full max-w-md">
                 <div class="mb-10 text-center lg:text-left">
                     <div class="mb-6 flex justify-center lg:justify-start">
-                        <img src="{{ $siteSettings['site_logo'] ?? asset('images/Logo.png') }}" alt="FundUnity CMS" class="h-20 object-contain" />
+                        <img src="<?php echo e(asset('images/Logo.png')); ?>" alt="FundUnity CMS" class="h-10 object-contain" />
                     </div>
                     <h1 class="text-3xl font-black tracking-tight text-slate-900">Buat Akun Baru</h1>
                     <p class="mt-2 text-sm font-medium text-slate-600">Bergabunglah dengan komunitas FundUnity.</p>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" class="space-y-5">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('register')); ?>" class="space-y-5">
+                    <?php echo csrf_field(); ?>
 
                     <!-- Name -->
                     <div>
@@ -46,16 +46,16 @@
                             id="name"
                             type="text"
                             name="name"
-                            value="{{ old('name') }}"
+                            value="<?php echo e(old('name')); ?>"
                             placeholder="Contoh: Budi Santoso"
                             required
                             autofocus
                             autocomplete="name"
-                            class="w-full rounded-xl border {{ $errors->has('name') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white' }} py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
+                            class="w-full rounded-xl border <?php echo e($errors->has('name') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white'); ?> py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                         >
-                        @if ($errors->has('name'))
-                            <p class="mt-2 text-xs font-medium text-red-600">{{ $errors->first('name') }}</p>
-                        @endif
+                        <?php if($errors->has('name')): ?>
+                            <p class="mt-2 text-xs font-medium text-red-600"><?php echo e($errors->first('name')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Email Address -->
@@ -65,15 +65,15 @@
                             id="email"
                             type="email"
                             name="email"
-                            value="{{ old('email') }}"
+                            value="<?php echo e(old('email')); ?>"
                             placeholder="nama@contoh.com"
                             required
                             autocomplete="username"
-                            class="w-full rounded-xl border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white' }} py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
+                            class="w-full rounded-xl border <?php echo e($errors->has('email') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white'); ?> py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                         >
-                        @if ($errors->has('email'))
-                            <p class="mt-2 text-xs font-medium text-red-600">{{ $errors->first('email') }}</p>
-                        @endif
+                        <?php if($errors->has('email')): ?>
+                            <p class="mt-2 text-xs font-medium text-red-600"><?php echo e($errors->first('email')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Phone Number (Optional) -->
@@ -83,14 +83,14 @@
                             id="phone"
                             type="tel"
                             name="phone"
-                            value="{{ old('phone') }}"
+                            value="<?php echo e(old('phone')); ?>"
                             placeholder="+62812345678"
                             autocomplete="tel"
                             class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                         >
-                        @if ($errors->has('phone'))
-                            <p class="mt-2 text-xs font-medium text-red-600">{{ $errors->first('phone') }}</p>
-                        @endif
+                        <?php if($errors->has('phone')): ?>
+                            <p class="mt-2 text-xs font-medium text-red-600"><?php echo e($errors->first('phone')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Password -->
@@ -104,7 +104,7 @@
                                 placeholder="Minimal 8 karakter"
                                 required
                                 autocomplete="new-password"
-                                class="w-full rounded-xl border {{ $errors->has('password') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white' }} py-3.5 px-4 pr-10 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
+                                class="w-full rounded-xl border <?php echo e($errors->has('password') ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white'); ?> py-3.5 px-4 pr-10 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                             >
                             <button
                                 type="button"
@@ -117,9 +117,9 @@
                                 </svg>
                             </button>
                         </div>
-                        @if ($errors->has('password'))
-                            <p class="mt-2 text-xs font-medium text-red-600">{{ $errors->first('password') }}</p>
-                        @endif
+                        <?php if($errors->has('password')): ?>
+                            <p class="mt-2 text-xs font-medium text-red-600"><?php echo e($errors->first('password')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Confirm Password -->
@@ -146,9 +146,9 @@
                                 </svg>
                             </button>
                         </div>
-                        @if ($errors->has('password_confirmation'))
-                            <p class="mt-2 text-xs font-medium text-red-600">{{ $errors->first('password_confirmation') }}</p>
-                        @endif
+                        <?php if($errors->has('password_confirmation')): ?>
+                            <p class="mt-2 text-xs font-medium text-red-600"><?php echo e($errors->first('password_confirmation')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Terms & Conditions -->
@@ -158,7 +158,8 @@
                                 id="agree_terms"
                                 type="checkbox"
                                 name="agree_terms"
-                                {{ old('agree_terms') ? 'checked' : '' }}
+                                <?php echo e(old('agree_terms') ? 'checked' : ''); ?>
+
                                 class="mt-1 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 transition-all"
                             >
                             <span class="text-xs text-slate-600 flex-1">
@@ -173,11 +174,11 @@
                     >
                         DAFTAR
                     </button>
-
+                    
                     <div class="text-center pt-6">
                         <p class="text-sm text-slate-600 font-medium">
                             Sudah punya akun?
-                            <a href="{{ route('login') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                            <a href="<?php echo e(route('login')); ?>" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
                                 Masuk sekarang
                             </a>
                         </p>
@@ -185,10 +186,11 @@
                 </form>
 
                 <p class="mt-12 text-center text-xs font-bold tracking-[0.2em] text-slate-400 lg:text-left">
-                    &copy; {{ date('Y') }} FundUnity Foundation
+                    &copy; <?php echo e(date('Y')); ?> FundUnity Foundation
                 </p>
             </div>
         </div>
     </div>
 </body>
 </html>
+<?php /**PATH E:\coding\intern yukmari\fundunity\resources\views/auth/register.blade.php ENDPATH**/ ?>

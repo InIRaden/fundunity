@@ -3,14 +3,6 @@
 @section('title', 'Pilar Fokus Program')
 
 @push('head')
-<style>
-    .focus-clamp-3 {
-        display: -webkit-box;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-    }
-</style>
 @endpush
 
 @section('content')
@@ -22,25 +14,25 @@
             'title' => 'Pendidikan',
             'description' => 'Memberikan pendidikan berkualitas untuk anak-anak agar dapat mengembangkan potensinya secara optimal.',
             'icon' => 'ph ph-books',
-            'style' => 'bg-blue-50 text-blue-600 border-blue-200',
+            'style' => 'text-blue-600',
         ],
         [
             'title' => 'Kesehatan',
-            'description' => 'Menyelenggarakan bantuan kesadaran kesehatan dan akses layanan kesehatan dasar bagi masyarakat.',
+            'description' => 'Menyelenggarakan bantuan kesadaran kesehatan & akses layanan kesehatan dasar bagi masyarakat.',
             'icon' => 'ph ph-heartbeat',
-            'style' => 'bg-rose-50 text-rose-600 border-rose-200',
+            'style' => 'text-rose-600',
         ],
         [
             'title' => 'Lingkungan',
             'description' => 'Mendorong inisiatif untuk perlindungan lingkungan hidup dan keberlanjutan alam.',
             'icon' => 'ph ph-tree-evergreen',
-            'style' => 'bg-emerald-50 text-emerald-600 border-emerald-200',
+            'style' => 'text-emerald-600',
         ],
         [
             'title' => 'Komunitas',
             'description' => 'Memberdayakan masyarakat melalui pengembangan keterampilan, kolaborasi, dan penguatan kelompok.',
             'icon' => 'ph ph-users',
-            'style' => 'bg-amber-50 text-amber-600 border-amber-200',
+            'style' => 'text-amber-600',
         ],
     ]);
 
@@ -48,16 +40,16 @@
     $displayPillars = $focusAreas->isNotEmpty()
         ? $focusAreas->values()->map(function ($item, $index) {
             $storedColor = strtolower((string) ($item->color ?? ''));
-            $style = 'bg-emerald-50 text-emerald-600 border-emerald-200';
+            $style = 'text-emerald-600';
 
             if (str_contains($storedColor, 'blue') || str_contains($storedColor, 'teal')) {
-                $style = 'bg-teal-50 text-teal-600 border-teal-200';
+                $style = 'text-blue-600';
             } elseif (str_contains($storedColor, 'rose') || str_contains($storedColor, 'red')) {
-                $style = 'bg-rose-50 text-rose-600 border-rose-200';
+                $style = 'text-rose-600';
             } elseif (str_contains($storedColor, 'emerald') || str_contains($storedColor, 'green')) {
-                $style = 'bg-emerald-50 text-emerald-600 border-emerald-200';
+                $style = 'text-emerald-600';
             } elseif (str_contains($storedColor, 'amber') || str_contains($storedColor, 'orange') || str_contains($storedColor, 'yellow')) {
-                $style = 'bg-amber-50 text-amber-600 border-amber-200';
+                $style = 'text-amber-600';
             }
 
             return [
@@ -67,12 +59,7 @@
                 'style' => $style,
             ];
         })
-        : $defaultPillars->map(function($p) {
-            if (str_contains($p['style'], 'blue')) {
-                $p['style'] = 'bg-teal-50 text-teal-600 border-teal-200';
-            }
-            return $p;
-        });
+        : $defaultPillars;
 
     $statsDonorCount = (int) ($impactStats['donor_count'] ?? 0);
     $statsProgramCount = (int) ($impactStats['completed_programs'] ?? 0);
@@ -135,19 +122,12 @@
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                 @foreach($displayPillars as $pillar)
-                    <article class="group rounded-[2rem] border p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden {{ $pillar['style'] }}">
-                        <div class="absolute right-0 top-0 -translate-y-4 translate-x-4 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-10 text-[100px]">
+                    <article class="flex h-full flex-col bg-white p-8 md:p-10 rounded-[40px] shadow-xl shadow-slate-200/50 border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                        <div class="mb-5 text-[40px] {{ $pillar['style'] }}">
                             <i class="{{ $pillar['icon'] }}"></i>
                         </div>
-                        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">
-                            <div class="text-2xl text-emerald-600"><i class="{{ $pillar['icon'] }}"></i></div>
-                        </div>
-                        <h3 class="mb-2 text-lg font-bold text-slate-900 relative z-10">{{ $pillar['title'] }}</h3>
-                        <p class="focus-clamp-3 text-sm leading-relaxed text-slate-500 relative z-10">{{ $pillar['description'] }}</p>
-                        <a href="{{ route('programs', ['category' => $pillar['title']]) }}" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 transition-colors hover:text-emerald-600 relative z-10">
-                            Lihat Program
-                            <i class="ph ph-arrow-right"></i>
-                        </a>
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">{{ $pillar['title'] }}</h3>
+                        <p class="text-slate-600 leading-relaxed flex-1">{{ $pillar['description'] }}</p>
                     </article>
                 @endforeach
             </div>

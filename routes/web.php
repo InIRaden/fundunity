@@ -14,7 +14,9 @@ use App\Http\Controllers\Admin\StakeholderController as AdminStakeholderControll
 use App\Http\Controllers\Admin\TeamMemberController as AdminTeamMemberController;
 use App\Http\Controllers\Admin\AdminUiController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page Routes
@@ -32,6 +34,8 @@ Route::post('/donasi', [LandingController::class, 'submitDonation'])->name('dona
 Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
 Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
 Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
+Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [LegalController::class, 'terms'])->name('terms');
 
 Route::prefix('landing')->name('landing.')->group(function () {
     Route::get('/', [LandingController::class, 'index'])->name('home');
@@ -46,6 +50,8 @@ Route::prefix('landing')->name('landing.')->group(function () {
     Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
     Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
     Route::get('/donate/{campaign?}', [LandingController::class, 'donationForm'])->name('donate');
+    Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
+    Route::get('/terms', [LegalController::class, 'terms'])->name('terms');
 });
 
 // Super Simple Admin Routes
@@ -57,6 +63,14 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/settings/payment', [AdminSettingsController::class, 'updatePayment'])->name('settings.payment.update');
     Route::post('/settings/seo', [AdminSettingsController::class, 'updateSeo'])->name('settings.seo.update');
     Route::post('/settings/security', [AdminSettingsController::class, 'updateSecurity'])->name('settings.security.update');
+
+    // Legal management routes
+    Route::get('/legal', [AdminUiController::class, 'legal'])->name('legal');
+    Route::post('/legal', [AdminSettingsController::class, 'updateLegal'])->name('legal.update');
+
+    // Dashboard API endpoints
+    Route::get('/api/donation-trend', [AdminDashboardController::class, 'getDonationTrend'])->name('api.donation-trend');
+    Route::get('/api/kpi-stats', [AdminDashboardController::class, 'getKpiStats'])->name('api.kpi-stats');
 
     // Converted admin pages from React app flow
     Route::get('/campaign', [AdminUiController::class, 'campaign'])->name('campaign');
@@ -112,10 +126,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
 });
 
-// Newsletter & Legal Routes
+// Newsletter Route
 Route::post('/newsletter/subscribe', [LandingController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
-Route::get('/privacy', [LandingController::class, 'privacy'])->name('privacy');
-Route::get('/terms', [LandingController::class, 'terms'])->name('terms');
 
 // Dashboard Route - Redirect to Admin Dashboard
 Route::get('/dashboard', function () {

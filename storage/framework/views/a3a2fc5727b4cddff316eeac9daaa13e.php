@@ -33,7 +33,7 @@
                     <li><a href="<?php echo e(route('landing.about')); ?>" class="hover:text-emerald-400 transition-colors">Tentang Kami</a></li>
                     <li><a href="<?php echo e(route('landing.about')); ?>" class="hover:text-emerald-400 transition-colors">Visi & Misi</a></li>
                     <li><a href="<?php echo e(route('landing.faq')); ?>" class="hover:text-emerald-400 transition-colors">FAQ</a></li>
-                    <li><a href="<?php echo e(route('landing.get-involved')); ?>" class="hover:text-emerald-400 transition-colors">Karir & Relawan</a></li>
+                    <li><a href="<?php echo e(route('landing.get-involved')); ?>" class="hover:text-emerald-400 transition-colors">Relawan</a></li>
                 </ul>
             </div>
 

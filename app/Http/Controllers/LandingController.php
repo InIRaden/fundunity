@@ -381,13 +381,4 @@ class LandingController extends Controller
         return back()->with('newsletter_success', 'Terima kasih telah berlangganan newsletter kami!');
     }
 
-    public function privacy()
-    {
-        return view('landing.privacy');
-    }
-
-    public function terms()
-    {
-        return view('landing.terms');
-    }
 }

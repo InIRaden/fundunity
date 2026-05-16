@@ -624,6 +624,23 @@ class AdminUiController extends Controller
         return view('admin.landing-manager', compact('tabs', 'pageMeta'));
     }
 
+    public function legal(): View
+    {
+        $settings = SiteSetting::query()->pluck('value', 'key');
+
+        $legal = [
+            'privacyPolicy' => $settings->get('legal_privacy_policy') ?: '',
+            'termsConditions' => $settings->get('legal_terms_conditions') ?: '',
+        ];
+
+        $pageMeta = [
+            'title' => 'Kebijakan & Privasi',
+            'subtitle' => 'Kelola kebijakan privasi dan syarat & ketentuan website',
+        ];
+
+        return view('admin.legal', compact('legal', 'pageMeta'));
+    }
+
     private function buildDashboardFeedItems(): array
     {
         $feedItems = collect()

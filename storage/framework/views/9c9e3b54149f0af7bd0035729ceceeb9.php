@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'FundUnity') }} - Konfirmasi Logout</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
-</head>
-<body class="font-sans bg-slate-50 text-slate-900">
+<?php if (isset($component)) { $__componentOriginal69dc84650370d1d4dc1b42d016d7226b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal69dc84650370d1d4dc1b42d016d7226b = $attributes; } ?>
+<?php $component = App\View\Components\GuestLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('guest-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\GuestLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
     <div class="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 font-sans">
         <div class="mb-8 text-center">
             <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm">
@@ -38,8 +37,8 @@
             </div>
 
             <div class="flex flex-col gap-3 px-8 pb-8">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('logout')); ?>">
+                    <?php echo csrf_field(); ?>
                     <button
                         type="submit"
                         class="w-full rounded-2xl bg-indigo-600 py-3.5 font-bold text-white shadow-md shadow-indigo-100 transition-all hover:bg-indigo-700 active:scale-95"
@@ -58,6 +57,7 @@
         </div>
     </div>
 
+    <?php $__env->startPush('head'); ?>
     <style>
         @keyframes scale-in {
             from {
@@ -75,7 +75,9 @@
             animation: scale-in 0.2s ease-out forwards;
         }
     </style>
+    <?php $__env->stopPush(); ?>
 
+    <?php $__env->startPush('scripts'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const modal = document.getElementById('logoutModal');
@@ -113,5 +115,15 @@
             });
         });
     </script>
-</body>
-</html>
+    <?php $__env->stopPush(); ?>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
+<?php $attributes = $__attributesOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
+<?php unset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
+<?php $component = $__componentOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
+<?php unset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
+<?php endif; ?>
+<?php /**PATH E:\coding\intern yukmari\fundunity\resources\views/auth/logout.blade.php ENDPATH**/ ?>

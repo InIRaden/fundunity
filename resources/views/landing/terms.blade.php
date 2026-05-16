@@ -8,10 +8,10 @@
     <div class="bg-[#022c22] pt-32 pb-24 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
         <div class="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl"></div>
-        
+
         <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
             <span class="text-orange-400 font-bold text-xs tracking-[0.2em] uppercase mb-4 block">Informasi Hukum</span>
-            <h1 class="text-3xl md:text-5xl font-black text-white mb-6">Syarat & <span class="text-emerald-400">Ketentuan</span></h1>
+            <h1 class="text-3xl md:text-5xl font-black text-white mb-6">Syarat & Ketentuan</span></h1>
             <p class="text-emerald-50/60 text-base md:text-lg">
                 Panduan dan aturan penggunaan platform demi kenyamanan dan keamanan bersama.
             </p>
@@ -32,72 +32,70 @@
                 </div>
             </div>
 
-            <div class="prose prose-slate prose-lg max-w-none">
-                <section class="mb-12">
-                    <div class="flex items-start gap-5 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                            <span class="font-bold text-emerald-600">01</span>
-                        </div>
-                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 pt-1">Penerimaan Ketentuan</h2>
-                    </div>
-                    <p class="text-slate-600 leading-relaxed pl-15">
-                        Dengan mengakses dan menggunakan situs web FundUnity, Anda secara otomatis menerima dan setuju untuk terikat oleh syarat dan ketentuan penggunaan ini. Jika Anda tidak setuju, mohon untuk tidak melanjutkan penggunaan platform ini.
-                    </p>
-                </section>
+            <div class="max-w-none mb-12">
+                @php
+                    // Clean content: normalize newlines and trim each line to prevent unintended tabs
+                    $cleanContent = collect(explode("\n", $content ?? ''))
+                        ->map(fn($line) => trim($line))
+                        ->implode("\n");
 
-                <section class="mb-12">
-                    <div class="flex items-start gap-5 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                            <span class="font-bold text-emerald-600">02</span>
-                        </div>
-                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 pt-1">Penggunaan Layanan</h2>
-                    </div>
-                    <p class="text-slate-600 leading-relaxed pl-15">
-                        Anda setuju untuk menggunakan layanan kami hanya untuk tujuan yang sah, seperti berdonasi, mendaftar relawan, atau memantau laporan transparansi, dan sesuai dengan semua hukum serta peraturan yang berlaku di Republik Indonesia.
-                    </p>
-                </section>
+                    // Split into blocks by double newlines
+                    $blocks = preg_split('/\n\s*\n/', $cleanContent);
+                    $itemIndex = 1;
+                @endphp
 
-                <section class="mb-12">
-                    <div class="flex items-start gap-5 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                            <span class="font-bold text-emerald-600">03</span>
-                        </div>
-                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 pt-1">Donasi</h2>
-                    </div>
-                    <p class="text-slate-600 leading-relaxed pl-15">
-                        Semua donasi yang diberikan melalui platform ini bersifat sukarela dan tidak dapat ditarik kembali (non-refundable), kecuali terdapat kesalahan sistematis yang dapat dibuktikan secara sah sesuai kebijakan pengembalian dana kami.
-                    </p>
-                </section>
+                @foreach($blocks as $block)
+                    @php
+                        $lines = explode("\n", trim($block));
+                        $titleLine = $lines[0];
+                        $bodyLines = array_slice($lines, 1);
 
-                <section class="mb-12">
-                    <div class="flex items-start gap-5 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                            <span class="font-bold text-emerald-600">04</span>
-                        </div>
-                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 pt-1">Perubahan Ketentuan</h2>
-                    </div>
-                    <p class="text-slate-600 leading-relaxed pl-15">
-                        Kami berhak untuk memperbarui syarat dan ketentuan ini sewaktu-waktu. Perubahan akan berlaku segera setelah dipublikasikan di halaman ini. Kami menyarankan Anda untuk memeriksa halaman ini secara berkala.
-                    </p>
-                </section>
+                        // Check if title starts with number like "1. "
+                        if (preg_match('/^\d+\.\s*(.*)/', $titleLine, $matches)) {
+                            $title = $matches[1];
+                            $number = str_pad($itemIndex++, 2, '0', STR_PAD_LEFT);
+                        } else {
+                            $title = $titleLine;
+                            $number = null;
+                        }
+                    @endphp
 
-                <section class="p-8 bg-emerald-50 rounded-3xl border border-emerald-100">
-                    <div class="flex items-start gap-5 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0 border border-emerald-100 shadow-sm">
-                            <i class="ph ph-chat-centered-text text-emerald-600 text-xl"></i>
-                        </div>
-                        <h2 class="text-xl font-bold text-emerald-900 pt-1">Pertanyaan Hukum?</h2>
+                    <section class="mb-12 last:mb-0">
+                        @if($number)
+                            <div class="flex items-start gap-5 mb-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100 shadow-sm">
+                                    <span class="font-bold text-emerald-600">{{ $number }}</span>
+                                </div>
+                                <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 pt-1">{{ $title }}</h2>
+                            </div>
+                            <div class="text-slate-600 leading-relaxed md:pl-[60px] whitespace-pre-wrap font-medium">
+                                {{ implode("\n", $bodyLines) }}
+                            </div>
+                        @else
+                            <div class="text-slate-700 leading-relaxed whitespace-pre-wrap font-medium prose prose-slate max-w-none">
+                                {!! nl2br(e($block)) !!}
+                            </div>
+                        @endif
+                    </section>
+                @endforeach
+            </div>
+
+            <div class="p-8 bg-emerald-50 rounded-3xl border border-emerald-100 mt-12">
+                <div class="flex items-start gap-5 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0 border border-emerald-100 shadow-sm">
+                        <i class="ph ph-chat-centered-text text-emerald-600 text-xl"></i>
                     </div>
-                    <p class="text-emerald-800/70 text-sm leading-relaxed mb-4 pl-15">
-                        Jika Anda memiliki pertanyaan atau butuh klarifikasi lebih lanjut mengenai Syarat & Ketentuan kami, silakan hubungi tim legal kami melalui email.
-                    </p>
-                    <div class="pl-15">
-                        <a href="mailto:komunitasruangberbagi@gmail.com" class="inline-flex items-center gap-2 font-bold text-emerald-700 hover:text-emerald-600 transition-colors">
-                            komunitasruangberbagi@gmail.com
-                            <i class="ph ph-arrow-right"></i>
-                        </a>
-                    </div>
-                </section>
+                    <h2 class="text-xl font-bold text-emerald-900 pt-1">Pertanyaan Hukum?</h2>
+                </div>
+                <p class="text-emerald-800/70 text-sm leading-relaxed mb-4 md:pl-[60px]">
+                    Jika Anda memiliki pertanyaan atau butuh klarifikasi lebih lanjut mengenai Syarat & Ketentuan kami, silakan hubungi tim legal kami melalui email.
+                </p>
+                <div class="md:pl-[60px]">
+                    <a href="mailto:komunitasruangberbagi@gmail.com" class="inline-flex items-center gap-2 font-bold text-emerald-700 hover:text-emerald-600 transition-colors">
+                        komunitasruangberbagi@gmail.com
+                        <i class="ph ph-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

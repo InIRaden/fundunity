@@ -35,7 +35,7 @@
                 <img id="profilePhotoPreview" class="<?php echo e(!empty($profile['photoUrl']) ? '' : 'hidden'); ?> w-full h-full object-cover" alt="Profile" <?php if(!empty($profile['photoUrl'])): ?> src="<?php echo e($profile['photoUrl']); ?>" <?php endif; ?>>
                 <i id="profilePhotoIcon" class="ph ph-user text-[36px] text-emerald-600 <?php echo e(!empty($profile['photoUrl']) ? 'hidden' : ''); ?>"></i>
               </div>
-              <div class="absolute -bottom-2 -right-2 bg-emerald-600 text-white p-2 rounded-xl shadow-md transition-all group-hover:scale-110"><i class="ph ph-camera text-[14px]"></i></div>
+              <div class="absolute -bottom-2 -right-2 bg-emerald-600 text-white p-3 rounded-full shadow-md transition-all group-hover:scale-110 w-10 h-10 flex items-center justify-center"><i class="ph ph-camera text-[14px]"></i></div>
             </div>
             <div class="text-center sm:text-left flex-1 space-y-3">
               <div>
@@ -72,7 +72,7 @@
                   <img id="logoPreview" class="<?php echo e(!empty($identity['logoUrl']) ? '' : 'hidden'); ?> w-full h-full object-contain" alt="Logo" <?php if(!empty($identity['logoUrl'])): ?> src="<?php echo e($identity['logoUrl']); ?>" <?php endif; ?>>
                   <i id="logoIcon" class="ph ph-image text-[40px] text-slate-300 <?php echo e(!empty($identity['logoUrl']) ? 'hidden' : ''); ?>"></i>
                 </div>
-                <div class="absolute bg-emerald-600 text-white p-1.5 rounded-xl shadow-md"><i class="ph ph-camera text-[14px]"></i></div>
+                <div class="absolute bg-emerald-600 text-white p-3 rounded-full shadow-md w-10 h-10 flex items-center justify-center"><i class="ph ph-camera text-[14px]"></i></div>
               </div>
             </div>
             <div class="md:col-span-2 space-y-4 justify-center flex flex-col">
@@ -104,13 +104,8 @@
             <h3 class="text-base font-bold text-slate-900 mb-1">Rekening Donasi Utama</h3>
             <p class="text-xs text-slate-400">Konfigurasi rekening bank dan upload QRIS global yayasan.</p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
-            <div class="space-y-5">
-              <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Bank</label><input id="bankName" type="text" value="<?php echo e($payment['bankName'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
-              <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nomor Rekening</label><input id="bankAccount" type="text" value="<?php echo e($payment['bankAccount'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" required></div>
-              <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Atas Nama</label><input id="bankHolder" type="text" value="<?php echo e($payment['bankHolder'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
-            </div>
-            <div class="space-y-4">
+          <div class="flex justify-center pt-2">
+            <div class="space-y-4 w-full md:w-auto">
               <label class="block text-xs font-bold text-slate-500 mb-1.5">Master QRIS Foundation</label>
               <div class="relative group cursor-pointer" id="qrisTrigger">
                 <input id="qrisInput" type="file" accept="image/*" class="hidden">
@@ -323,9 +318,6 @@
 
     try {
       const formData = new FormData();
-      formData.append('bankName', document.getElementById('bankName').value);
-      formData.append('bankAccount', document.getElementById('bankAccount').value);
-      formData.append('bankHolder', document.getElementById('bankHolder').value);
       formData.append('qrisEnabled', document.getElementById('qrisReady').checked ? '1' : '0');
 
       const qrisFile = document.getElementById('qrisInput').files[0];

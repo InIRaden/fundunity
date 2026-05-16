@@ -43,36 +43,51 @@
             </div>
             
             <h2 class="text-2xl md:text-4xl font-black text-slate-900 leading-[1.3] mb-6">
-              <?php echo e($visionItem->title ?? 'Mewujudkan Dampak Yang Terukur & Nyata.'); ?>
-
+              Mewujudkan Dampak Yang Terukur & Nyata.
             </h2>
             
             <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-10">
-              <?php echo e($visionItem->description ?? 'Kami bukan sekadar wadah, tapi sebuah gerakan transformatif yang mengedepankan akuntabilitas digital untuk memberdayakan setiap lapisan masyarakat.'); ?>
-
+              Kami bukan sekadar wadah, tapi sebuah gerakan transformatif yang mengedepankan akuntabilitas digital untuk memberdayakan setiap lapisan masyarakat.
             </p>
 
-            <?php if($missionItem && $missionItem->description): ?>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-10">
-                <?php
-                    $missions = explode("\n", $missionItem->description);
-                    $missions = array_filter(array_map('trim', $missions));
-                ?>
-                <?php $__currentLoopData = $missions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $misi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="flex items-start gap-3">
-                    <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="14" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
+                <!-- Kolom Visi -->
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-emerald-500" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.49a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z"></path></svg> Visi
+                    </h3>
+                    <?php if($visionItem && $visionItem->description): ?>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="14" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                        </div>
+                        <p class="text-slate-700 text-sm font-semibold leading-relaxed"><?php echo e($visionItem->description); ?></p>
                     </div>
-                    <p class="text-slate-700 text-sm font-semibold leading-relaxed"><?php echo e($misi); ?></p>
+                    <?php endif; ?>
                 </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-            <?php endif; ?>
 
-            <div class="mt-4 flex items-center gap-6">
-               <a href="<?php echo e(route('landing.get-involved')); ?>" class="px-8 py-3.5 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 flex items-center gap-2">
-                  Pelajari Lebih Lanjut <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
-               </a>
+                <!-- Kolom Misi -->
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-emerald-500" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.49a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z"></path></svg> Misi
+                    </h3>
+                    <?php if($missionItem && $missionItem->description): ?>
+                    <div class="space-y-4">
+                        <?php
+                            $missions = explode("\n", $missionItem->description);
+                            $missions = array_filter(array_map('trim', $missions));
+                        ?>
+                        <?php $__currentLoopData = $missions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $misi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="14" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                            </div>
+                            <p class="text-slate-700 text-sm font-semibold leading-relaxed"><?php echo e($misi); ?></p>
+                        </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
             </div>
           </div>
         </div>

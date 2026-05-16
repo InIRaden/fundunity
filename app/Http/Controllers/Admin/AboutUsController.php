@@ -37,6 +37,10 @@ class AboutUsController extends Controller
             'is_active' => true,
         ]);
 
+        if ($validated['section'] === 'general' && $imagePath) {
+            \App\Models\AboutUsItem::where('section', 'general')->update(['image_url' => $imagePath]);
+        }
+
         return response()->json([
             'message' => 'Data profil berhasil ditambahkan.',
             'data' => $this->transform($item),
@@ -71,6 +75,10 @@ class AboutUsController extends Controller
             'description' => $validated['description'] ?? null,
             'image_url' => $imagePath,
         ]);
+
+        if ($validated['section'] === 'general' && $request->hasFile('image_file')) {
+            \App\Models\AboutUsItem::where('section', 'general')->update(['image_url' => $imagePath]);
+        }
 
         return response()->json([
             'message' => 'Data profil berhasil diperbarui.',
