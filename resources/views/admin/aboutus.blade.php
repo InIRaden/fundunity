@@ -1,14 +1,14 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="flex flex-col relative">
     <div class="flex items-end gap-1.5 relative z-20 -mb-[1px]">
       <button id="tabVisi" class="px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border">Visi Organisasi</button>
       <button id="tabMisi" class="px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border">Misi Organisasi</button>
     </div>
 
-    <div class="bg-white rounded-b-2xl rounded-tr-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden relative z-10 flex flex-col min-h-[400px]">
+    <div class="bg-white rounded-b-2xl rounded-tr-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden relative z-10 flex flex-col">
       <div class="p-8">
         <div id="aboutDisplay" class="flex flex-col md:flex-row gap-12">
            {{-- Visual Preview --}}
@@ -75,10 +75,7 @@
         <button type="button" id="cancelAboutEdit" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
         <button id="submitEditAbout" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700 flex items-center gap-2 min-w-[140px] justify-center transition-all">
           <span id="submitBtnText">Simpan Perubahan</span>
-          <svg id="submitSpinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
+          <x-icons.spinner id="submitSpinner" class="hidden animate-spin h-4 w-4 text-white" />
         </button>
       </div>
     </form>
@@ -120,7 +117,7 @@
     const off = 'bg-gray-50 border-transparent text-slate-400 hover:text-emerald-600 hover:bg-white z-10 border-b-slate-200';
     document.getElementById('tabVisi').className = 'px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border ' + (aboutState.active === 'visi' ? on : off);
     document.getElementById('tabMisi').className = 'px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border ' + (aboutState.active === 'misi' ? on : off);
-    
+
     const item = currentItem();
     if (item) {
       document.getElementById('displayTitle').textContent = item.nama;
@@ -208,7 +205,7 @@
     formData.append('section', 'general');
     formData.append('nama', document.getElementById('editNama').value);
     formData.append('description', document.getElementById('editDesc').value);
-    
+
     const fileInput = document.getElementById('editImageFile');
     if (fileInput.files[0]) {
       formData.append('image_file', fileInput.files[0]);
@@ -223,7 +220,7 @@
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || 'Terjadi kesalahan.');
-      
+
       if (isNew) {
         aboutState.data.push({
           id: json.data.id,
@@ -247,7 +244,7 @@
           imageUrl: json.data.imageUrl
         }));
       }
-      
+
       closeEdit();
       paintTabs(); // Re-render dengan data terbaru
     } catch (err) {

@@ -12,20 +12,50 @@
         $loginError = $errors->first('email') ?: $errors->first('password') ?: $errors->first();
     ?>
 
-    <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 font-sans">
-        <div class="w-full max-w-md">
-            <div class="mb-10 flex flex-col items-center">
-                <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-600 shadow-xl shadow-indigo-200">
-                    <i class="ph ph-shield-check text-[32px] text-white"></i>
-                </div>
-                <h1 class="text-2xl font-black tracking-tight text-slate-900">FundUnity Admin</h1>
-                <p class="mt-1 text-sm font-medium text-slate-500">Panel Manajemen Organisasi Internal</p>
+    <div class="flex min-h-screen font-sans bg-white">
+        <!-- Left Side: Illustration -->
+        <div class="hidden lg:flex lg:w-1/2 bg-emerald-50/50 flex-col justify-center items-center p-12 relative overflow-hidden">
+            <!-- Decorative Background Elements -->
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
+                <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-200 blur-[80px]"></div>
+                <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-300 blur-[100px]"></div>
             </div>
 
-            <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:p-10">
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-800">Masuk ke Akun</h2>
-                    <p class="mt-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Gunakan akses resmi Anda</p>
+            <div class="relative z-10 text-center mb-10 max-w-lg">
+                <h2 class="text-3xl font-black text-slate-800 mb-4">Empowering Community Funding</h2>
+                <p class="text-slate-600 font-medium">Bergabunglah dalam mengelola inisiatif amal yang transparan dan berdampak bagi komunitas.</p>
+            </div>
+            <img src="<?php echo e(asset('images/fundunity_login_illustration.png')); ?>" alt="Community Funding" class="relative z-10 w-full max-w-md object-contain drop-shadow-xl" />
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+            <div class="w-full max-w-md">
+                <div class="mb-10 text-center lg:text-left">
+                    <div class="mb-6 flex justify-center lg:justify-start">
+                        <?php if (isset($component)) { $__componentOriginal987d96ec78ed1cf75b349e2e5981978f = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal987d96ec78ed1cf75b349e2e5981978f = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.logo','data' => ['class' => 'h-20 w-auto min-w-[80px]','containerClass' => 'bg-emerald-50 text-emerald-500 rounded-2xl','iconClass' => 'text-4xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('logo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'h-20 w-auto min-w-[80px]','containerClass' => 'bg-emerald-50 text-emerald-500 rounded-2xl','iconClass' => 'text-4xl']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal987d96ec78ed1cf75b349e2e5981978f)): ?>
+<?php $attributes = $__attributesOriginal987d96ec78ed1cf75b349e2e5981978f; ?>
+<?php unset($__attributesOriginal987d96ec78ed1cf75b349e2e5981978f); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal987d96ec78ed1cf75b349e2e5981978f)): ?>
+<?php $component = $__componentOriginal987d96ec78ed1cf75b349e2e5981978f; ?>
+<?php unset($__componentOriginal987d96ec78ed1cf75b349e2e5981978f); ?>
+<?php endif; ?>
+                    </div>
+                    <h1 class="text-3xl font-black tracking-tight text-slate-900">Welcome Back, Please Login</h1>
+                    <p class="mt-2 text-sm font-medium text-slate-600">Panel Manajemen Organisasi Internal</p>
                 </div>
 
                 <?php if(session('status')): ?>
@@ -36,9 +66,9 @@
                 <?php endif; ?>
 
                 <?php if($loginError): ?>
-                    <div id="loginErrorBox" class="mb-6 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-600">
-                        <?php echo e($loginError); ?>
-
+                    <div id="loginErrorBox" class="mb-6 flex items-start gap-2 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-700">
+                        <i class="ph ph-warning-circle text-base text-rose-500 mt-0.5"></i>
+                        <span><?php echo e($loginError); ?></span>
                     </div>
                 <?php endif; ?>
 
@@ -46,11 +76,8 @@
                     <?php echo csrf_field(); ?>
 
                     <div>
-                        <label for="email" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Email Address</label>
+                        <label for="email" class="mb-2 block text-sm font-bold text-slate-700">Email Address</label>
                         <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                                <i class="ph ph-envelope-simple text-base text-slate-300"></i>
-                            </div>
                             <input
                                 id="email"
                                 type="email"
@@ -60,17 +87,14 @@
                                 required
                                 autofocus
                                 autocomplete="username"
-                                class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                                class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                             >
                         </div>
                     </div>
 
                     <div>
-                        <label for="password" class="mb-2 ml-1 block text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Password</label>
+                        <label for="password" class="mb-2 block text-sm font-bold text-slate-700">Password</label>
                         <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                                <i class="ph ph-lock text-base text-slate-300"></i>
-                            </div>
                             <input
                                 id="password"
                                 type="password"
@@ -78,14 +102,14 @@
                                 placeholder="••••••••"
                                 required
                                 autocomplete="current-password"
-                                class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                                class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                             >
                         </div>
                     </div>
 
                     <div class="flex justify-end pt-1">
                         <?php if(Route::has('password.request')): ?>
-                            <a href="<?php echo e(route('password.request')); ?>" class="text-xs font-bold text-indigo-600 transition-colors hover:text-indigo-700">
+                            <a href="<?php echo e(route('password.request')); ?>" class="text-sm font-bold text-emerald-600 transition-colors hover:text-emerald-700">
                                 Lupa Kata Sandi?
                             </a>
                         <?php endif; ?>
@@ -94,16 +118,25 @@
                     <button
                         type="submit"
                         id="loginSubmitButton"
-                        class="w-full rounded-2xl bg-indigo-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-indigo-100 transition-all active:scale-[0.98] hover:bg-indigo-700"
+                        class="w-full rounded-xl bg-emerald-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] hover:bg-emerald-700 mt-2"
                     >
-                        MASUK KE DASHBOARD
+                        LOGIN
                     </button>
-                </form>
-            </div>
 
-            <p class="mt-12 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                &copy; <?php echo e(date('Y')); ?> FundUnity Foundation • Secure Access Only
-            </p>
+                    <div class="text-center pt-6">
+                        <p class="text-sm text-slate-600 font-medium">
+                            Belum punya akun?
+                            <a href="<?php echo e(url('/register')); ?>" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                                Daftar sekarang
+                            </a>
+                        </p>
+                    </div>
+                </form>
+
+                <p class="mt-12 text-center text-xs font-bold tracking-[0.2em] text-slate-400 lg:text-left">
+                    &copy; <?php echo e(date('Y')); ?> FundUnity Foundation
+                </p>
+            </div>
         </div>
     </div>
 
@@ -139,8 +172,8 @@
 
                 submitButton.disabled = true;
                 submitButton.textContent = 'MENGOTENTIKASI...';
-                submitButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
-                submitButton.classList.add('cursor-not-allowed', 'bg-indigo-300');
+                submitButton.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                submitButton.classList.add('cursor-not-allowed', 'bg-emerald-300');
             });
         });
     </script>

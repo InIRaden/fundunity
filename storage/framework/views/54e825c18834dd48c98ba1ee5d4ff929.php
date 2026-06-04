@@ -19,25 +19,44 @@
 ?>
 
 <div class="min-h-screen bg-slate-50 pb-20">
-    <div class="bg-slate-900 pt-32 pb-24 relative overflow-hidden">
+    <div class="bg-[#022c22] pt-32 pb-24 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-orange-500/10 rounded-full blur-[100px] translate-y-1/2"></div>
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest bg-emerald-400/10 px-4 py-2 rounded-full border border-emerald-400/20 mb-6 inline-block">Pusat Kebaikan</span>
-            <h1 class="text-4xl md:text-6xl font-black text-white mb-6">Wujudkan Perubahan<br><span class="text-emerald-500">Mulai Dari Sini.</span></h1>
-            <p class="text-slate-400 text-lg max-w-2xl">Jelajahi berbagai program bantuan sosial kami. Setiap rupiah yang Anda sumbangkan sepenuhnya disalurkan untuk menciptakan dampak nyata bagi mereka yang membutuhkan.</p>
+            <h1 class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-orange-300 to-emerald-400 mb-6">Wujudkan Perubahan Mulai Dari Sini.</h1>
+            <p class="text-emerald-50/60 text-base md:text-md max-w-2xl">Jelajahi program bantuan sosial yang sedang berjalan. Setiap donasi terdokumentasi dan disalurkan secara transparan kepada mereka yang membutuhkan.</p>
         </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
-        <div class="bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 p-6 flex flex-col md:flex-row gap-4 items-center">
+        <div class="bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 p-6 flex flex-col md:flex-row gap-4 items-center border border-slate-100">
             <div class="relative flex-1 group w-full">
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M232,216l-46.83-46.83a80.06,80.06,0,1,0-16,16L216,232a8,8,0,0,0,11.31-11.31ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
-                <input id="programSearch" type="text" placeholder="Cari nama program bantuan..." class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-14 pr-6 text-slate-700 focus:ring-2 focus:ring-emerald-500 transition-all font-medium">
+                <?php if (isset($component)) { $__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.icons.search','data' => ['class' => 'absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors h-6 w-6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('icons.search'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors h-6 w-6']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a)): ?>
+<?php $attributes = $__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a; ?>
+<?php unset($__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a)): ?>
+<?php $component = $__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a; ?>
+<?php unset($__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a); ?>
+<?php endif; ?>
+                <input id="programSearch" type="text" placeholder="Cari nama program bantuan..." class="w-full bg-slate-50 border border-emerald-200 rounded-2xl py-4 pl-14 pr-6 text-slate-700 transition-all font-bold text-sm">
             </div>
             <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto scrollbar-hide">
-                <button type="button" data-filter="Semua" class="program-filter whitespace-nowrap px-6 py-4 rounded-2xl font-bold text-sm transition-all bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">Semua</button>
+                <button type="button" data-filter="Semua" class="program-filter whitespace-nowrap px-6 py-4 rounded-xl font-bold text-sm transition-all bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">Semua</button>
                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <button type="button" data-filter="<?php echo e($category); ?>" class="program-filter whitespace-nowrap px-6 py-4 rounded-2xl font-bold text-sm transition-all bg-slate-50 text-slate-500 hover:bg-slate-100">
+                    <button type="button" data-filter="<?php echo e($category); ?>" class="program-filter whitespace-nowrap px-6 py-4 rounded-xl font-bold text-sm transition-all bg-slate-50 text-slate-600 hover:bg-slate-100">
                         <?php echo e($category); ?>
 
                     </button>
@@ -51,19 +70,19 @@
             <?php $__empty_1 = true; $__currentLoopData = $campaigns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campaign): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php
                     $progress = (int) min(100, round(((int) $campaign->collected / max((int) $campaign->target, 1)) * 100));
-                    $daysLeft = max(0, now()->diffInDays($campaign->deadline, false));
+                    $daysLeft = max(0, (int) now()->diffInDays($campaign->deadline, false));
                     $isUrgent = $campaign->status === 'aktif' && $daysLeft <= 7;
-                        $campaignImage = $campaign->image ?? 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=800';
+                        $campaignImage = $campaign->image ?? '';
                 ?>
                 <article data-card data-title="<?php echo e(strtolower($campaign->title)); ?>" data-category="<?php echo e($campaign->category ?? 'Umum'); ?>" class="program-card group flex h-full flex-col overflow-hidden rounded-[40px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50 transition-transform duration-300 hover:-translate-y-2">
                     <div class="relative h-64 overflow-hidden">
                         <img src="<?php echo e($campaignImage); ?>" alt="<?php echo e($campaign->title); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-700 shadow-sm">
+                        <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-[10px] font-black tracking-widest text-slate-700 shadow-sm">
                             <?php echo e($campaign->category ?? 'Umum'); ?>
 
                         </div>
                         <?php if($isUrgent): ?>
-                            <div class="absolute top-6 right-6 bg-rose-500 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm animate-pulse">
+                            <div class="absolute top-6 right-6 bg-rose-500 text-white px-4 py-2 rounded-xl text-[10px] font-black tracking-widest shadow-sm animate-pulse">
                                 Mendesak
                             </div>
                         <?php endif; ?>
@@ -76,11 +95,11 @@
                         <div class="mt-auto">
                             <div class="flex justify-between items-end mb-3">
                                 <div>
-                                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Terkumpul</p>
+                                    <p class="text-slate-500 text-xs font-bold tracking-widest mb-1">Terkumpul</p>
                                     <p class="text-emerald-600 font-extrabold text-xl leading-none">Rp <?php echo e(number_format((int) $campaign->collected, 0, ',', '.')); ?></p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Target</p>
+                                    <p class="text-slate-400 text-xs font-bold tracking-widest mb-1">Target</p>
                                     <p class="text-slate-600 font-bold text-sm leading-none">Rp <?php echo e(number_format((int) $campaign->target, 0, ',', '.')); ?></p>
                                 </div>
                             </div>
@@ -91,7 +110,26 @@
 
                             <div class="flex justify-between items-center text-xs font-bold text-slate-500 bg-slate-50 p-4 rounded-2xl">
                                 <div class="flex items-center gap-2">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-slate-400" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path></svg>
+                                    <?php if (isset($component)) { $__componentOriginal46848001facf1cdb1a84c118cea2e25d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal46848001facf1cdb1a84c118cea2e25d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.icons.users','data' => ['class' => 'h-4 w-4 text-slate-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('icons.users'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'h-4 w-4 text-slate-400']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal46848001facf1cdb1a84c118cea2e25d)): ?>
+<?php $attributes = $__attributesOriginal46848001facf1cdb1a84c118cea2e25d; ?>
+<?php unset($__attributesOriginal46848001facf1cdb1a84c118cea2e25d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal46848001facf1cdb1a84c118cea2e25d)): ?>
+<?php $component = $__componentOriginal46848001facf1cdb1a84c118cea2e25d; ?>
+<?php unset($__componentOriginal46848001facf1cdb1a84c118cea2e25d); ?>
+<?php endif; ?>
                                     <?php echo e(number_format(max(1, (int) floor(((int) $campaign->collected) / 100000)), 0, ',', '.')); ?> Donatur
                                 </div>
                                 <div class="flex items-center gap-2 text-rose-500">
@@ -115,13 +153,53 @@
 
         <div id="programEmptySearch" class="hidden text-center py-20 bg-white rounded-[40px] shadow-sm border border-slate-100">
             <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-slate-400" height="40" width="40" xmlns="http://www.w3.org/2000/svg"><path d="M232,216l-46.83-46.83a80.06,80.06,0,1,0-16,16L216,232a8,8,0,0,0,11.31-11.31ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+                <?php if (isset($component)) { $__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.icons.search','data' => ['class' => 'text-slate-400 h-10 w-10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('icons.search'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'text-slate-400 h-10 w-10']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a)): ?>
+<?php $attributes = $__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a; ?>
+<?php unset($__attributesOriginala0c73ad9511ae1934ff7056d4fc38e8a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a)): ?>
+<?php $component = $__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a; ?>
+<?php unset($__componentOriginala0c73ad9511ae1934ff7056d4fc38e8a); ?>
+<?php endif; ?>
             </div>
             <p class="text-xl font-bold text-slate-900">Program tidak ditemukan</p>
             <p class="text-slate-500 mt-2">Coba gunakan kata kunci lain atau pilih kategori yang berbeda.</p>
             <button type="button" id="programReset" class="mt-8 text-emerald-600 font-bold underline">Resest Filter</button>
         </div>
     </div>
+
+    <?php if (isset($component)) { $__componentOriginal65ce234e62d27907589a5cd317288898 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal65ce234e62d27907589a5cd317288898 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.landing.cta','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('landing.cta'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal65ce234e62d27907589a5cd317288898)): ?>
+<?php $attributes = $__attributesOriginal65ce234e62d27907589a5cd317288898; ?>
+<?php unset($__attributesOriginal65ce234e62d27907589a5cd317288898); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal65ce234e62d27907589a5cd317288898)): ?>
+<?php $component = $__componentOriginal65ce234e62d27907589a5cd317288898; ?>
+<?php unset($__componentOriginal65ce234e62d27907589a5cd317288898); ?>
+<?php endif; ?>
 </div>
 <?php $__env->stopSection(); ?>
 

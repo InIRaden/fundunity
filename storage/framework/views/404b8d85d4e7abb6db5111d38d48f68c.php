@@ -11,10 +11,10 @@
     <section class="py-24 bg-slate-50 border-t border-slate-100">
         <div class="mx-auto max-w-4xl px-6">
             <div class="mb-16 text-center">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
-                    Pertanyaan yang Sering <span class="text-emerald-500">Diajukan</span>
+                <h1 class="text-2xl md:text-4xl font-bold text-emerald-600 leading-tight mb-4">
+                    Pertanyaan yang Sering Diajukan</span>
                 </h1>
-                <p class="text-slate-500 text-lg">Kami merangkum jawaban jujur dari pertanyaan-pertanyaan donatur untuk menghapus keraguan Anda.</p>
+                <p class="text-slate-500 text-md">Kami kumpulkan pertanyaan yang paling sering ditanyakan oleh donatur dan relawan untuk memudahkan Anda memahami cara kerja platform kami.</p>
             </div>
 
             <div class="space-y-4">
@@ -23,8 +23,46 @@
                         <button type="button" class="faq-trigger flex items-center justify-between w-full text-left font-bold text-slate-900 hover:text-emerald-600 transition-colors">
                             <span class="<?php echo e($index === 0 ? 'text-xl' : 'text-lg'); ?>"><?php echo e($faq->question); ?></span>
                             <span class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors <?php echo e($index === 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'); ?>">
-                                <svg data-icon="plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="<?php echo e($index === 0 ? 'hidden' : ''); ?>"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
-                                <svg data-icon="minus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="<?php echo e($index === 0 ? '' : 'hidden'); ?>"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"></path></svg>
+                                <?php if (isset($component)) { $__componentOriginal52632fe7b137108a4c1d9fb6383ade19 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal52632fe7b137108a4c1d9fb6383ade19 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.icons.plus','data' => ['class' => ''.e($index === 0 ? 'hidden' : '').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('icons.plus'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => ''.e($index === 0 ? 'hidden' : '').'']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal52632fe7b137108a4c1d9fb6383ade19)): ?>
+<?php $attributes = $__attributesOriginal52632fe7b137108a4c1d9fb6383ade19; ?>
+<?php unset($__attributesOriginal52632fe7b137108a4c1d9fb6383ade19); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal52632fe7b137108a4c1d9fb6383ade19)): ?>
+<?php $component = $__componentOriginal52632fe7b137108a4c1d9fb6383ade19; ?>
+<?php unset($__componentOriginal52632fe7b137108a4c1d9fb6383ade19); ?>
+<?php endif; ?>
+                                <?php if (isset($component)) { $__componentOriginal366cc9aca1adebfaa2d1eeeb0565a599 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal366cc9aca1adebfaa2d1eeeb0565a599 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.icons.minus','data' => ['class' => ''.e($index === 0 ? '' : 'hidden').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('icons.minus'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => ''.e($index === 0 ? '' : 'hidden').'']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal366cc9aca1adebfaa2d1eeeb0565a599)): ?>
+<?php $attributes = $__attributesOriginal366cc9aca1adebfaa2d1eeeb0565a599; ?>
+<?php unset($__attributesOriginal366cc9aca1adebfaa2d1eeeb0565a599); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal366cc9aca1adebfaa2d1eeeb0565a599)): ?>
+<?php $component = $__componentOriginal366cc9aca1adebfaa2d1eeeb0565a599; ?>
+<?php unset($__componentOriginal366cc9aca1adebfaa2d1eeeb0565a599); ?>
+<?php endif; ?>
                             </span>
                         </button>
 
@@ -34,12 +72,33 @@
                     </article>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
-                        FAQ belum tersedia dari admin.
+                        Belum ada pertanyaan yang tersedia. Silakan <a href="<?php echo e($siteSettings['whatsapp_url'] ?? '#'); ?>" target="_blank" rel="noopener noreferrer" class="text-emerald-600 font-bold hover:underline">hubungi kami via WhatsApp</a>.
                     </div>
                 <?php endif; ?>
             </div>
         </div>
     </section>
+
+    <?php if (isset($component)) { $__componentOriginal65ce234e62d27907589a5cd317288898 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal65ce234e62d27907589a5cd317288898 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.landing.cta','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('landing.cta'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal65ce234e62d27907589a5cd317288898)): ?>
+<?php $attributes = $__attributesOriginal65ce234e62d27907589a5cd317288898; ?>
+<?php unset($__attributesOriginal65ce234e62d27907589a5cd317288898); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal65ce234e62d27907589a5cd317288898)): ?>
+<?php $component = $__componentOriginal65ce234e62d27907589a5cd317288898; ?>
+<?php unset($__componentOriginal65ce234e62d27907589a5cd317288898); ?>
+<?php endif; ?>
 </div>
 <?php $__env->stopSection(); ?>
 

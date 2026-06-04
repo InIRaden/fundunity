@@ -1,18 +1,23 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6 max-w-[1400px] mx-auto w-full">
-  <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-    <div class="relative w-full sm:w-96">
-      <i class="ph ph-magnifying-glass text-[18px] absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-      <input id="gallerySearch" type="text" placeholder="Cari dokumentasi..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden relative z-10 flex flex-col">
+    <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
+      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">Galeri Aktivitas</h2>
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+        <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
+          <input id="gallerySearch" type="text" placeholder="Cari dokumentasi..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+        </div>
+        <button id="openGalleryModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+          <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Foto</span>
+        </button>
+      </div>
     </div>
-    <button id="openGalleryModal" class="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-emerald-600/20 transition-all whitespace-nowrap">
-      <i class="ph ph-plus text-[18px]"></i> Tambah Foto Aktivitas
-    </button>
-  </div>
-
-  <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div class="p-5">
+        <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
 </div>
 
 <div id="galleryModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in shadow-2xl overflow-y-auto">
@@ -157,7 +162,7 @@
       </div>
     `).join('');
 
-    document.getElementById('galleryGrid').innerHTML = rows || '<div class="col-span-full bg-white border border-dashed border-slate-200 rounded-2xl p-10 text-center text-slate-500 text-sm">Belum ada dokumentasi ditemukan.</div>';
+    document.getElementById('galleryGrid').innerHTML = rows || '<div class="col-span-full py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></div>';
   }
 
   function openGalleryModal(id = null) {

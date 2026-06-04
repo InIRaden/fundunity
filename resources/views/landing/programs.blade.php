@@ -33,7 +33,7 @@
     <div class="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
         <div class="bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 p-6 flex flex-col md:flex-row gap-4 items-center border border-slate-100">
             <div class="relative flex-1 group w-full">
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M232,216l-46.83-46.83a80.06,80.06,0,1,0-16,16L216,232a8,8,0,0,0,11.31-11.31ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+                <x-icons.search class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors h-6 w-6" />
                 <input id="programSearch" type="text" placeholder="Cari nama program bantuan..." class="w-full bg-slate-50 border border-emerald-200 rounded-2xl py-4 pl-14 pr-6 text-slate-700 transition-all font-bold text-sm">
             </div>
             <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto scrollbar-hide">
@@ -91,7 +91,7 @@
 
                             <div class="flex justify-between items-center text-xs font-bold text-slate-500 bg-slate-50 p-4 rounded-2xl">
                                 <div class="flex items-center gap-2">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-slate-400" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path></svg>
+                                    <x-icons.users class="h-4 w-4 text-slate-400" />
                                     {{ number_format(max(1, (int) floor(((int) $campaign->collected) / 100000)), 0, ',', '.') }} Donatur
                                 </div>
                                 <div class="flex items-center gap-2 text-rose-500">
@@ -115,7 +115,7 @@
 
         <div id="programEmptySearch" class="hidden text-center py-20 bg-white rounded-[40px] shadow-sm border border-slate-100">
             <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-slate-400" height="40" width="40" xmlns="http://www.w3.org/2000/svg"><path d="M232,216l-46.83-46.83a80.06,80.06,0,1,0-16,16L216,232a8,8,0,0,0,11.31-11.31ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+                <x-icons.search class="text-slate-400 h-10 w-10" />
             </div>
             <p class="text-xl font-bold text-slate-900">Program tidak ditemukan</p>
             <p class="text-slate-500 mt-2">Coba gunakan kata kunci lain atau pilih kategori yang berbeda.</p>

@@ -3,24 +3,27 @@
 @section('admin-content')
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-    <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="relative w-full md:w-96">
-        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-500"><i class="ph ph-magnifying-glass text-base"></i></div>
-        <input id="slider-search" type="text" class="w-full pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-emerald-500/50" placeholder="Cari judul banner..." />
+    <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
+      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">Kelola Banner</h2>
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+        <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
+          <input id="slider-search" type="text" placeholder="Cari judul banner..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-emerald-500/50">
+        </div>
+        <button onclick="openSliderModal()" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+          <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Banner</span>
+        </button>
       </div>
-      <button id="openSliderModal" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm">
-        <i class="ph ph-plus text-sm"></i> Tambah Banner
-      </button>
     </div>
 
     <div class="overflow-x-auto">
       <table class="w-full border-collapse">
         <thead>
           <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white">Pratinjau Media</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white">Informasi Konten</th>
-            <th class="py-4 px-6 text-center text-[11px] font-semibold text-white w-24">Urutan</th>
-            <th class="py-4 px-6 text-center text-[11px] font-semibold text-white">Aksi</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white">Pratinjau Media</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white">Informasi Konten</th>
+            <th class="py-4 px-6 text-center text-[11px] font-bold text-white w-24">Urutan</th>
+            <th class="py-4 px-6 text-center text-[11px] font-bold text-white">Aksi</th>
           </tr>
         </thead>
         <tbody id="slider-body" class="divide-y divide-slate-100"></tbody>
@@ -161,14 +164,14 @@
 
   function renderSliderRows() {
     const data = filteredItems();
-    document.getElementById('slider-body').innerHTML = data.map((item, i) => `
+    document.getElementById('slider-body').innerHTML = data.length ? data.map((item, i) => `
       <tr class="hover:bg-slate-50/50 transition-colors">
         <td class="py-5 px-6"><div class="w-32 h-20 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shadow-sm"><img src="${item.imageUrl || ''}" class="w-full h-full object-cover" alt="${item.title || ''}" /></div></td>
         <td class="py-5 px-6"><div class="flex flex-col"><span class="text-sm font-semibold text-slate-900">${item.title}</span><span class="text-xs text-slate-500 mt-1 line-clamp-1">${item.description}</span></div></td>
         <td class="py-5 px-6 text-center"><span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full">${i + 1}</span></td>
         <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openSliderModal(${item.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="openDeleteModal(${item.id})">Hapus</button></div></td>
       </tr>
-    `).join('');
+    `).join('') : '<tr><td colspan="4" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
     document.getElementById('slider-count').innerText = String(data.length);
   }
 

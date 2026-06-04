@@ -8,7 +8,7 @@
   $seo = $seo ?? [];
 @endphp
 
-<div class="space-y-6">
+<div class="max-w-6xl mx-auto space-y-6">
   <div id="settingToast" class="hidden items-center gap-3 px-5 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold fixed top-24 right-8 z-[100] shadow-lg">
     <i class="ph ph-check-circle text-base"></i><span id="settingToastText"></span>
   </div>
@@ -132,6 +132,7 @@
           <div><h3 class="text-base font-bold text-slate-900 mb-1">SEO & Pengaturan Global</h3><p class="text-xs text-slate-400">Optimasi pencarian Google dan status operasional website.</p></div>
           <div class="space-y-5">
             <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Meta Description (SEO)</label><textarea id="seoMetaDescription" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">{{ $seo['metaDescription'] ?? '' }}</textarea></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Deskripsi Footer (Tagline)</label><textarea id="seoFooterTagline" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">{{ $seo['footerTagline'] ?? '' }}</textarea></div>
             <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Copyright Text Footer</label><input id="seoFooterCopyright" type="text" value="{{ $seo['footerCopyright'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
             <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50 flex items-center justify-between">
               <div><p class="text-sm font-bold text-rose-900">Mode Pemeliharaan (Maintenance)</p><p class="text-xs text-rose-600">Pengunjung tidak dapat mengakses landing page saat aktif.</p></div>
@@ -145,13 +146,7 @@
           <div><h3 class="text-base font-bold text-slate-900 mb-1">Keamanan & Kredensial</h3><p class="text-xs text-slate-400">Pengaturan kata sandi akun untuk akses manajemen admin.</p></div>
           <div id="passError" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100 px-4 py-2 rounded-xl"></div>
           <div class="space-y-4 pt-2">
-            <div>
-              <label class="block text-xs font-bold text-slate-500 mb-2">Kata Sandi Saat Ini</label>
-              <div class="relative max-w-md">
-                <input id="currentPass" type="password" class="w-full px-4 py-2 bg-slate-50 border border-emerald-200 rounded-xl text-sm outline-none">
-                <button type="button" id="toggleCurrentPass" class="absolute right-3 top-2 text-slate-400 hover:text-slate-600"><i class="ph ph-eye text-base"></i></button>
-              </div>
-            </div>
+            <!-- Kata Sandi Saat Ini telah dihapus sesuai permintaan -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-slate-500 mb-2">Kata Sandi Baru</label>
@@ -195,10 +190,22 @@
     setTimeout(() => t.classList.remove('flex'), 3000);
   }
 
+  function setButtonState(button, isActive, label) {
+    if (!button) {
+      return;
+    }
+    button.disabled = !isActive;
+    button.classList.toggle('opacity-70', !isActive);
+    button.classList.toggle('cursor-not-allowed', !isActive);
+    if (label) {
+      button.textContent = label;
+    }
+  }
+
   function setMaintenanceButton() {
     const btn = document.getElementById('maintenanceToggle');
     btn.textContent = ss.maintenance ? 'Aktif' : 'Nonaktif';
-    btn.className = 'px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all' + (ss.maintenance ? 'bg-rose-600 text-white' : 'bg-white border border-rose-200 text-rose-500 hover:bg-rose-50');
+    btn.className = 'px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ' + (ss.maintenance ? 'bg-rose-600 text-white shadow-md' : 'bg-white border border-rose-200 text-rose-500 hover:bg-rose-50');
   }
 
   function syncTabs() {
@@ -271,6 +278,8 @@
   document.getElementById('qrisInput').addEventListener('change', function () { readImage(this, 'qrisPreview', null, 'qrisPlaceholder'); });
 
   document.getElementById('saveProfileBtn').addEventListener('click', async function () {
+    const button = this;
+    setButtonState(button, false, 'Menyimpan...');
     try {
       const formData = new FormData();
       formData.append('displayName', document.getElementById('displayName').value);
@@ -287,11 +296,15 @@
       toast(result.message || 'Profil admin berhasil diperbarui.');
     } catch (error) {
       window.alert(error.message);
+    } finally {
+      setButtonState(button, true, 'Simpan Profil');
     }
   });
 
   document.getElementById('identitasPane').addEventListener('submit', async function (e) {
     e.preventDefault();
+    const button = this.querySelector('button[type="submit"]');
+    setButtonState(button, false, 'Menyimpan...');
 
     try {
       const formData = new FormData();
@@ -312,11 +325,15 @@
       toast(result.message || 'Identitas website berhasil disimpan.');
     } catch (error) {
       window.alert(error.message);
+    } finally {
+      setButtonState(button, true, 'Simpan Identitas');
     }
   });
 
   document.getElementById('pembayaranPane').addEventListener('submit', async function (e) {
     e.preventDefault();
+    const button = this.querySelector('button[type="submit"]');
+    setButtonState(button, false, 'Menyimpan...');
 
     try {
       const formData = new FormData();
@@ -331,22 +348,29 @@
       toast(result.message || 'Konfigurasi pembayaran disimpan.');
     } catch (error) {
       window.alert(error.message);
+    } finally {
+      setButtonState(button, true, 'Simpan Pembayaran');
     }
   });
 
   document.getElementById('seoPane').addEventListener('submit', async function (e) {
     e.preventDefault();
+    const button = this.querySelector('button[type="submit"]');
+    setButtonState(button, false, 'Menyimpan...');
 
     try {
       const result = await requestJson(endpoints.seo, {
         metaDescription: document.getElementById('seoMetaDescription').value,
         footerCopyright: document.getElementById('seoFooterCopyright').value,
+        footerTagline: document.getElementById('seoFooterTagline').value,
         maintenanceMode: ss.maintenance,
       });
 
       toast(result.message || 'Pengaturan SEO dan global disimpan.');
     } catch (error) {
       window.alert(error.message);
+    } finally {
+      setButtonState(button, true, 'Simpan Pengaturan');
     }
   });
 
@@ -362,37 +386,36 @@
     icon.className = 'ph ' + (input.type === 'password' ? 'ph-eye' : 'ph-eye-slash') + ' text-base';
   }
 
-  document.getElementById('toggleCurrentPass').addEventListener('click', () => togglePass('currentPass', 'toggleCurrentPass'));
   document.getElementById('toggleNewPass').addEventListener('click', () => togglePass('newPass', 'toggleNewPass'));
 
   document.getElementById('keamananPane').addEventListener('submit', async function (e) {
     e.preventDefault();
-
-    const current = document.getElementById('currentPass').value;
+    const button = this.querySelector('button[type="submit"]');
     const next = document.getElementById('newPass').value;
     const confirm = document.getElementById('confirmPass').value;
     const err = document.getElementById('passError');
 
     err.classList.add('hidden');
 
-    if (!current) { err.textContent = 'Masukkan kata sandi saat ini.'; err.classList.remove('hidden'); return; }
     if (next.length < 8) { err.textContent = 'Kata sandi baru minimal 8 karakter.'; err.classList.remove('hidden'); return; }
     if (next !== confirm) { err.textContent = 'Konfirmasi kata sandi tidak cocok.'; err.classList.remove('hidden'); return; }
 
+    setButtonState(button, false, 'Menyimpan...');
+
     try {
       const result = await requestJson(endpoints.security, {
-        current_password: current,
         new_password: next,
         new_password_confirmation: confirm,
       });
 
-      document.getElementById('currentPass').value = '';
       document.getElementById('newPass').value = '';
       document.getElementById('confirmPass').value = '';
       toast(result.message || 'Kata sandi berhasil diperbarui.');
     } catch (error) {
       err.textContent = error.message;
       err.classList.remove('hidden');
+    } finally {
+      setButtonState(button, true, 'Perbarui Password');
     }
   });
 

@@ -1,14 +1,14 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="flex flex-col relative">
     <div class="flex items-end gap-1.5 relative z-20 -mb-[1px]">
       <button id="allTab" class="px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border">Semua Kotak</button>
       <button id="unreadTab" class="flex items-center gap-2 px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border">Belum Dibaca <span id="unreadBadge" class="w-5 h-5 rounded-full flex items-center justify-center text-[10px]"></span></button>
     </div>
 
-    <div class="bg-white border border-slate-200 shadow-xl shadow-slate-200/40 rounded-b-2xl rounded-tr-2xl overflow-hidden relative z-10 flex flex-col min-h-[400px]">
+    <div class="bg-white border border-slate-200 shadow-xl shadow-slate-200/40 rounded-b-2xl rounded-tr-2xl overflow-hidden relative z-10 flex flex-col">
       <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
         <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2">Daftar Kotak Masuk <span id="messageCount" class="bg-slate-100 text-slate-500 text-xs px-2 py-0.5 rounded-full"></span></h2>
         <div class="relative w-full md:w-96">
@@ -17,21 +17,22 @@
         </div>
       </div>
 
-      <div id="messageEmpty" class="hidden text-center py-40 px-4">
-        <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100"><i class="ph ph-envelope text-[28px]"></i></div>
-        <h3 class="text-slate-800 font-bold text-lg mb-1">Tidak Ada Pesan</h3>
-        <p class="text-slate-500 text-sm">Kotak masuk Anda sedang kosong.</p>
+      <div id="messageEmpty" class="hidden py-20 text-center text-slate-400 border-b border-slate-100">
+        <div class="flex flex-col items-center justify-center gap-3">
+          <i class="ph ph-info text-[32px] text-slate-300"></i>
+          <p>Tidak ada data ditemukan.</p>
+        </div>
       </div>
 
-      <div id="messageTableWrap" class="overflow-x-auto min-h-[500px]">
+      <div id="messageTableWrap" class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-emerald-600">
               <th class="w-10 px-6 py-4 border-b border-emerald-100/50"></th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white border-b border-emerald-100/50">Pengirim</th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white border-b border-emerald-100/50">Cuplikan Pesan</th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white text-right border-b border-emerald-100/50">Tanggal Masuk</th>
-              <th class="px-6 py-4 text-[11px] font-semibold text-white text-center border-b border-emerald-100/50">Aksi</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white border-b border-emerald-100/50 text-left">Pengirim</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white border-b border-emerald-100/50 text-left">Cuplikan Pesan</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white text-right border-b border-emerald-100/50">Tanggal Masuk</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white text-center border-b border-emerald-100/50">Aksi</th>
             </tr>
           </thead>
           <tbody id="messageRows" class="divide-y divide-slate-100"></tbody>

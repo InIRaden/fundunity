@@ -24,7 +24,7 @@
             <div class="w-full max-w-md">
                 <div class="mb-10 text-center lg:text-left">
                     <div class="mb-6 flex justify-center lg:justify-start">
-                        <img src="{{ $siteSettings['site_logo'] ?? asset('images/Logo.png') }}" alt="FundUnity CMS" class="h-20 object-contain" />
+                        <x-logo class="h-20 w-auto min-w-[80px]" containerClass="bg-emerald-50 text-emerald-500 rounded-2xl" iconClass="text-4xl" />
                     </div>
                     <h1 class="text-3xl font-black tracking-tight text-slate-900">Welcome Back, Please Login</h1>
                     <p class="mt-2 text-sm font-medium text-slate-600">Panel Manajemen Organisasi Internal</p>
@@ -97,7 +97,7 @@
                     <div class="text-center pt-6">
                         <p class="text-sm text-slate-600 font-medium">
                             Belum punya akun?
-                            <a href="{{ route('register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                            <a href="{{ url('/register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
                                 Daftar sekarang
                             </a>
                         </p>

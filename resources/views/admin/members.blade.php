@@ -1,8 +1,8 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6">
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden relative z-10 flex flex-col min-h-[400px]">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden relative z-10 flex flex-col">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
       <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
         <span>Daftar Anggota Organisasi</span>
@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto min-h-[500px]">
+    <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-emerald-600">
@@ -178,7 +178,7 @@
 
   function renderMemberRows() {
     const data = filteredMembers();
-    document.getElementById('memberCount').textContent = data.length + ' Orang';
+    document.getElementById('memberCount').innerHTML = '<span class="flex items-center gap-1"><i class="ph ph-users text-sm"></i>' + data.length + ' Orang</span>';
     document.getElementById('memberRows').innerHTML = data.length ? data.map((item) => `
       <tr class="hover:bg-slate-50/50 transition-colors">
         <td class="px-6 py-5 align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100"><i class="ph ph-identification-badge"></i> ${item.jabatan}</span></td>

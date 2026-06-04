@@ -17,7 +17,7 @@
         @if($activeCampaign)
             <div class="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center gap-4">
                 <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center shrink-0">
-                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM164,84H92a8,8,0,0,0,0,16h72a8,8,0,0,0,0-16Zm0,40H92a8,8,0,0,0,0,16h72a8,8,0,0,0,0-16Z"></path></svg>
+                    <x-icons.person-circle class="h-6 w-6" />
                 </div>
                 <div>
                     <p class="text-sm font-bold text-slate-500">Mendonasikan untuk program:</p>
@@ -52,7 +52,7 @@
                     <div id="donationResumePrompt" class="mb-6 hidden rounded-xl border border-amber-200 bg-amber-50 p-4">
                         <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
                             <div class="flex items-center gap-3">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="24" width="24" xmlns="http://www.w3.org/2000/svg" class="text-amber-500"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24Zm0,32a12,12,0,1,1-12,12A12,12,0,0,1,128,56Zm12,120a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Z"></path></svg>
+                                <x-icons.person-circle class="h-6 w-6 text-amber-500" />
                                 <div>
                                     <p class="font-bold text-slate-800">Anda memiliki donasi yang tertunda</p>
                                     <p class="text-sm text-slate-600">Lanjutkan transaksi sebelumnya?</p>
@@ -155,7 +155,7 @@
                             <p id="paymentTransactionId" class="font-extrabold text-slate-900">-</p>
                         </div>
                         <div class="flex shrink-0 items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-amber-600">
-                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm44-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v32h36A8,8,0,0,1,172,128Z"></path></svg>
+                            <x-icons.person-circle class="h-4 w-4" />
                             <span id="paymentCountdown" class="text-sm font-bold">15:00</span>
                         </div>
                     </div>

@@ -3,9 +3,10 @@
         || request()->routeIs('landing.home')
         || request()->is('landing')
         || request()->is('landing/');
-    $logoUrl = filled($siteSettings['site_logo'] ?? null) ? $siteSettings['site_logo'] : asset('images/Logo.png');
-    $brandName = $siteSettings['site_short_name'] ?? 'Yuk Mari Project';
-    $brandSuffix = $siteSettings['site_name_suffix'] ?? 'Yuk Mari Project';
+    $logoUrl = filled($siteSettings['site_logo'] ?? null) ? $siteSettings['site_logo'] : null;
+    $hasLogo = filled($logoUrl);
+    $brandName = $siteSettings['site_short_name'] ?? 'Nama Singkat';
+    $brandSuffix = $siteSettings['site_name_suffix'] ?? 'Nama PT Anda';
     $landingHomeUrl = route('landing.home');
 
     $navMenus = [
@@ -41,9 +42,9 @@
 >
     <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <a href="{{ route('landing.home') }}" class="flex items-center gap-3">
-            <img src="{{ $logoUrl }}" alt="Logo" class="w-10 h-10 rounded-xl shadow-sm">
+            <x-logo class="w-10 h-10 rounded-xl shadow-sm bg-white" containerClass="bg-white/90 border border-slate-200 text-emerald-600" iconClass="text-xl" />
             <span id="landingHeaderBrand" class="font-black tracking-tight text-xl {{ $isLandingHome ? 'text-white' : 'text-slate-900' }}">
-                {{ $brandName }}<span class="text-emerald-500"></span>
+                {{ $brandName }}
             </span>
         </a>
 
@@ -166,7 +167,7 @@
                 el.classList.toggle('text-white/80', !shouldBeSolid);
                 el.classList.toggle('text-slate-600', shouldBeSolid);
 
-    
+
             });
         }
 

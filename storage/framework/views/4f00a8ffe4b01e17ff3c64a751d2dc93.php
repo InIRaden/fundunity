@@ -1,30 +1,31 @@
 <?php $__env->startSection('admin-content'); ?>
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="campaignStats"></div>
 
   <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden">
-    <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="relative w-full md:w-80">
-        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-          <i class="ph ph-magnifying-glass text-[18px] text-emerald-500"></i>
+    <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
+      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">Daftar Campaign</h2>
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+        <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
+          <input id="campaignSearch" type="text" placeholder="Cari campaign atau kategori..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
         </div>
-        <input id="campaignSearch" type="text" placeholder="Cari campaign atau kategori..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+        <button id="openCampaignModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+          <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Campaign</span>
+        </button>
       </div>
-      <button id="openCampaignModal" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
-        <i class="ph ph-plus text-sm"></i> Buat Campaign Baru
-      </button>
     </div>
 
     <div class="overflow-x-auto">
       <table class="w-full border-collapse">
         <thead>
           <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Campaign</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Kategori</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Progress Donasi</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Deadline</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Status</th>
-            <th class="py-4 px-6 text-left text-[11px] font-semibold text-white uppercase tracking-widest border-b border-emerald-100/50">Aksi</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Campaign</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Kategori</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Progress Donasi</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Deadline</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Status</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Aksi</th>
           </tr>
         </thead>
         <tbody id="campaignRows" class="divide-y divide-slate-100"></tbody>
@@ -37,8 +38,8 @@
   </div>
 </div>
 
-<div id="campaignModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-[100] p-4">
-  <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-scale-in">
+<div id="campaignModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-[100] p-4 overflow-y-auto">
+  <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto animate-scale-in">
     <div class="bg-emerald-600 px-6 py-5 flex items-center justify-between">
       <div>
         <h3 id="campaignModalTitle" class="text-base font-bold text-white">Buat Campaign Baru</h3>
@@ -49,20 +50,31 @@
       </button>
     </div>
 
-    <form id="campaignForm">
-      <div class="p-6 space-y-5">
+    <form id="campaignForm" class="flex flex-col flex-1 overflow-hidden">
+      <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
-          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Judul Campaign</label>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">Judul Campaign</label>
           <input required id="fTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="Contoh: Bantuan Bencana NTT">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Kategori</label>
-            <input required id="fCategory" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="Kebencanaan / Pendidikan...">
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Kategori</label>
+            <select required id="fCategory" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all">
+              <option value="Bencana Alam">Bencana Alam</option>
+              <option value="Pendidikan">Pendidikan</option>
+              <option value="Kesehatan">Kesehatan</option>
+              <option value="Lingkungan">Lingkungan</option>
+              <option value="Pangan">Pangan</option>
+              <option value="Komunitas">Komunitas</option>
+              <option value="Donasi Umum">Donasi Umum</option>
+              <option value="Infrastruktur">Infrastruktur</option>
+              <option value="Kemanusiaan">Kemanusiaan</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Status</label>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Status</label>
             <div id="statusToggle" class="flex items-center bg-slate-100 rounded-xl p-1 gap-1">
               <button type="button" data-status="draft" class="status-choice flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all text-slate-500 hover:text-slate-700">Draft</button>
               <button type="button" data-status="aktif" class="status-choice flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all">Aktif</button>
@@ -73,22 +85,33 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Target Nominal (Rp)</label>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Nominal (Rp)</label>
             <input required id="fTarget" type="number" min="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="50000000">
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Deadline</label>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Deadline</label>
             <input required id="fDeadline" type="date" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Deskripsi Campaign</label>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">Deskripsi Campaign</label>
           <textarea required id="fDescription" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all resize-none" placeholder="Jelaskan tujuan dan detail campaign ini..."></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">Upload Poster/Thumbnail (Opsional)</label>
+          <input id="fImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+          <div id="imagePreviewWrap" class="hidden mt-3 relative">
+            <p class="text-[10px] text-slate-400 font-bold mb-1.5 uppercase tracking-wider">Preview Gambar</p>
+            <div class="relative rounded-2xl overflow-hidden border border-slate-200 aspect-video bg-slate-100">
+              <img id="imagePreviewEl" src="" alt="Preview" class="w-full h-full object-cover">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
         <button type="button" id="cancelCampaignModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-white transition-all">Batal</button>
         <button type="submit" id="submitCampaignBtn" class="px-8 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
           <i class="ph ph-plus text-base"></i> Buat Campaign
@@ -118,6 +141,7 @@
       deadline: String(raw.deadline || '').slice(0, 10),
       category: raw.category || 'Umum',
       status: raw.status || 'aktif',
+      imageUrl: raw.image || ''
     };
   }
 
@@ -139,15 +163,18 @@
     return 'Rp ' + Number(n).toLocaleString('id-ID');
   }
 
-  async function requestCampaign(url, method, payload) {
+  async function requestCampaignForm(url, method, formData) {
+    if (method !== 'POST') {
+      formData.append('_method', method);
+      method = 'POST';
+    }
     const response = await fetch(url, {
       method,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
       },
-      body: JSON.stringify(payload),
+      body: formData,
     });
 
     const json = await response.json().catch(() => ({}));
@@ -159,6 +186,23 @@
 
     return json;
   }
+
+  document.getElementById('fImageFile').addEventListener('change', function () {
+    const file = this.files[0];
+    const wrap = document.getElementById('imagePreviewWrap');
+    const preview = document.getElementById('imagePreviewEl');
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        wrap.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      wrap.classList.add('hidden');
+      preview.src = '';
+    }
+  });
 
   function setSubmitLoading(loading) {
     const button = document.getElementById('submitCampaignBtn');
@@ -190,7 +234,7 @@
           <i class="${c.icon} text-[22px]"></i>
         </div>
         <div>
-          <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">${c.label}</p>
+          <p class="text-[11px] font-semibold text-slate-400">${c.label}</p>
           <p class="text-xl font-bold text-slate-900 mt-0.5">${c.value}</p>
         </div>
       </div>
@@ -232,7 +276,7 @@
           </td>
         </tr>
       `;
-    }).join('') : '<tr><td colspan="6" class="py-12 text-center text-sm text-slate-400 font-medium">Belum ada campaign ditemukan.</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
     document.getElementById('campaignRows').innerHTML = rows;
     document.getElementById('campaignCount').textContent = `Menampilkan ${filtered.length} campaign`;
   }
@@ -265,12 +309,25 @@
       document.getElementById('fTarget').value = editing.target;
       document.getElementById('fDeadline').value = editing.deadline;
       document.getElementById('fDescription').value = editing.description;
+
+      const wrap = document.getElementById('imagePreviewWrap');
+      const preview = document.getElementById('imagePreviewEl');
+      document.getElementById('fImageFile').value = '';
+      if (editing.imageUrl) {
+        preview.src = editing.imageUrl;
+        wrap.classList.remove('hidden');
+      } else {
+        wrap.classList.add('hidden');
+        preview.src = '';
+      }
     } else {
       campaignState.editingId = null;
       campaignState.status = 'aktif';
       document.getElementById('campaignModalTitle').textContent = 'Buat Campaign Baru';
       document.getElementById('campaignModalSub').textContent = 'Isi detail campaign yang akan dipublikasikan';
       document.getElementById('campaignForm').reset();
+      document.getElementById('imagePreviewWrap').classList.add('hidden');
+      document.getElementById('imagePreviewEl').src = '';
     }
     setStatusButtons();
     setSubmitLoading(false);
@@ -288,7 +345,8 @@
   }
 
   async function deleteCampaign(id, button) {
-    if (window.confirm('Hapus campaign ini secara permanen?')) {
+    const confirmDelete = await customConfirm('Hapus Campaign?', 'Apakah Anda yakin ingin menghapus campaign ini secara permanen?');
+    if (confirmDelete) {
       const originalHtml = button?.innerHTML;
 
       if (button) {
@@ -298,12 +356,14 @@
       }
 
       try {
-        await requestCampaign(`${campaignBaseUrl}/${id}`, 'DELETE', {});
+        const formData = new FormData();
+        await requestCampaignForm(`${campaignBaseUrl}/${id}`, 'DELETE', formData);
         campaignState.campaigns = campaignState.campaigns.filter(c => c.id !== id);
         renderStats();
         renderRows();
+        customAlert('Berhasil', 'Campaign telah dihapus.');
       } catch (error) {
-        window.alert(error.message);
+        customAlert('Kesalahan', error.message, 'error');
       } finally {
         if (button) {
           button.disabled = false;
@@ -337,33 +397,48 @@
       return;
     }
 
-    const payload = {
-      title: document.getElementById('fTitle').value,
-      category: document.getElementById('fCategory').value,
-      target: Number(document.getElementById('fTarget').value),
-      deadline: document.getElementById('fDeadline').value,
-      description: document.getElementById('fDescription').value,
-      status: campaignState.status,
-    };
+    const formData = new FormData();
+    formData.append('title', document.getElementById('fTitle').value);
+    formData.append('category', document.getElementById('fCategory').value);
+    formData.append('target', document.getElementById('fTarget').value);
+    formData.append('deadline', document.getElementById('fDeadline').value);
+    formData.append('description', document.getElementById('fDescription').value);
+    formData.append('status', campaignState.status);
+
+    const fileInput = document.getElementById('fImageFile');
+    if (fileInput.files[0]) {
+      formData.append('image_file', fileInput.files[0]);
+    }
+
+    const deadlineInput = document.getElementById('fDeadline').value;
+    const deadlineDate = new Date(deadlineInput);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (deadlineDate < today) {
+      await customAlert('Tanggal Tidak Valid', 'Deadline campaign tidak boleh di masa lalu. Silakan pilih tanggal hari ini atau mendatang.', 'error');
+      return;
+    }
 
     campaignState.isSubmitting = true;
     setSubmitLoading(true);
 
     try {
       if (campaignState.editingId) {
-        const result = await requestCampaign(`${campaignBaseUrl}/${campaignState.editingId}`, 'PUT', payload);
+        const result = await requestCampaignForm(`${campaignBaseUrl}/${campaignState.editingId}`, 'PUT', formData);
         const updated = normalizeCampaign(result.data || {});
         campaignState.campaigns = campaignState.campaigns.map((c) => c.id === campaignState.editingId ? updated : c);
       } else {
-        const result = await requestCampaign(campaignStoreUrl, 'POST', payload);
+        const result = await requestCampaignForm(campaignStoreUrl, 'POST', formData);
         campaignState.campaigns.unshift(normalizeCampaign(result.data || {}));
       }
 
       closeCampaignModal();
       renderStats();
       renderRows();
+      customAlert('Berhasil', campaignState.editingId ? 'Campaign berhasil diperbarui.' : 'Campaign berhasil ditambahkan.');
     } catch (error) {
-      window.alert(error.message);
+      customAlert('Kesalahan', error.message, 'error');
     } finally {
       campaignState.isSubmitting = false;
       setSubmitLoading(false);

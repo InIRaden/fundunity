@@ -5,7 +5,7 @@
   $legal = $legal ?? [];
 @endphp
 
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div id="legalToast" class="hidden items-center gap-3 px-5 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold fixed top-24 right-8 z-[100] shadow-lg">
     <i class="ph ph-check-circle text-base"></i><span id="legalToastText"></span>
   </div>

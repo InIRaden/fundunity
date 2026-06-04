@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
     <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl p-6 text-white shadow-xl shadow-emerald-600/20 relative overflow-hidden group">
       <div class="relative z-10 flex flex-col h-full justify-between">
@@ -53,7 +53,7 @@
       <button id="tabPenyaluran" class="px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-extrabold transition-all border">Laporan Penyaluran (Transparansi)</button>
     </div>
 
-    <div class="bg-white border border-slate-200 shadow-xl shadow-slate-200/40 rounded-b-2xl rounded-tr-2xl overflow-hidden relative z-10 flex flex-col min-h-[400px]">
+    <div class="bg-white border border-slate-200 shadow-xl shadow-slate-200/40 rounded-b-2xl rounded-tr-2xl overflow-hidden relative z-10 flex flex-col">
       <div id="pemasukanPane" class="animate-fade-in flex-1 flex flex-col">
         <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white">
           <div class="flex items-center gap-2 p-1 bg-slate-100 rounded-xl">
@@ -61,12 +61,12 @@
             <button data-filter="berhasil" class="income-filter px-4 py-1.5 text-xs font-bold rounded-lg transition-all">Berhasil</button>
             <button data-filter="pending" class="income-filter px-4 py-1.5 text-xs font-bold rounded-lg transition-all">Pending / Cek Manual</button>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="relative">
+          <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
               <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-              <input id="incomeSearch" type="text" placeholder="Cari nama donatur..." class="pl-9 pr-4 py-2 border border-emerald-500 text-emerald-900 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none w-64 transition-all placeholder:text-emerald-500/50">
+              <input id="incomeSearch" type="text" placeholder="Cari nama donatur..." class="w-full sm:w-64 pl-9 pr-4 py-2 border border-emerald-500 text-emerald-900 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
             </div>
-            <button id="openIncomeModal" class="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors"><i class="ph ph-plus text-sm"></i> Input Manual</button>
+            <button id="openIncomeModal" class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors whitespace-nowrap"><i class="ph ph-plus text-sm"></i> Input Manual</button>
           </div>
         </div>
 
@@ -457,7 +457,7 @@
 
     const tbody = document.getElementById('detailModalPenerimaRows');
     if (!l.penerimaList || l.penerimaList.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="3" class="py-8 text-center text-slate-400 text-xs italic">Belum ada penerima manfaat yang dicatat untuk program ini.<br>Tambahkan via menu <strong>Relasi &amp; Bantuan → Penerima Bantuan</strong>.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="3" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>`;
     } else {
       tbody.innerHTML = l.penerimaList.map((p, i) => `
         <tr class="border-t border-slate-100 hover:bg-slate-50">

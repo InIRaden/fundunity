@@ -10,23 +10,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Open Sans"', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        soft: '0 24px 60px rgba(15, 23, 42, 0.12)',
-                    },
-                },
-            },
-        };
-    </script>
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         html {
@@ -89,7 +74,7 @@
 
     @stack('head')
 </head>
-<body>
+<body data-page="@yield('body-data','')">
     <div class="bg-white text-slate-900 font-sans min-h-screen flex flex-col">
         <x-landing.navbar />
 

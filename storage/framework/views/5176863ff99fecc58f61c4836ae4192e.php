@@ -11,9 +11,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css','resources/js/app.js']); ?>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
     <!-- Custom Styles -->
     <style>
@@ -21,37 +20,102 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-50">
+<body data-page="<?php echo $__env->yieldContent('body-data',''); ?>" class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen bg-gray-50">
         <?php echo $__env->make('layouts.admin.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <!-- Main Content -->
-        <div style="margin-left: <?php echo e($sidebarWidth ?? '256px'); ?>; width: calc(100% - <?php echo e($sidebarWidth ?? '256px'); ?>); transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out; min-height: 100vh;">
+        <div id="mainContent" class="transition-all duration-300 ease-in-out min-h-screen">
+            <script>
+                // Initialize sidebar state before paint to prevent flicker
+                (function() {
+                    const isDesktop = window.innerWidth >= 1024;
+                    const savedState = localStorage.getItem('sidebarState');
+                    let isCollapsed = false;
+
+                    if (savedState) {
+                        isCollapsed = savedState === 'collapsed';
+                    } else {
+                        isCollapsed = !isDesktop;
+                    }
+
+                    const sidebar = document.getElementById('adminSidebar');
+                    const mainContent = document.getElementById('mainContent');
+                    const toggleIcon = document.getElementById('toggleIcon');
+
+                    // Disable transitions temporarily
+                    sidebar.style.transition = 'none';
+                    mainContent.style.transition = 'none';
+
+                    if (isCollapsed) {
+                        sidebar.classList.add('sidebar-collapsed');
+                        mainContent.style.marginLeft = '72px';
+                        mainContent.style.width = 'calc(100% - 72px)';
+                        if(toggleIcon) {
+                            toggleIcon.classList.remove('ph-caret-left');
+                            toggleIcon.classList.add('ph-caret-right');
+                        }
+                    } else {
+                        sidebar.classList.remove('sidebar-collapsed');
+                        mainContent.style.marginLeft = '224px';
+                        mainContent.style.width = 'calc(100% - 224px)';
+                        if(toggleIcon) {
+                            toggleIcon.classList.remove('ph-caret-right');
+                            toggleIcon.classList.add('ph-caret-left');
+                        }
+                    }
+
+                    // Re-enable transitions
+                    setTimeout(() => {
+                        sidebar.style.transition = '';
+                        mainContent.style.transition = '';
+                    }, 50);
+                })();
+            </script>
             <?php echo $__env->make('layouts.admin.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            
+            <?php if(isset($siteSettings['maintenance_mode']) && $siteSettings['maintenance_mode'] === '1'): ?>
+            <div class="bg-rose-500 text-white px-4 py-3 text-center text-sm font-bold flex items-center justify-center gap-2 shadow-sm relative z-20">
+                <i class="ph ph-warning-circle text-lg animate-pulse"></i>
+                Website Publik sedang dalam Mode Pemeliharaan (Maintenance). Pengunjung tidak dapat mengakses halaman utama.
+            </div>
+            <?php endif; ?>
+
             <main class="p-8">
-                <?php echo $__env->yieldContent('admin-content'); ?>
+                <div class="w-full">
+                    <?php echo $__env->yieldContent('admin-content'); ?>
+                </div>
             </main>
         </div>
     </div>
 
+    <?php echo $__env->make('components.admin-modals', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
     <!-- JavaScript -->
     <script>
-        // Sidebar toggle functionality
         function toggleSidebar() {
-            const sidebar = document.querySelector('.fixed.top-0.left-0');
-            const mainContent = document.querySelector('div[style*="margin-left"]');
-            const isOpen = sidebar.classList.contains('w-56');
+            const sidebar = document.getElementById('adminSidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleIcon = document.getElementById('toggleIcon');
 
-            if (isOpen) {
-                sidebar.classList.remove('w-56');
-                sidebar.classList.add('w-[72px]');
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebar.classList.remove('sidebar-collapsed');
+                mainContent.style.marginLeft = '224px';
+                mainContent.style.width = 'calc(100% - 224px)';
+                if(toggleIcon) {
+                    toggleIcon.classList.remove('ph-caret-right');
+                    toggleIcon.classList.add('ph-caret-left');
+                }
+                localStorage.setItem('sidebarState', 'expanded');
+            } else {
+                sidebar.classList.add('sidebar-collapsed');
                 mainContent.style.marginLeft = '72px';
                 mainContent.style.width = 'calc(100% - 72px)';
-            } else {
-                sidebar.classList.remove('w-[72px]');
-                sidebar.classList.add('w-56');
-                mainContent.style.marginLeft = '256px';
-                mainContent.style.width = 'calc(100% - 256px)';
+                if(toggleIcon) {
+                    toggleIcon.classList.remove('ph-caret-left');
+                    toggleIcon.classList.add('ph-caret-right');
+                }
+                localStorage.setItem('sidebarState', 'collapsed');
             }
         }
     </script>

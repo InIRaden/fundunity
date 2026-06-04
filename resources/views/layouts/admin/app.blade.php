@@ -11,9 +11,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    @vite(['resources/css/app.css','resources/js/app.js'])
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
     <!-- Custom Styles -->
     <style>
@@ -21,15 +20,71 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-50">
+<body data-page="@yield('body-data','')" class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen bg-gray-50">
         @include('layouts.admin.sidebar')
 
         <!-- Main Content -->
-        <div id="mainContent" class="lg:ml-56 w-full lg:w-[calc(100%-224px)] transition-all duration-300 ease-in-out min-h-100vh">
+        <div id="mainContent" class="transition-all duration-300 ease-in-out min-h-screen">
+            <script>
+                // Initialize sidebar state before paint to prevent flicker
+                (function() {
+                    const isDesktop = window.innerWidth >= 1024;
+                    const savedState = localStorage.getItem('sidebarState');
+                    let isCollapsed = false;
+
+                    if (savedState) {
+                        isCollapsed = savedState === 'collapsed';
+                    } else {
+                        isCollapsed = !isDesktop;
+                    }
+
+                    const sidebar = document.getElementById('adminSidebar');
+                    const mainContent = document.getElementById('mainContent');
+                    const toggleIcon = document.getElementById('toggleIcon');
+
+                    // Disable transitions temporarily
+                    sidebar.style.transition = 'none';
+                    mainContent.style.transition = 'none';
+
+                    if (isCollapsed) {
+                        sidebar.classList.add('sidebar-collapsed');
+                        mainContent.style.marginLeft = '72px';
+                        mainContent.style.width = 'calc(100% - 72px)';
+                        if(toggleIcon) {
+                            toggleIcon.classList.remove('ph-caret-left');
+                            toggleIcon.classList.add('ph-caret-right');
+                        }
+                    } else {
+                        sidebar.classList.remove('sidebar-collapsed');
+                        mainContent.style.marginLeft = '224px';
+                        mainContent.style.width = 'calc(100% - 224px)';
+                        if(toggleIcon) {
+                            toggleIcon.classList.remove('ph-caret-right');
+                            toggleIcon.classList.add('ph-caret-left');
+                        }
+                    }
+
+                    // Re-enable transitions
+                    setTimeout(() => {
+                        sidebar.style.transition = '';
+                        mainContent.style.transition = '';
+                    }, 50);
+                })();
+            </script>
             @include('layouts.admin.header')
+            
+            @if(isset($siteSettings['maintenance_mode']) && $siteSettings['maintenance_mode'] === '1')
+            <div class="bg-rose-500 text-white px-4 py-3 text-center text-sm font-bold flex items-center justify-center gap-2 shadow-sm relative z-20">
+                <i class="ph ph-warning-circle text-lg animate-pulse"></i>
+                Website Publik sedang dalam Mode Pemeliharaan (Maintenance). Pengunjung tidak dapat mengakses halaman utama.
+            </div>
+            @endif
+
             <main class="p-8">
-                @yield('admin-content')
+                <div class="w-full">
+                    @yield('admin-content')
+                </div>
             </main>
         </div>
     </div>
@@ -38,7 +93,6 @@
 
     <!-- JavaScript -->
     <script>
-        // Sidebar toggle functionality (desktop collapse)
         function toggleSidebar() {
             const sidebar = document.getElementById('adminSidebar');
             const mainContent = document.getElementById('mainContent');
@@ -46,46 +100,24 @@
 
             if (sidebar.classList.contains('sidebar-collapsed')) {
                 sidebar.classList.remove('sidebar-collapsed');
-                mainContent.classList.remove('lg:ml-[72px]', 'lg:w-[calc(100%-72px)]');
-                mainContent.classList.add('lg:ml-56', 'lg:w-[calc(100%-224px)]');
-                toggleIcon.classList.remove('ph-caret-right');
-                toggleIcon.classList.add('ph-caret-left');
+                mainContent.style.marginLeft = '224px';
+                mainContent.style.width = 'calc(100% - 224px)';
+                if(toggleIcon) {
+                    toggleIcon.classList.remove('ph-caret-right');
+                    toggleIcon.classList.add('ph-caret-left');
+                }
+                localStorage.setItem('sidebarState', 'expanded');
             } else {
                 sidebar.classList.add('sidebar-collapsed');
-                mainContent.classList.remove('lg:ml-56', 'lg:w-[calc(100%-224px)]');
-                mainContent.classList.add('lg:ml-[72px]', 'lg:w-[calc(100%-72px)]');
-                toggleIcon.classList.remove('ph-caret-left');
-                toggleIcon.classList.add('ph-caret-right');
+                mainContent.style.marginLeft = '72px';
+                mainContent.style.width = 'calc(100% - 72px)';
+                if(toggleIcon) {
+                    toggleIcon.classList.remove('ph-caret-left');
+                    toggleIcon.classList.add('ph-caret-right');
+                }
+                localStorage.setItem('sidebarState', 'collapsed');
             }
         }
-
-        // Mobile sidebar toggle
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('adminSidebar');
-            const backdrop = document.getElementById('sidebarBackdrop');
-
-            sidebar.classList.toggle('translate-x-0');
-            sidebar.classList.toggle('-translate-x-full');
-            backdrop.classList.toggle('hidden');
-        }
-
-        function closeMobileSidebar() {
-            const sidebar = document.getElementById('adminSidebar');
-            const backdrop = document.getElementById('sidebarBackdrop');
-
-            sidebar.classList.add('-translate-x-full');
-            sidebar.classList.remove('translate-x-0');
-            backdrop.classList.add('hidden');
-        }
-
-        // Close mobile sidebar when clicking menu items
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.addEventListener('click', () => {
-                if (window.innerWidth < 1024) {
-                    closeMobileSidebar();
-                }
-            });
-        });
     </script>
 </body>
 </html>

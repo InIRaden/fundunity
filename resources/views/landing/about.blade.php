@@ -8,7 +8,7 @@
     // We assume the first generalProfile is Visi and second is Misi (or similar logic)
     $visionItem = $generalProfile->filter(fn($v) => str_contains(strtolower($v->title), 'visi'))->first() ?: $generalProfile->get(0);
     $missionItem = $generalProfile->filter(fn($v) => str_contains(strtolower($v->title), 'misi'))->first() ?: $generalProfile->get(1) ?: $generalProfile->get(0);
-    
+
     $primaryImage = $visionItem?->image_url ?: '';
 @endphp
 
@@ -22,19 +22,19 @@
     <section id="tentang" class="pt-24 pb-12 bg-white relative overflow-hidden rounded-t-[60px] z-10">
       <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24 mb-20">
-          
+
           {{-- Photos/Images Collage --}}
           <div class="w-full lg:w-1/3">
             <div class="relative">
               {{-- Main Image --}}
               <div class="relative rounded-[45px] overflow-hidden shadow-2xl z-10 border-8 border-white">
-                <img 
-                  src="{{ $primaryImage }}" 
-                  alt="Tim FundUnity" 
+                <img
+                  src="{{ $primaryImage }}"
+                  alt="Tim FundUnity"
                   class="w-full aspect-[4/5] object-cover"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-              </div> 
+              </div>
             </div>
           </div>
 
@@ -43,11 +43,11 @@
             <div class="inline-flex items-center gap-2 mb-2">
               <span class="text-emerald-700 font-bold text-xs md:text-sm tracking-widest mb-3 uppercase">Tentang Kami</span>
             </div>
-            
+
             <h2 class="text-2xl md:text-4xl font-black text-slate-900 leading-[1.3] mb-6">
               Mewujudkan Dampak Yang Terukur & Nyata.
             </h2>
-            
+
             <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-10">
               Kami bukan sekadar wadah, tapi sebuah gerakan transformatif yang mengedepankan akuntabilitas digital untuk memberdayakan setiap lapisan masyarakat.
             </p>
@@ -125,7 +125,7 @@
     <section class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
         <div class="absolute inset-0 opacity-5 bg-cover bg-center mix-blend-overlay"></div>
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
-        
+
         <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-emerald-500 mx-auto mb-6 md:mb-8 opacity-80" height="48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M104,112A40,40,0,1,1,64,72,40,40,0,0,1,104,112Zm112-40a40,40,0,1,0,40,40A40,40,0,0,0,216,72ZM64,168a80.11,80.11,0,0,0-80,80,8,8,0,0,0,8,8H120a8,8,0,0,0,8-8A80.11,80.11,0,0,0,64,168Zm152,0a80.11,80.11,0,0,0-80,80,8,8,0,0,0,8,8H264a8,8,0,0,0,8-8A80.11,80.11,0,0,0,216,168Z"></path></svg>
             <h2 class="text-2xl md:text-4xl font-extrabold text-white leading-snug mb-6 md:mb-8">
@@ -147,12 +147,12 @@
                 <span class="text-emerald-700 font-bold text-sm tracking-widest mb-3 block">Nilai-Nilai Inti</span>
                 <h2 class="text-3xl md:text-5xl font-bold text-slate-900">Apa yang Membuat Kami Berbeda?</h2>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 {{-- Value 1 --}}
                 <div class="bg-white p-10 rounded-[40px] shadow-xl shadow-slate-200/50 border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
                     <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
-                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="32" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48.24-94.78-64-40A8,8,0,0,0,100,88v80a8,8,0,0,0,12.24,6.78l64-40a8,8,0,0,0,0-13.56ZM116,153.57V102.43L156.91,128Z"></path></svg>
+                        <x-icons.person-circle class="h-8 w-8 text-emerald-500" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-4">Transparansi Penuh</h3>
                     <p class="text-slate-600 leading-relaxed">Setiap donasi yang masuk dapat dilacak penggunaannya. Kami memastikan laporan selalu tersedia untuk publik secara real-time.</p>

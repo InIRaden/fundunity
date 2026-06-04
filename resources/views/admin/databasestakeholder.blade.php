@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-gradient-to-br from-emerald-800 to-emerald-900 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row md:items-end justify-between gap-6 relative overflow-hidden shadow-emerald-900/20">
     <div class="relative z-10 max-w-xl">
       <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-5 backdrop-blur-md border border-white/10">
@@ -21,18 +21,18 @@
     <div class="absolute bottom-0 left-1/4 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl translate-y-1/2 pointer-events-none"></div>
   </div>
 
-  <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden min-h-[500px] flex flex-col">
+  <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden flex flex-col">
     <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2">
         <span id="stakeTitle">Direktori Donatur</span>
         <span id="stakeCount" class="bg-slate-100 text-slate-500 text-xs px-2 py-0.5 rounded-full font-medium"></span>
       </h2>
-      <div class="flex items-center gap-3">
-        <div class="relative">
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+        <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
           <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-500"></i>
           <input id="stakeSearch" type="text" placeholder="Cari data..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
         </div>
-        <button id="openStakeModal" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+        <button id="openStakeModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
           <i class="ph ph-plus text-sm"></i> Tambah
         </button>
       </div>
@@ -285,7 +285,7 @@
         <td class="py-4 px-6 text-sm font-semibold text-emerald-600">${rp(p.nilai)}</td>
         <td class="py-4 px-6"><div class="flex items-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-semibold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditStake(${p.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-semibold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteStake(${p.id}, this)">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="5" class="px-6 py-12 text-center text-sm text-slate-500">Data penerima bantuan tidak ditemukan.</td></tr>';
+    `).join('') : '<tr><td colspan="5" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
     document.getElementById('stakeTitle').textContent = 'Penerima Bantuan';
     document.getElementById('stakeCount').textContent = data.length + ' Data';
   }
@@ -300,7 +300,7 @@
         <td class="py-4 px-6">${r.isVerified ? '<span class="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100 w-fit"><i class="ph ph-check-circle text-xs"></i>Terverifikasi</span>' : '<span class="flex items-center gap-1.5 text-[10px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100 w-fit"><i class="ph ph-warning-circle text-xs"></i>Belum Verifikasi</span>'}</td>
         <td class="py-4 px-6"><div class="flex items-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-semibold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditStake(${r.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-semibold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteStake(${r.id}, this)">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="5" class="px-6 py-12 text-center text-sm text-slate-500">Data relawan tidak ditemukan.</td></tr>';
+    `).join('') : '<tr><td colspan="5" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
     document.getElementById('stakeTitle').textContent = 'Pendaftar Relawan';
     document.getElementById('stakeCount').textContent = data.length + ' Data';
   }

@@ -20,11 +20,11 @@
 
 <div class="relative">
   <!-- Sidebar -->
-  <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out bg-emerald-600 text-white rounded-r-3xl w-56 lg:w-56 -left-56 lg:left-0 lg:translate-x-0 translate-x-0" style="z-index: 40;">
+  <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out bg-emerald-600 text-white rounded-r-3xl w-56 z-40">
     <!-- Logo Area -->
     <div id="sidebarLogo" class="flex items-center shrink-0 mt-4 mb-4 px-5 gap-3 transition-all duration-300 sidebar-logo-open">
-      <img src="{{ $siteSettings['site_logo'] ?? asset('images/Logo.png') }}" alt="FundUnity" class="object-contain transition-all duration-300 h-8 w-auto" />
-      <span class="text-sm font-bold text-white tracking-tight opacity-90 whitespace-nowrap sidebar-text-show">FundUnity</span>
+      <x-logo class="h-8 w-auto min-w-[32px] transition-all duration-300" containerClass="bg-white/20 text-white rounded-lg" iconClass="text-lg" />
+      <span class="text-sm font-bold text-white tracking-tight opacity-90 whitespace-nowrap sidebar-text-show">{{ $siteSettings['site_short_name'] ?? 'FundUnity' }}</span>
     </div>
 
     <!-- Nav Items -->
@@ -55,39 +55,33 @@
     </div>
 
     <!-- Toggle Button -->
-    <button id="sidebarToggle" onclick="toggleSidebar()" class="absolute -right-3 top-8 w-6 h-6 bg-white text-slate-600 hover:text-emerald-600 rounded-full flex items-center justify-center transition-all lg:flex hidden">
-      <i id="toggleIcon" class="ph ph-caret-left text-[13px] leading-none"></i>
+    <button id="sidebarToggle" onclick="toggleSidebar()" class="absolute -right-3 top-8 w-6 h-6 bg-white text-slate-600 hover:text-emerald-600 rounded-full flex items-center justify-center transition-all z-50 shadow-sm border border-slate-200">
+      <i id="toggleIcon" class="ph ph-caret-right text-[13px] leading-none"></i>
     </button>
   </div>
-
-  <!-- Mobile Menu Toggle (visible only on mobile) -->
-  <button id="sidebarMobileToggle" onclick="toggleMobileSidebar()" class="fixed bottom-6 right-6 w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center lg:hidden z-50 shadow-lg">
-    <i class="ph ph-list text-[20px]"></i>
-  </button>
-
-  <!-- Mobile Sidebar Backdrop -->
-  <div id="sidebarBackdrop" onclick="closeMobileSidebar()" class="fixed inset-0 bg-black/50 lg:hidden hidden z-30"></div>
 
   <style>
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Sidebar collapsed state */
+    /* Sidebar collapsed state (Desktop) */
     #adminSidebar.sidebar-collapsed {
       width: 72px;
     }
-
     #adminSidebar.sidebar-collapsed #sidebarLogo {
       padding: 0;
       justify-content: center;
     }
-
     #adminSidebar.sidebar-collapsed .sidebar-item {
       justify-content: center !important;
       padding-left: 0 !important;
       padding-right: 0 !important;
+      margin-right: 0 !important;
+      border-radius: 12px !important;
     }
-
+    #adminSidebar.sidebar-collapsed .sidebar-item .absolute {
+      display: none !important;
+    }
     #adminSidebar.sidebar-collapsed .sidebar-text-show {
       display: none;
     }

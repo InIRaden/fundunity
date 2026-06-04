@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'FundUnity') }} - Lupa Kata Sandi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 </head>
 <body class="font-sans bg-white text-slate-900">
     <div class="flex min-h-screen font-sans bg-white">
@@ -34,7 +34,7 @@
             <div class="w-full max-w-md">
                 <div class="mb-10 text-center lg:text-left">
                     <div class="mb-6 flex justify-center lg:justify-start">
-                        <img src="{{ $siteSettings['site_logo'] ?? asset('images/Logo.png') }}" alt="FundUnity CMS" class="h-20 object-contain" />
+                        <x-logo class="h-20 w-auto min-w-[80px]" containerClass="bg-emerald-50 text-emerald-500 rounded-2xl" iconClass="text-4xl" />
                     </div>
                     <h1 class="text-3xl font-black tracking-tight text-slate-900">Lupa Kata Sandi?</h1>
                     <p class="mt-2 text-sm font-medium text-slate-600">Masukkan email Anda untuk menerima link reset kata sandi.</p>
@@ -86,7 +86,7 @@
                         </p>
                         <p class="text-center text-sm text-slate-600 font-medium">
                             Belum punya akun?
-                            <a href="{{ route('register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                            <a href="{{ url('/register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
                                 Daftar sekarang
                             </a>
                         </p>

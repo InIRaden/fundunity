@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('admin-content')
-<div class="space-y-6">
+<div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div>
     <h2 class="text-2xl font-bold text-slate-900">Log Aktivitas</h2>
     <p class="text-slate-600">Riwayat komprehensif audit sistem dan manipulasi data.</p>

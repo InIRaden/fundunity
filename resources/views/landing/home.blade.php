@@ -1,6 +1,7 @@
 @extends('layouts.landing')
 
 @section('title', optional($page)->meta_title ?? 'Wujudkan Dampak Nyata')
+@section('body-data', 'landing-home')
 
 @push('head')
 <style>
@@ -61,9 +62,9 @@
     $heroDistributedAmount = (int) ($impactStats['distributed_amount'] ?? 0);
     $heroCompletedPrograms = (int) ($impactStats['completed_programs'] ?? 0);
 
-    $heroDonorLabel = $heroDonorCount > 0 ? number_format($heroDonorCount, 0, ',', '.').'+' : '45K+';
-    $heroAmountLabel = $heroDistributedAmount > 0 ? $formatCompactRupiah($heroDistributedAmount) : 'Rp 12M';
-    $heroProgramLabel = $heroCompletedPrograms > 0 ? number_format($heroCompletedPrograms, 0, ',', '.') : '128';
+    $heroDonorLabel = $heroDonorCount > 0 ? number_format($heroDonorCount, 0, ',', '.').'+' : '0';
+    $heroAmountLabel = $heroDistributedAmount > 0 ? $formatCompactRupiah($heroDistributedAmount) : 'Rp 0';
+    $heroProgramLabel = $heroCompletedPrograms > 0 ? number_format($heroCompletedPrograms, 0, ',', '.') : '0';
 @endphp
 
 {{-- Hero Section with Auto-Slider --}}
@@ -72,7 +73,7 @@
     @if($sliderItems->count() > 1)
         @foreach($sliderItems as $si => $slide)
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 {{ $si === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $si }}">
-                <img src="{{ $slide->image_url }}" alt="{{ $slide->title ?? 'Slide '.($si+1) }}" class="w-full h-full object-cover opacity-30 object-top">
+                <img src="{{ $slide->image_url }}" alt="{{ $slide->title ?? 'Slide '.($si+1) }}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-30 object-top">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#022c22] via-[#022c22]/60 to-transparent"></div>
             </div>
         @endforeach
@@ -84,7 +85,7 @@
         </div>
     @else
         <div class="absolute inset-0">
-            <img src="{{ $heroImage }}" alt="Hero" class="w-full h-full object-cover opacity-30 object-top">
+            <img src="{{ $heroImage }}" alt="Hero" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-30 object-top">
             <div class="absolute inset-0 bg-gradient-to-t from-[#022c22] via-[#022c22]/60 to-transparent"></div>
         </div>
     @endif
@@ -106,7 +107,7 @@
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-orange-500 animate-pulse" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path></svg>
             </a>
             <a href="{{ route('landing.about') }}" class="w-full sm:w-auto px-8 py-3.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-2xl backdrop-blur-md border border-white/10 transition-all flex items-center justify-center gap-3">
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="22" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48.24-94.78-64-40A8,8,0,0,0,100,88v80a8,8,0,0,0,12.24,6.78l64-40a8,8,0,0,0,0-13.56ZM116,153.57V102.43L156.91,128Z"></path></svg>
+                <x-icons.person-circle class="h-5 w-5" />
                 Lihat Profil Kami
             </a>
         </div>
@@ -188,7 +189,7 @@
             </div>
             <a href="{{ route('landing.programs') }}" class="flex items-center gap-2 text-emerald-600 font-bold hover:text-emerald-700 transition-colors whitespace-nowrap">
                 Lihat Semua Program
-                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
+                <x-icons.arrow-right class="h-5 w-5" />
             </a>
         </div>
 
@@ -203,7 +204,7 @@
 
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-transform duration-300 group flex flex-col h-full">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="{{ $campaignImage }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="{{ $campaignImage }}" alt="{{ $campaign->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 shadow-sm">
                             {{ $campaign->category ?? 'Umum' }}
                         </div>
@@ -238,7 +239,7 @@
 
                             <div class="flex justify-between items-center text-xs font-bold text-slate-500 bg-slate-50 p-3 rounded-xl">
                                 <div class="flex items-center gap-1.5">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" class="text-slate-400" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path></svg>
+                                    <x-icons.users class="h-4 w-4 text-slate-400" />
                                     {{ number_format(max(1, (int) floor(((int) $campaign->collected) / 100000)), 0, ',', '.') }} Donatur
                                 </div>
                                 <div class="flex items-center gap-1.5 text-amber-600">
@@ -275,7 +276,7 @@
             @else
                 @foreach($homePartners as $partner)
                     <div class="group relative flex flex-col items-center justify-center grayscale hover:grayscale-0 transition-all duration-300">
-                        <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" class="h-10 md:h-12 object-contain transition-transform duration-300 group-hover:scale-110">
+                        <img src="{{ $partner->logo }}" alt="{{ $partner->name }}" loading="lazy" decoding="async" class="h-10 md:h-12 object-contain transition-transform duration-300 group-hover:scale-110">
                     </div>
                 @endforeach
             @endif
@@ -374,47 +375,5 @@
 </section>
 @endsection
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Hero slider
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.slide-dot');
-        if (slides.length > 1) {
-            let current = 0;
-            function goToSlide(n) {
-                slides[current].classList.remove('opacity-100');
-                slides[current].classList.add('opacity-0');
-                dots[current].classList.remove('bg-emerald-400', 'w-6');
-                dots[current].classList.add('bg-white/30');
-                current = (n + slides.length) % slides.length;
-                slides[current].classList.remove('opacity-0');
-                slides[current].classList.add('opacity-100');
-                dots[current].classList.remove('bg-white/30');
-                dots[current].classList.add('bg-emerald-400', 'w-6');
-            }
-            dots.forEach((dot, i) => dot.addEventListener('click', () => goToSlide(i)));
-            setInterval(() => goToSlide(current + 1), 5000);
-        }
-
-        // Contact form
-        const contactForm = document.getElementById('homeContactForm');
-        const submitButton = document.getElementById('homeContactSubmitButton');
-        const submitLabel = document.getElementById('homeContactSubmitLabel');
-        const submitIcon = document.getElementById('homeContactSubmitIcon');
-
-        contactForm?.addEventListener('submit', function () {
-            if (!submitButton || !submitLabel || !submitIcon) {
-                return;
-            }
-
-            submitButton.disabled = true;
-            submitButton.classList.add('cursor-not-allowed', 'opacity-80');
-            submitButton.classList.remove('hover:bg-emerald-700');
-            submitLabel.textContent = 'Mengirim...';
-            submitIcon.classList.add('animate-spin');
-        });
-    });
-</script>
-@endpush
+{{-- Page scripts moved to `resources/js/pages/landing/home.js` and loaded via Vite --}}
 

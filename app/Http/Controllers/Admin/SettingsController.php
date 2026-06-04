@@ -53,6 +53,7 @@ class SettingsController extends Controller
         $seo = [
             'metaDescription' => $settings->get('seo_meta_description') ?: '',
             'footerCopyright' => $settings->get('footer_copyright') ?: '',
+            'footerTagline' => $settings->get('footer_tagline') ?: '',
             'maintenanceMode' => $settings->get('maintenance_mode') === '1',
         ];
 
@@ -185,11 +186,13 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'metaDescription' => ['nullable', 'string', 'max:1000'],
             'footerCopyright' => ['nullable', 'string', 'max:255'],
+            'footerTagline' => ['nullable', 'string', 'max:1000'],
             'maintenanceMode' => ['nullable', 'boolean'],
         ]);
 
         $this->upsertSetting('seo_meta_description', $this->nullableString($validated['metaDescription'] ?? null), 'textarea', 'seo', 'SEO Meta Description');
         $this->upsertSetting('footer_copyright', $this->nullableString($validated['footerCopyright'] ?? null), 'text', 'general', 'Footer Copyright');
+        $this->upsertSetting('footer_tagline', $this->nullableString($validated['footerTagline'] ?? null), 'textarea', 'general', 'Footer Tagline');
         $this->upsertSetting('maintenance_mode', $request->boolean('maintenanceMode') ? '1' : '0', 'text', 'general', 'Maintenance Mode');
 
         return response()->json([
@@ -215,7 +218,6 @@ class SettingsController extends Controller
     public function updateSecurity(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
             'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 

@@ -9,36 +9,7 @@
 @php
     $focusAreas = collect($focusAreas ?? []);
 
-    $defaultPillars = collect([
-        [
-            'title' => 'Pendidikan',
-            'description' => 'Memberikan pendidikan berkualitas untuk anak-anak agar dapat mengembangkan potensinya secara optimal.',
-            'icon' => 'ph ph-books',
-            'style' => 'text-blue-600',
-        ],
-        [
-            'title' => 'Kesehatan',
-            'description' => 'Menyelenggarakan bantuan kesadaran kesehatan & akses layanan kesehatan dasar bagi masyarakat.',
-            'icon' => 'ph ph-heartbeat',
-            'style' => 'text-rose-600',
-        ],
-        [
-            'title' => 'Lingkungan',
-            'description' => 'Mendorong inisiatif untuk perlindungan lingkungan hidup dan keberlanjutan alam.',
-            'icon' => 'ph ph-tree-evergreen',
-            'style' => 'text-emerald-600',
-        ],
-        [
-            'title' => 'Komunitas',
-            'description' => 'Memberdayakan masyarakat melalui pengembangan keterampilan, kolaborasi, dan penguatan kelompok.',
-            'icon' => 'ph ph-users',
-            'style' => 'text-amber-600',
-        ],
-    ]);
-
-
-    $displayPillars = $focusAreas->isNotEmpty()
-        ? $focusAreas->values()->map(function ($item, $index) {
+    $displayPillars = $focusAreas->values()->map(function ($item, $index) {
             $storedColor = strtolower((string) ($item->color ?? ''));
             $style = 'text-emerald-600';
 
@@ -58,16 +29,16 @@
                 'icon' => $item->icon ?: 'ph ph-target',
                 'style' => $style,
             ];
-        })
-        : $defaultPillars;
+        });
 
     $statsDonorCount = (int) ($impactStats['donor_count'] ?? 0);
     $statsProgramCount = (int) ($impactStats['completed_programs'] ?? 0);
     $statsVolunteerCount = (int) ($impactStats['volunteer_count'] ?? 0);
 
-    $labelDonor = $statsDonorCount > 0 ? number_format($statsDonorCount, 0, ',', '.') : '10K+';
-    $labelProgram = $statsProgramCount > 0 ? $statsProgramCount : '50+';
-    $labelVolunteer = $statsVolunteerCount > 0 ? $statsVolunteerCount : '300+';
+    $labelDonor = $statsDonorCount > 0 ? number_format($statsDonorCount, 0, ',', '.') : '0';
+    $labelProgram = $statsProgramCount > 0 ? $statsProgramCount : '0';
+    $labelVolunteer = $statsVolunteerCount > 0 ? $statsVolunteerCount : '0';
+    $labelActiveCampaign = $activeCampaignCount > 0 ? $activeCampaignCount : '0';
 @endphp
 
 <div class="min-h-screen bg-white pb-16 pt-16">
@@ -121,7 +92,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                @foreach($displayPillars as $pillar)
+                @forelse($displayPillars as $pillar)
                     <article class="flex h-full flex-col bg-white p-8 md:p-10 rounded-[40px] shadow-xl shadow-slate-200/50 border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
                         <div class="mb-5 text-[40px] {{ $pillar['style'] }}">
                             <i class="{{ $pillar['icon'] }}"></i>
@@ -129,7 +100,11 @@
                         <h3 class="text-xl font-bold text-slate-900 mb-4">{{ $pillar['title'] }}</h3>
                         <p class="text-slate-600 leading-relaxed flex-1">{{ $pillar['description'] }}</p>
                     </article>
-                @endforeach
+                @empty
+                    <div class="rounded-[1rem] border border-dashed border-slate-200 bg-slate-50 p-8 text-sm text-slate-500 lg:col-span-4 text-center">
+                        Belum ada fokus area yang aktif dari halaman admin.
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -149,7 +124,7 @@
                     <p class="text-emerald-50/60 font-medium">Program Selesai</p>
                 </div>
                 <div>
-                    <div class="text-5xl md:text-6xl font-black text-white mb-2">{{ $activeCampaignCount ?? 0 }}<span class="text-orange-400">+</span></div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-2">{{ $labelActiveCampaign }}<span class="text-orange-400">+</span></div>
                     <p class="text-emerald-50/60 font-medium">Program Berjalan</p>
                 </div>
                 <div>

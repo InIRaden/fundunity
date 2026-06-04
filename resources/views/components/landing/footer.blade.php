@@ -1,8 +1,9 @@
 @php
-    $logoUrl = filled($siteSettings['site_logo'] ?? null) ? $siteSettings['site_logo'] : asset('images/Logo.png');
-    $brandName = $siteSettings['site_short_name'] ?? "Yuk Mari Project";
-    $brandSuffix = $siteSettings['site_name_suffix'] ?? "Yuk Mari Project";
-    $addressHtml = $siteSettings['address'] ?? 'Sekretariat Utama<br>Gedung Kemahasiswaan Lt. 2, Jatinangor';
+    $logoUrl = filled($siteSettings['site_logo'] ?? null) ? $siteSettings['site_logo'] : null;
+    $hasLogo = filled($logoUrl);
+    $brandName = $siteSettings['site_short_name'] ?? 'Nama Singkat';
+    $brandSuffix = $siteSettings['site_name_suffix'] ?? 'Nama PT Anda';
+    $addressHtml = $siteSettings['address'] ? nl2br(e($siteSettings['address'])) : 'Alamat Anda';
 @endphp
 
 <footer class="bg-[#022c22] border-t border-emerald-900/50 text-slate-400 py-16">
@@ -10,7 +11,7 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16">
             <div class="md:col-span-4">
                 <div class="flex items-center gap-3 mb-6">
-                    <img src="{{ $logoUrl }}" alt="Logo" class="w-10 h-10 rounded-xl shadow-sm bg-white">
+                    <x-logo class="w-10 h-10 rounded-xl shadow-sm bg-white" containerClass="bg-white/90 border border-slate-200 text-emerald-600" iconClass="text-xl" />
                     <span class="font-black tracking-tight text-2xl text-white">{{ $brandName }}</span>
                 </div>
                 <p class="mb-6 leading-relaxed text-emerald-50/50">
@@ -82,7 +83,7 @@
                         required
                     >
                     <button id="newsletterSubmitButton" type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center text-white hover:bg-emerald-400 transition-colors disabled:opacity-50">
-                        <svg id="newsletterSubmitIcon" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"></path></svg>
+                        <x-icons.paper-plane id="newsletterSubmitIcon" class="h-5 w-5" />
                     </button>
                 </form>
             </div>

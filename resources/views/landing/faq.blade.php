@@ -25,8 +25,8 @@
                         <button type="button" class="faq-trigger flex items-center justify-between w-full text-left font-bold text-slate-900 hover:text-emerald-600 transition-colors">
                             <span class="{{ $index === 0 ? 'text-xl' : 'text-lg' }}">{{ $faq->question }}</span>
                             <span class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors {{ $index === 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500' }}">
-                                <svg data-icon="plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="{{ $index === 0 ? 'hidden' : '' }}"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
-                                <svg data-icon="minus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg" class="{{ $index === 0 ? '' : 'hidden' }}"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"></path></svg>
+                                <x-icons.plus class="{{ $index === 0 ? 'hidden' : '' }}" />
+                                <x-icons.minus class="{{ $index === 0 ? '' : 'hidden' }}" />
                             </span>
                         </button>
 
@@ -42,7 +42,7 @@
             </div>
         </div>
     </section>
-    
+
     <x-landing.cta />
 </div>
 @endsection
