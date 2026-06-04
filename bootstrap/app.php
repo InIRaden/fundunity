@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust Railway's reverse proxy so HTTPS URLs are generated correctly.
+        // Railway terminates SSL at the proxy layer and forwards requests internally via HTTP,
+        // sending X-Forwarded-Proto: https — Laravel must trust this header.
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             \App\Http\Middleware\EnsurePublicSiteAvailable::class,
         ]);
