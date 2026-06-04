@@ -72,14 +72,14 @@
   </div>
 </div>
 
-<div id="stakeModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
-  <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-slide-up">
+<div id="stakeModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in overflow-y-auto">
+  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
     <div class="flex items-center justify-between p-6 border-b border-slate-100">
       <h3 id="stakeModalTitle" class="text-lg font-bold text-slate-800">Tambah Donatur</h3>
       <button id="closeStakeModal" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"><i class="ph ph-x text-base"></i></button>
     </div>
-    <div class="p-6 space-y-4" id="stakeModalBody"></div>
-    <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+    <div class="p-6 space-y-4 overflow-y-auto flex-1" id="stakeModalBody"></div>
+    <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
       <button id="cancelStakeModal" class="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">Batal</button>
       <button id="saveStakeModal" class="px-8 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all">Simpan Data</button>
     </div>

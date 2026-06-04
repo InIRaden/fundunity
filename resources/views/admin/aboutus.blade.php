@@ -43,14 +43,14 @@
 </div>
 
 {{-- Edit Modal --}}
-<div id="aboutEditModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-  <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-slide-up">
+<div id="aboutEditModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
+  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
     <div class="flex items-center justify-between p-6 border-b border-slate-100">
       <h3 id="editModalTitle" class="text-lg font-bold text-slate-800">Edit Konten</h3>
       <button id="closeAboutEdit" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
     </div>
-    <form id="aboutEditForm">
-      <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+    <form id="aboutEditForm" class="flex flex-col flex-1 overflow-hidden">
+      <div class="p-6 space-y-4 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1">Judul</label>
           <input id="editNama" required class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none">
@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
+      <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl shrink-0">
         <button type="button" id="cancelAboutEdit" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
         <button id="submitEditAbout" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700 flex items-center gap-2 min-w-[140px] justify-center transition-all">
           <span id="submitBtnText">Simpan Perubahan</span>

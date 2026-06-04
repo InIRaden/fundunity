@@ -55,14 +55,14 @@
   </div>
 </div>
 
-<div id="memberEditModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-  <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-slide-up">
+<div id="memberEditModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
+  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
     <div class="flex items-center justify-between p-6 border-b border-slate-100">
       <h3 class="text-lg font-bold text-slate-800">Edit Anggota</h3>
       <button id="closeMemberEdit" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
     </div>
-    <form id="memberEditForm">
-      <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+    <form id="memberEditForm" class="flex flex-col flex-1 overflow-hidden">
+      <div class="p-6 space-y-4 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1">Jabatan</label>
           <input id="editJabatan" required class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none">
@@ -80,7 +80,7 @@
           <input id="editImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
         </div>
       </div>
-      <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
+      <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl shrink-0">
         <button type="button" id="cancelMemberEdit" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
         <button id="editMemberSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Perubahan</button>
       </div>
@@ -88,14 +88,14 @@
   </div>
 </div>
 
-<div id="memberAddModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-  <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-slide-up">
+<div id="memberAddModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
+  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
     <div class="flex items-center justify-between p-6 border-b border-slate-100">
       <h3 class="text-lg font-bold text-slate-800">Tambah Anggota</h3>
       <button id="closeMemberAdd" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
     </div>
-    <form id="memberAddForm">
-      <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+    <form id="memberAddForm" class="flex flex-col flex-1 overflow-hidden">
+      <div class="p-6 space-y-4 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1">Jabatan</label>
           <input id="addJabatan" required class="w-full border border-slate-200 rounded-xl px-4 py-2 bg-slate-50 text-sm focus:border-emerald-500 outline-none" placeholder="Contoh: Ketua Umum">
@@ -113,7 +113,7 @@
           <input id="addImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
         </div>
       </div>
-      <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
+      <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl shrink-0">
         <button type="button" id="cancelMemberAdd" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
         <button id="addMemberSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Data Baru</button>
       </div>

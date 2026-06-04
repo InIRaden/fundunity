@@ -15,8 +15,8 @@
   <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 </div>
 
-<div id="galleryModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in shadow-2xl">
-  <div class="bg-white rounded-[32px] w-full max-w-xl overflow-hidden shadow-2xl border border-slate-100 animate-slide-up">
+<div id="galleryModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in shadow-2xl overflow-y-auto">
+  <div class="bg-white rounded-[32px] w-full max-w-xl flex flex-col max-h-[90vh] my-auto shadow-2xl border border-slate-100 animate-slide-up">
     <div class="p-8 border-b border-slate-50 flex items-center justify-between bg-emerald-50/30">
       <div>
         <h3 id="galleryModalTitle" class="text-xl font-bold text-slate-800">Dokumentasi Baru</h3>
@@ -25,9 +25,9 @@
       <button id="closeGalleryModal" class="w-10 h-10 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-emerald-600 transition-all"><i class="ph ph-x text-xl"></i></button>
     </div>
 
-    <form id="galleryForm">
+    <form id="galleryForm" class="flex flex-col flex-1 overflow-hidden">
       <input id="galleryEditingId" type="hidden">
-      <div class="p-8 space-y-6">
+      <div class="p-8 space-y-6 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-2">Judul Aktivitas</label>
           <input id="galleryTitle" required class="w-full border border-slate-200 rounded-2xl px-5 py-3.5 text-sm bg-slate-50/50 outline-none focus:border-emerald-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-300" placeholder="Cth: Penyerahan Beasiswa Tahap II">
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <div class="p-8 bg-slate-50/50 border-t border-slate-100 flex justify-end gap-3">
+      <div class="p-8 bg-slate-50/50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
         <button type="button" id="cancelGalleryModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Tutup</button>
         <button id="submitGalleryBtn" type="submit" class="px-10 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-bold shadow-xl shadow-emerald-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]">Simpan Dokumentasi</button>
       </div>

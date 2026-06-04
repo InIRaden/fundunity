@@ -39,8 +39,8 @@
   </div>
 </div>
 
-<div id="campaignModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-[100] p-4">
-  <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-scale-in">
+<div id="campaignModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-[100] p-4 overflow-y-auto">
+  <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto animate-scale-in">
     <div class="bg-emerald-600 px-6 py-5 flex items-center justify-between">
       <div>
         <h3 id="campaignModalTitle" class="text-base font-bold text-white">Buat Campaign Baru</h3>
@@ -51,8 +51,8 @@
       </button>
     </div>
 
-    <form id="campaignForm">
-      <div class="p-6 space-y-5">
+    <form id="campaignForm" class="flex flex-col flex-1 overflow-hidden">
+      <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Judul Campaign</label>
           <input required id="fTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="Contoh: Bantuan Bencana NTT">
@@ -101,7 +101,7 @@
         </div>
       </div>
 
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
         <button type="button" id="cancelCampaignModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-white transition-all">Batal</button>
         <button type="submit" id="submitCampaignBtn" class="px-8 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
           <i class="ph ph-plus text-base"></i> Buat Campaign

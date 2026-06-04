@@ -8,7 +8,7 @@
     <title><?php echo e($siteSettings['site_name'] ?? config('app.name', 'Fundunity')); ?> - <?php echo $__env->yieldContent('title', 'Wujudkan Dampak Nyata'); ?></title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|sora:600,700,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,8 +16,8 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        display: ['"Sora"', 'sans-serif'],
+                        sans: ['"Open Sans"', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
                     },
                     boxShadow: {
                         soft: '0 24px 60px rgba(15, 23, 42, 0.12)',

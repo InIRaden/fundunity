@@ -33,14 +33,14 @@
   </div>
 </div>
 
-<div id="slider-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[100] p-4">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
+<div id="slider-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[100] p-4 overflow-y-auto">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
       <h3 id="sliderModalTitle" class="text-base font-semibold text-slate-900">Tambah Banner</h3>
       <button id="closeSliderModal" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
     </div>
-    <form id="sliderForm">
-    <div class="p-6 space-y-5">
+    <form id="sliderForm" class="flex flex-col flex-1 overflow-hidden">
+    <div class="p-6 space-y-5 overflow-y-auto flex-1">
       <div>
         <label class="block text-xs text-slate-500 mb-2">Judul Banner</label>
         <input id="sliderTitle" type="text" required placeholder="Masukkan judul utama..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" />
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
       <button type="button" id="cancelSliderModal" class="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Batal</button>
       <button id="sliderSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all">Simpan Banner</button>
     </div>
