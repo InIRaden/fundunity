@@ -7,6 +7,12 @@
 
     <title>{{ $siteSettings['site_name'] ?? config('app.name', 'Fundunity') }} - @yield('title', 'Wujudkan Dampak Nyata')</title>
 
+    @if(!empty($siteSettings['site_logo']))
+        <link rel="icon" href="{{ $siteSettings['site_logo'] }}" type="image/png">
+    @else
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    @endif
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap" rel="stylesheet" />
 

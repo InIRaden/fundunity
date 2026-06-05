@@ -7,6 +7,12 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        @if(!empty($siteSettings['site_logo']))
+            <link rel="icon" href="{{ $siteSettings['site_logo'] }}" type="image/png">
+        @else
+            <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        @endif
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
