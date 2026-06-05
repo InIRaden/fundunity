@@ -294,6 +294,7 @@
       document.getElementById('currentEmail').textContent = result.data?.email || formData.get('email');
       document.getElementById('newEmail').value = '';
       toast(result.message || 'Profil admin berhasil diperbarui.');
+      setTimeout(() => window.location.reload(), 800);
     } catch (error) {
       window.alert(error.message);
     } finally {
@@ -323,6 +324,7 @@
 
       const result = await requestForm(endpoints.identity, formData);
       toast(result.message || 'Identitas website berhasil disimpan.');
+      setTimeout(() => window.location.reload(), 800);
     } catch (error) {
       window.alert(error.message);
     } finally {
@@ -346,6 +348,7 @@
 
       const result = await requestForm(endpoints.payment, formData);
       toast(result.message || 'Konfigurasi pembayaran disimpan.');
+      setTimeout(() => window.location.reload(), 800);
     } catch (error) {
       window.alert(error.message);
     } finally {
@@ -367,6 +370,7 @@
       });
 
       toast(result.message || 'Pengaturan SEO dan global disimpan.');
+      setTimeout(() => window.location.reload(), 800);
     } catch (error) {
       window.alert(error.message);
     } finally {
