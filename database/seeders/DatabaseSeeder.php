@@ -18,16 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-            User::firstOrCreate(
-                ['email' => 'test@example.com'],
-                [
-            'name' => 'Test User',
-                ]
-            );
-
         $this->call([
+            SuperAdminSeeder::class,
             LandingContentSeeder::class,
             ProgramSeeder::class,
             FocusAreaSeeder::class,

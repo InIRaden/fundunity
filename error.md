@@ -18,7 +18,7 @@ Laravel 12.52.0
 7 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3937
 8 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3865
 9 - vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:2235
-10 - app\Http\Controllers\LandingController.php:56
+10 - app\Http\Controllers\LandingController.php:58
 11 - vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
 12 - vendor\laravel\framework\src\Illuminate\Routing\Route.php:265
 13 - vendor\laravel\framework\src\Illuminate\Routing\Route.php:211
@@ -73,12 +73,13 @@ Laravel 12.52.0
 
 ## Request
 
-GET /
+GET /landing
 
 ## Headers
 
 * **host**: 127.0.0.1:8000
 * **connection**: keep-alive
+* **cache-control**: max-age=0
 * **sec-ch-ua**: "Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"
 * **sec-ch-ua-mobile**: ?0
 * **sec-ch-ua-platform**: "Windows"
@@ -91,11 +92,12 @@ GET /
 * **sec-fetch-dest**: document
 * **accept-encoding**: gzip, deflate, br, zstd
 * **accept-language**: en-US,en;q=0.9,id;q=0.8
+* **cookie**: locale=eyJpdiI6ImowejdjSFM2NjFKY1Vza0pSVFV5SHc9PSIsInZhbHVlIjoiQTRRQithN1ZGRXJYSlFNYXNuR2luellPcHhvYldBUktvQ1NFVUZibHFDV01ES05ScHdpc254SmdGVXRNdlNjViIsIm1hYyI6Ijc4Mjc4ODZkZjg2MGU1NDkwNmNiYjc1Yzk3MWI4YzBiMzNmMWNiNDAxOTU3ZjNlZDhmMTIwNDljNjllNzU2MjkiLCJ0YWciOiIifQ%3D%3D; XSRF-TOKEN=eyJpdiI6IndHZnN6MjJiUTd5KytnSG9MRk5KWnc9PSIsInZhbHVlIjoic05kdWNpY1prYXBHUFZTODJsVXhsMHV0TUlWS2Z3UnI1K2FQamdTT3hhZndMb2J4eFFDNW11S04xbFNHNGZyRFY0RWFCNXBuUndyWDVxc3crOUQ3dXU4K2ZFYlQ4WnZkM0wvK1RoVGFHSktNOXAwUDJIeExjRFRsc0EvUmNDQ3giLCJtYWMiOiJkMGZjYTI1NzRmMTA4MzA0ZmM1NWE5MGVjYmNjZTUyM2E2YmQ3YzVkNjY2N2Q2OTQyYzk1OTk3M2ZmNzU0NTJlIiwidGFnIjoiIn0%3D; laravel-session=eyJpdiI6IktjQlhFVTluNzBrNFhnMnhKQXZRYmc9PSIsInZhbHVlIjoiSWExSG1zdHVpM2VQeFZLb2ZSck41RU5rMU1GR2tMU091Q0o3aFlGSG5HUlpsSWpYWDhvTWs3b1hIazVPbTRlanlDZWM3TFdKL3c4WTdqYzFHcUxjSllFRHpVQklhZDA0Um0rQlhidG1oWE1nSGxJcWk2LzJKYWdoWEdhOGQxR08iLCJtYWMiOiIzOTQ1NjMzMzFkMzYyYTk1MGE2MDNjNTNiOGJjMWY0MDZiZGI3Yzc4ZjY0NTkwYmRiOTIzMzZkZWUwYWFiYmJjIiwidGFnIjoiIn0%3D
 
 ## Route Context
 
 controller: App\Http\Controllers\LandingController@index
-route name: home
+route name: landing.home
 middleware: web
 
 ## Route Parameters
@@ -104,16 +106,17 @@ No route parameter data available.
 
 ## Database Queries
 
-* mysql - select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'site_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists` (25.08 ms)
-* mysql - select `value`, `key` from `site_settings` (0.45 ms)
-* mysql - select * from `sessions` where `id` = 'v7Nt4aYaYcCyM3z1DFGBVAfiNFuv1CaSFfmID1Ae' limit 1 (2.78 ms)
-* mysql - select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'site_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists` (0.72 ms)
-* mysql - select `value` from `site_settings` where `key` = 'maintenance_mode' limit 1 (8.29 ms)
-* mysql - select * from `pages` where `slug` = 'home' limit 1 (11.89 ms)
-* mysql - select * from `image_sliders` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 8 (13.85 ms)
-* mysql - select * from `campaigns` where `is_active` = 1 and `status` = 'aktif' order by `deadline` asc, `created_at` desc limit 3 (5.93 ms)
-* mysql - select * from `focus_areas` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 4 (10.41 ms)
-* mysql - select * from `partners` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 12 (9.3 ms)
-* mysql - select count(*) as aggregate from `donors` where `is_active` = 1 (11.37 ms)
-* mysql - select sum(`collected`) as aggregate from `campaigns` where `is_active` = 1 (0.31 ms)
-* mysql - select count(*) as aggregate from `campaigns` where `is_active` = 1 and `status` = 'selesai' (0.32 ms)
+* mysql - select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'site_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists` (2.52 ms)
+* mysql - select `value`, `key` from `site_settings` (0.5 ms)
+* mysql - select * from `sessions` where `id` = 'SuKRxkm61OLneZHw70RLqOUOlKBp15Fw1i0KhFrQ' limit 1 (0.49 ms)
+* mysql - select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'site_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists` (0.48 ms)
+* mysql - select `value` from `site_settings` where `key` = 'maintenance_mode' limit 1 (0.35 ms)
+* mysql - select * from `pages` where `slug` = 'home' limit 1 (0.57 ms)
+* mysql - select * from `image_sliders` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 8 (0.43 ms)
+* mysql - select * from `campaigns` where `is_active` = 1 and `status` = 'aktif' order by `deadline` asc, `created_at` desc limit 3 (0.43 ms)
+* mysql - select * from `focus_areas` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 4 (0.32 ms)
+* mysql - select * from `partners` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 12 (0.42 ms)
+* mysql - select count(*) as aggregate from `donors` where `is_active` = 1 (0.39 ms)
+* mysql - select sum(`collected`) as aggregate from `campaigns` where `is_active` = 1 (0.24 ms)
+* mysql - select count(*) as aggregate from `campaigns` where `is_active` = 1 and `status` = 'selesai' (0.26 ms)
+* mysql - select * from `users` where `id` = 1 limit 1 (0.69 ms)

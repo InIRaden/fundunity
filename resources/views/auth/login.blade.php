@@ -86,6 +86,14 @@
                         @endif
                     </div>
 
+                    <!-- Google reCAPTCHA v2 -->
+                    <div class="flex justify-center">
+                        <div class="g-recaptcha" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"></div>
+                    </div>
+                    @error('g-recaptcha-response')
+                        <p class="text-xs font-bold text-rose-600 text-center -mt-2">{{ $message }}</p>
+                    @enderror
+
                     <button
                         type="submit"
                         id="loginSubmitButton"
@@ -93,15 +101,6 @@
                     >
                         LOGIN
                     </button>
-
-                    <div class="text-center pt-6">
-                        <p class="text-sm text-slate-600 font-medium">
-                            Belum punya akun?
-                            <a href="{{ url('/register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
-                                Daftar sekarang
-                            </a>
-                        </p>
-                    </div>
                 </form>
 
                 <p class="mt-12 text-center text-xs font-bold tracking-[0.2em] text-slate-400 lg:text-left">
@@ -112,6 +111,7 @@
     </div>
 
     @push('head')
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         @keyframes login-shake {
             0%, 100% { transform: translateX(0); }

@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\EnsurePublicSiteAvailable::class,
         ]);
+
+        $middleware->alias([
+            'force-change-password' => \App\Http\Middleware\ForceChangePassword::class,
+            'super-admin'           => \App\Http\Middleware\SuperAdminOnly::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

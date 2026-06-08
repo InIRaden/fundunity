@@ -7,6 +7,7 @@
     <title>{{ config('app.name', 'FundUnity') }} - Lupa Kata Sandi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="font-sans bg-white text-slate-900">
     <div class="flex min-h-screen font-sans bg-white">
@@ -70,6 +71,14 @@
                         @endif
                     </div>
 
+                    <!-- Google reCAPTCHA v2 -->
+                    <div class="flex justify-center">
+                        <div class="g-recaptcha" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"></div>
+                    </div>
+                    @error('g-recaptcha-response')
+                        <p class="text-xs font-bold text-rose-600 text-center -mt-2">{{ $message }}</p>
+                    @enderror
+
                     <button
                         type="submit"
                         class="w-full rounded-xl bg-emerald-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] hover:bg-emerald-700 mt-6"
@@ -82,12 +91,6 @@
                             Ingat kata sandi Anda?
                             <a href="{{ route('login') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
                                 Masuk di sini
-                            </a>
-                        </p>
-                        <p class="text-center text-sm text-slate-600 font-medium">
-                            Belum punya akun?
-                            <a href="{{ url('/register') }}" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
-                                Daftar sekarang
                             </a>
                         </p>
                     </div>

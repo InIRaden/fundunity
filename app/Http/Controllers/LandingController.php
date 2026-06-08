@@ -208,8 +208,11 @@ class LandingController extends Controller
 
     public function donationForm(?Campaign $campaign = null)
     {
+        $qrisUrl = \App\Models\SiteSetting::where('key', 'payment_qris_url')->value('value');
+
         return view('landing.donation', [
             'selectedCampaign' => $campaign,
+            'qrisUrl' => $qrisUrl,
         ]);
     }
 
@@ -217,13 +220,11 @@ class LandingController extends Controller
     {
         $validated = $request->validateWithBag('donation', [
             'name' => ['required', 'string', 'max:150'],
-            'email' => ['required', 'email', 'max:190', 'regex:/^[A-Za-z0-9._%+-]+@gmail\.com$/i'],
+            'email' => ['required', 'string', 'max:190'],
             'amount' => ['required', 'integer', 'min:1000'],
             'campaign_id' => ['nullable', 'integer', 'exists:campaigns,id'],
             'note' => ['nullable', 'string', 'max:3000'],
             'is_anonymous' => ['nullable', 'boolean'],
-        ], [
-            'email.regex' => 'Email donasi harus menggunakan akun Gmail.',
         ]);
 
         $donor = Donor::where('email', $validated['email'])->first();

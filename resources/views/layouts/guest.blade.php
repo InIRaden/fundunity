@@ -1,5 +1,5 @@
 @php
-    $isAuthStandalonePage = request()->routeIs('login') || request()->routeIs('logout.confirm');
+    $isAuthStandalonePage = request()->routeIs('login') || request()->routeIs('logout.confirm') || request()->routeIs('password.request') || request()->routeIs('password.reset');
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

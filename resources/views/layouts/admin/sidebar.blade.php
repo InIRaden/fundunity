@@ -27,7 +27,6 @@
       <span class="text-sm font-bold text-white tracking-tight opacity-90 whitespace-nowrap sidebar-text-show">{{ $siteSettings['site_short_name'] ?? 'FundUnity' }}</span>
     </div>
 
-    <!-- Nav Items -->
     <nav class="flex-1 space-y-0.5 px-3 mt-1 overflow-y-auto overflow-x-hidden relative hide-scrollbar">
       @foreach($menuItems as $item)
         <a href="{{ route($item['route']) }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ request()->routeIs($item['route']) ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-slate-300 hover:bg-emerald-700 hover:text-white rounded-2xl px-4' }}">
@@ -41,6 +40,18 @@
           <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ request()->routeIs($item['route']) ? 'text-emerald-600' : '' }}">{{ $item['label'] }}</span>
         </a>
       @endforeach
+
+      {{-- Menu Manajemen Admin - hanya tampil untuk Super Admin --}}
+      @if(Auth::user()?->isSuperAdmin())
+        <a href="{{ route('admin.management') }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ request()->routeIs('admin.management') ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-amber-200 hover:bg-emerald-700 hover:text-white rounded-2xl px-4' }}">
+          @if(request()->routeIs('admin.management'))
+            <div class="absolute right-0 -top-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at top left, transparent 20px, #f8fafc 0);"></div>
+            <div class="absolute right-0 -bottom-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at bottom left, transparent 20px, #f8fafc 0);"></div>
+          @endif
+          <i class="ph ph-crown shrink-0 text-[19px] leading-none"></i>
+          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ request()->routeIs('admin.management') ? 'text-emerald-600' : '' }}">Manajemen Admin</span>
+        </a>
+      @endif
     </nav>
 
     <!-- Logout -->

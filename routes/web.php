@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\TeamMemberController as AdminTeamMemberController
 use App\Http\Controllers\Admin\AdminUiController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ForceChangePasswordController;
+use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Route;
@@ -56,7 +58,17 @@ Route::prefix('landing')->name('landing.')->group(function () {
 });
 
 // Super Simple Admin Routes
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-password'])->group(function () {
+    // Halaman wajib ganti sandi (tidak perlu force-change-password middleware lagi)
+    Route::get('/force-change-password', [ForceChangePasswordController::class, 'show'])->name('force-change-password')->withoutMiddleware('force-change-password');
+    Route::post('/force-change-password', [ForceChangePasswordController::class, 'update'])->name('force-change-password.update')->withoutMiddleware('force-change-password');
+
+    // Manajemen Admin - hanya Super Admin
+    Route::get('/management', [AdminManagementController::class, 'index'])->name('management')->middleware('super-admin');
+    Route::post('/management', [AdminManagementController::class, 'store'])->name('management.store')->middleware('super-admin');
+    Route::post('/management/{admin}/reset-password', [AdminManagementController::class, 'resetPassword'])->name('management.reset-password')->middleware('super-admin');
+    Route::delete('/management/{admin}', [AdminManagementController::class, 'destroy'])->name('management.destroy')->middleware('super-admin');
+
     Route::get('/dashboard', [AdminUiController::class, 'dashboard'])->name('dashboard');
     Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings');
     Route::post('/settings/profile', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');

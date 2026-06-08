@@ -181,14 +181,18 @@
 
                     <div class="mb-8 inline-block rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-2xl shadow-slate-200/50">
                         <div class="relative mx-auto mb-3 flex h-56 w-56 items-center justify-center overflow-hidden rounded-2xl border-4 border-slate-50 bg-slate-50">
-                            <div class="grid grid-cols-4 gap-1 opacity-20">
-                                @for($i = 0; $i < 16; $i++)
-                                    <div class="h-8 w-8 rounded-sm bg-slate-900"></div>
-                                @endfor
-                            </div>
-                            <div class="absolute rounded-xl border border-slate-100 bg-white p-3 shadow-lg">
-                                <p class="text-[10px] font-black text-slate-900">QRIS CODE</p>
-                            </div>
+                            @if(!empty($qrisUrl))
+                                <img src="{{ $qrisUrl }}" alt="QRIS Code" class="w-full h-full object-contain">
+                            @else
+                                <div class="grid grid-cols-4 gap-1 opacity-20">
+                                    @for($i = 0; $i < 16; $i++)
+                                        <div class="h-8 w-8 rounded-sm bg-slate-900"></div>
+                                    @endfor
+                                </div>
+                                <div class="absolute rounded-xl border border-slate-100 bg-white p-3 shadow-lg">
+                                    <p class="text-[10px] font-black text-slate-900">QRIS CODE</p>
+                                </div>
+                            @endif
                         </div>
                         <p class="text-[11px] font-bold text-slate-400">Berlaku untuk semua e-wallet & bank</p>
                     </div>

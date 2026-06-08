@@ -28,48 +28,6 @@ class LandingContentSeeder extends Seeder
         $this->seedPartners();
     }
 
-    private function seedDonations(): void
-    {
-        if (Donation::query()->exists()) {
-            return;
-        }
-
-        $campaigns = Campaign::all();
-        
-        foreach ($campaigns as $campaign) {
-            // Create some donors first
-            $donors = [
-                ['name' => 'Budi Santoso', 'email' => 'budi@gmail.com'],
-                ['name' => 'Liana Putri', 'email' => 'liana@gmail.com'],
-                ['name' => 'Hamba Allah', 'email' => 'anon@gmail.com'],
-            ];
-
-            foreach ($donors as $index => $donorData) {
-                $donor = Donor::firstOrCreate(
-                    ['email' => $donorData['email']],
-                    ['name' => $donorData['name'], 'total_donation' => 0, 'is_active' => true]
-                );
-
-                $amount = [50000, 100000, 250000][$index % 3];
-                $isAnon = $donorData['name'] === 'Hamba Allah';
-
-                Donation::create([
-                    'transaction_id' => 'DON-' . strtoupper(Str::random(10)),
-                    'campaign_id' => $campaign->id,
-                    'donor_id' => $donor->id,
-                    'amount' => $amount,
-                    'status' => 'success',
-                    'prayer' => $isAnon ? 'Semoga berkah untuk semua.' : 'Semangat terus untuk tim relawan!',
-                    'is_anonymous' => $isAnon,
-                    'created_at' => now()->subHours(rand(1, 48)),
-                ]);
-
-                $donor->increment('total_donation', $amount);
-                $donor->update(['last_donation' => now()]);
-            }
-        }
-    }
-
     private function seedSiteSettings(): void
     {
         $settings = [

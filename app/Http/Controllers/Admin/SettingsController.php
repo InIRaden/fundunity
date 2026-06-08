@@ -147,13 +147,20 @@ class SettingsController extends Controller
 
     public function updatePayment(Request $request): JsonResponse
     {
+        $hasExistingQris = SiteSetting::where('key', 'payment_qris_url')->value('value');
+
         $validated = $request->validate([
             'bankName' => ['required', 'string', 'max:100'],
             'bankAccount' => ['required', 'string', 'max:100'],
             'bankHolder' => ['required', 'string', 'max:200'],
             'qrisEnabled' => ['nullable', 'boolean'],
             'qrisUrl' => ['nullable', 'url', 'max:500'],
-            'qris_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'qris_file' => [
+                $hasExistingQris ? 'nullable' : 'required', 
+                'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'
+            ],
+        ], [
+            'qris_file.required' => 'Gambar QRIS wajib diunggah.',
         ]);
 
         $currentQris = SiteSetting::query()->where('key', 'payment_qris_url')->value('value');
