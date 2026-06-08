@@ -24,6 +24,17 @@
                     <p class="text-lg font-extrabold text-slate-900 leading-tight">{{ $activeCampaign->title }}</p>
                 </div>
             </div>
+        @else
+            <div class="mb-6 p-4 bg-indigo-50 rounded-xl border border-indigo-100 flex items-center gap-4">
+                <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+                    <i class="ph ph-hand-heart text-2xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-500">Anda sedang melakukan:</p>
+                    <p class="text-lg font-extrabold text-slate-900 leading-tight">Donasi Umum</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Dana akan disalurkan ke program yang paling membutuhkan.</p>
+                </div>
+            </div>
         @endif
 
         @if($donationErrors->any())
@@ -95,6 +106,10 @@
                                 </div>
                                 <input id="donationNameInput" type="text" value="{{ old('name') }}" placeholder="Nama Anda" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                             </div>
+                            <div class="mt-3 flex items-center gap-2">
+                                <input id="donationAnonymousInput" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                <label for="donationAnonymousInput" class="text-xs font-bold text-slate-500 cursor-pointer">Sembunyikan nama saya (Hamba Allah)</label>
+                            </div>
                         </div>
                         <div>
                             <label class="mb-2 block text-sm font-bold text-slate-700">Email / No WhatsApp</label>
@@ -104,9 +119,10 @@
                                 </div>
                                 <input id="donationEmailInput" type="text" value="{{ old('email') }}" placeholder="Email atau No WA (untuk bukti donasi)" class="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-3 pl-12 pr-4 font-bold text-slate-900 outline-none transition-colors focus:border-emerald-500">
                             </div>
+                            <p class="mt-2 text-[10px] text-slate-400 font-medium italic">* Bukti donasi akan dikirimkan secara otomatis melalui kontak di atas.</p>
                         </div>
                         <div>
-                            <label class="mb-2 block text-sm font-bold text-slate-700">Catatan (Opsional)</label>
+                            <label class="mb-2 block text-sm font-bold text-slate-700">Doa / Dukungan (Opsional)</label>
                             <textarea id="donationNoteInput" rows="3" placeholder="Tulis catatan atau doa..." class="w-full resize-none rounded-xl border-2 border-slate-100 bg-slate-50 p-4 text-sm text-slate-900 outline-none transition-colors focus:border-emerald-500">{{ old('note') }}</textarea>
                         </div>
                     </div>
@@ -235,6 +251,7 @@
                 <input type="hidden" name="email" id="finalDonationEmail">
                 <input type="hidden" name="amount" id="finalDonationAmount">
                 <input type="hidden" name="note" id="finalDonationNote">
+                <input type="hidden" name="is_anonymous" id="finalDonationAnonymous">
                 <input type="hidden" name="campaign_id" value="{{ $activeCampaign?->id }}">
             </form>
         @endif
@@ -289,11 +306,14 @@
         const paymentTransactionId = document.getElementById('paymentTransactionId');
         const paymentCountdown = document.getElementById('paymentCountdown');
 
+        const anonymousInput = document.getElementById('donationAnonymousInput');
+
         const finalForm = document.getElementById('finalDonationForm');
         const finalName = document.getElementById('finalDonationName');
         const finalEmail = document.getElementById('finalDonationEmail');
         const finalAmount = document.getElementById('finalDonationAmount');
         const finalNote = document.getElementById('finalDonationNote');
+        const finalAnonymous = document.getElementById('finalDonationAnonymous');
 
         function formatCurrency(amount) {
             return 'Rp ' + Number(amount || 0).toLocaleString('id-ID');
@@ -452,7 +472,8 @@
         }
 
         function syncConfirmation() {
-            confirmName.textContent = nameInput?.value?.trim() || '-';
+            const isAnon = anonymousInput?.checked;
+            confirmName.textContent = isAnon ? 'Hamba Allah' : (nameInput?.value?.trim() || '-');
             confirmAmount.textContent = formatCurrency(selectedAmount);
             paymentAmount.textContent = formatCurrency(selectedAmount);
             paymentTransactionId.textContent = transactionId || '-';
@@ -597,6 +618,7 @@
             finalEmail.value = emailInput?.value?.trim() || '';
             finalAmount.value = String(selectedAmount);
             finalNote.value = noteInput?.value || '';
+            finalAnonymous.value = anonymousInput?.checked ? '1' : '0';
 
             const submitButton = document.getElementById('donationSubmitButton');
             submitButton?.classList.add('cursor-not-allowed', 'bg-emerald-400');

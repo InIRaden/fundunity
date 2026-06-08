@@ -162,7 +162,7 @@
       </div>
     `).join('');
 
-    document.getElementById('galleryGrid').innerHTML = rows || '<div class="col-span-full py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></div>';
+    document.getElementById('galleryGrid').innerHTML = rows || emptyGridItem();
   }
 
   function openGalleryModal(id = null) {

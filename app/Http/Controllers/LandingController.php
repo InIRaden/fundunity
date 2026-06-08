@@ -14,7 +14,9 @@ use App\Models\GalleryItem;
 use App\Models\ImageSlider;
 use App\Models\Page;
 use App\Models\Volunteer;
+use App\Models\Donation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -119,6 +121,33 @@ class LandingController extends Controller
         return view('landing.programs', compact('campaigns', 'categories'));
     }
 
+    public function campaignDetail(Campaign $campaign)
+    {
+        if (! $campaign->is_active) {
+            abort(404);
+        }
+
+        $campaign->load(['updates' => function ($query) {
+            $query->orderByDesc('created_at');
+        }]);
+
+        $recentDonations = Donation::with('donor')
+            ->where('campaign_id', $campaign->id)
+            ->where('status', 'success')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        $prayers = Donation::where('campaign_id', $campaign->id)
+            ->where('status', 'success')
+            ->whereNotNull('prayer')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        return view('landing.campaign-detail', compact('campaign', 'recentDonations', 'prayers'));
+    }
+
     public function focusAreas()
     {
         $focusAreas = FocusArea::where('is_active', true)
@@ -192,6 +221,7 @@ class LandingController extends Controller
             'amount' => ['required', 'integer', 'min:1000'],
             'campaign_id' => ['nullable', 'integer', 'exists:campaigns,id'],
             'note' => ['nullable', 'string', 'max:3000'],
+            'is_anonymous' => ['nullable', 'boolean'],
         ], [
             'email.regex' => 'Email donasi harus menggunakan akun Gmail.',
         ]);
@@ -225,26 +255,22 @@ class LandingController extends Controller
             }
         }
 
-        $summary = 'DONASI PUBLIK - Nominal: Rp '.number_format((int) $validated['amount'], 0, ',', '.').'.';
-
-        if ($campaign) {
-            $summary .= ' Campaign: '.$campaign->title.'.';
-        }
-
-        $notes = trim((string) ($validated['note'] ?? ''));
-
-        Message::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'message' => $notes !== '' ? $summary."\nCatatan: ".$notes : $summary,
-            'is_read' => false,
-            'read_at' => null,
+        // Record the transaction in the donations table
+        $donation = Donation::create([
+            'transaction_id' => 'DON-' . strtoupper(Str::random(10)),
+            'campaign_id' => $validated['campaign_id'] ?? null,
+            'donor_id' => $donor->id,
+            'amount' => (int) $validated['amount'],
+            'status' => 'success',
+            'prayer' => $validated['note'] ?? null,
+            'is_anonymous' => $request->boolean('is_anonymous'),
         ]);
 
         return back()
             ->with('donation_success', 'Donasi berhasil dikirim. Terima kasih atas kontribusi Anda.')
             ->with('donation_amount', (int) $validated['amount'])
-            ->with('donation_name', $validated['name']);
+            ->with('donation_name', $donation->is_anonymous ? 'Hamba Allah' : $validated['name'])
+            ->with('donation_transaction', $donation->transaction_id);
     }
 
     public function submitContact(Request $request)

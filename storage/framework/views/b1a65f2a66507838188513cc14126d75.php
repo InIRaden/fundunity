@@ -2,7 +2,7 @@
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
-      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">Fokus Pilar Area</h2>
+      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i class="ph ph-target text-emerald-600 text-[20px]"></i> Fokus Pilar Area</h2>
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
           <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
@@ -296,7 +296,7 @@
         <td class="py-5 px-6"><p class="text-sm text-slate-500 line-clamp-2 max-w-lg">${a.description}</p></td>
         <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editArea(${a.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteArea(${a.id}, this)">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="3" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    `).join('') : emptyTableRow(3);
     document.getElementById('areaCount').textContent = 'Menampilkan ' + data.length + ' area';
   }
 

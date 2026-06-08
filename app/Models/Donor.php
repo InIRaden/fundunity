@@ -22,4 +22,12 @@ class Donor extends Model
         'last_donation' => 'date',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the donations made by the donor.
+     */
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
 }

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Campaign;
+use App\Models\Donation;
+use App\Models\Donor;
 use App\Models\Faq;
 use App\Models\FocusArea;
 use App\Models\ImageSlider;
@@ -10,6 +12,7 @@ use App\Models\Page;
 use App\Models\Partner;
 use App\Models\SiteSetting;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class LandingContentSeeder extends Seeder
 {
@@ -20,8 +23,51 @@ class LandingContentSeeder extends Seeder
         $this->seedSlider();
         $this->seedFocusAreas();
         $this->seedCampaigns();
+        $this->seedDonations();
         $this->seedFaqs();
         $this->seedPartners();
+    }
+
+    private function seedDonations(): void
+    {
+        if (Donation::query()->exists()) {
+            return;
+        }
+
+        $campaigns = Campaign::all();
+        
+        foreach ($campaigns as $campaign) {
+            // Create some donors first
+            $donors = [
+                ['name' => 'Budi Santoso', 'email' => 'budi@gmail.com'],
+                ['name' => 'Liana Putri', 'email' => 'liana@gmail.com'],
+                ['name' => 'Hamba Allah', 'email' => 'anon@gmail.com'],
+            ];
+
+            foreach ($donors as $index => $donorData) {
+                $donor = Donor::firstOrCreate(
+                    ['email' => $donorData['email']],
+                    ['name' => $donorData['name'], 'total_donation' => 0, 'is_active' => true]
+                );
+
+                $amount = [50000, 100000, 250000][$index % 3];
+                $isAnon = $donorData['name'] === 'Hamba Allah';
+
+                Donation::create([
+                    'transaction_id' => 'DON-' . strtoupper(Str::random(10)),
+                    'campaign_id' => $campaign->id,
+                    'donor_id' => $donor->id,
+                    'amount' => $amount,
+                    'status' => 'success',
+                    'prayer' => $isAnon ? 'Semoga berkah untuk semua.' : 'Semangat terus untuk tim relawan!',
+                    'is_anonymous' => $isAnon,
+                    'created_at' => now()->subHours(rand(1, 48)),
+                ]);
+
+                $donor->increment('total_donation', $amount);
+                $donor->update(['last_donation' => now()]);
+            }
+        }
     }
 
     private function seedSiteSettings(): void
@@ -160,9 +206,31 @@ class LandingContentSeeder extends Seeder
 
         $items = [
             [
-                'title' => 'Bantuan Mendesak Korban Banjir Demak dan Sekitarnya',
-                'description' => 'Program bantuan cepat tanggap untuk keluarga terdampak banjir.',
-                'collected' => 125000000,
+                'title' => 'Wujudkan Mimpi Sekolah Tepian Negeri: Renovasi SDN 02 NTT',
+                'description' => "Kondisi bangunan SDN 02 di pelosok NTT saat ini sangat memprihatinkan. Atap bocor, dinding retak, dan lantai tanah menjadi teman sehari-hari adik-adik kita belajar.\n\nMari bersama HMT-Unpad kita patungan untuk memberikan ruang kelas yang layak bagi masa depan bangsa. Dana yang terkumpul akan digunakan untuk:\n1. Renovasi atap dan plafon\n2. Pengadaan kursi dan meja belajar baru\n3. Pembuatan pojok baca (perpustakaan mini)",
+                'collected' => 85000000,
+                'target' => 150000000,
+                'deadline' => now()->addDays(45)->toDateString(),
+                'category' => 'Pendidikan',
+                'image' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2670&auto=format&fit=crop',
+                'status' => 'aktif',
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Patungan Sembako & Paket Gizi untuk Lansia Dhuafa Jatinangor',
+                'description' => "Di sekitar Jatinangor, masih banyak kakek dan nenek yang hidup sebatang kara dan kesulitan memenuhi kebutuhan pangan harian.\n\nProgram ini bertujuan menyalurkan paket sembako lengkap dan tambahan gizi (susu & vitamin) untuk 100 Lansia Dhuafa setiap bulannya. Mari ulurkan tangan kita untuk meringankan beban mereka di usia senja.",
+                'collected' => 12500000,
+                'target' => 50000000,
+                'deadline' => now()->addDays(15)->toDateString(),
+                'category' => 'Sosial',
+                'image' => 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=800',
+                'status' => 'aktif',
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Emergency Response: Bantuan Mendesak Korban Banjir Demak',
+                'description' => "Ribuan warga Demak saat ini mengungsi akibat banjir bandang yang merendam pemukiman mereka. Kebutuhan mendesak saat ini adalah:\n- Makanan siap saji\n- Selimut & Pakaian layak pakai\n- Obat-obatan & Alat kebersihan\n- Air bersih\n\nTim relawan HMT-Unpad sudah berada di lokasi untuk menyalurkan bantuan secara langsung.",
+                'collected' => 145000000,
                 'target' => 200000000,
                 'deadline' => now()->addDays(5)->toDateString(),
                 'category' => 'Bencana Alam',
@@ -171,31 +239,60 @@ class LandingContentSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'title' => 'Beasiswa Pendidikan Untuk 100 Anak Yatim Berprestasi',
-                'description' => 'Program beasiswa pendidikan untuk anak-anak yatim berprestasi.',
-                'collected' => 45000000,
-                'target' => 100000000,
-                'deadline' => now()->addDays(24)->toDateString(),
-                'category' => 'Pendidikan',
-                'image' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800',
-                'status' => 'aktif',
-                'is_active' => true,
-            ],
-            [
-                'title' => 'Pembangunan Sumur Air Bersih Pelosok NTT',
-                'description' => 'Pembangunan sarana air bersih untuk wilayah yang sulit akses air.',
-                'collected' => 8200000,
-                'target' => 50000000,
-                'deadline' => now()->addDays(60)->toDateString(),
-                'category' => 'Infrastruktur',
-                'image' => 'https://plus.unsplash.com/premium_photo-1664302152996-03fcb2220d9e?auto=format&fit=crop&q=80&w=800',
-                'status' => 'aktif',
+                'title' => 'Program Pemberdayaan Ekonomi Masyarakat Jabar (Legacy)',
+                'description' => 'Program pemberdayaan ekonomi yang telah selesai dilaksanakan pada periode sebelumnya.',
+                'collected' => 950000000,
+                'target' => 950000000,
+                'deadline' => now()->subMonths(6)->toDateString(),
+                'category' => 'Ekonomi',
+                'image' => 'https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?auto=format&fit=crop&q=80&w=800',
+                'status' => 'selesai',
                 'is_active' => true,
             ],
         ];
 
         foreach ($items as $item) {
             Campaign::create($item);
+        }
+    }
+
+    private function seedDonations(): void
+    {
+        if (Donation::query()->exists()) {
+            return;
+        }
+
+        $campaigns = Campaign::all();
+        
+        foreach ($campaigns as $campaign) {
+            $donorsData = [
+                ['name' => 'Budi Santoso', 'email' => 'budi@gmail.com', 'prayer' => 'Semoga berkah untuk adek-adek di sana, semangat belajarnya!', 'amount' => 100000],
+                ['name' => 'Hamba Allah', 'email' => 'anon1@gmail.com', 'prayer' => 'Sedekah untuk almarhum Ibu, mohon doanya.', 'amount' => 500000, 'is_anon' => true],
+                ['name' => 'Liana Putri', 'email' => 'liana@gmail.com', 'prayer' => 'Semangat terus tim relawan HMT! Titip salam untuk warga.', 'amount' => 250000],
+                ['name' => 'Andi Wijaya', 'email' => 'andi@gmail.com', 'prayer' => 'Semoga sedikit bantuan ini bermanfaat.', 'amount' => 50000],
+                ['name' => 'Hamba Allah', 'email' => 'anon2@gmail.com', 'prayer' => 'Lancar terus programnya.', 'amount' => 1000000, 'is_anon' => true],
+            ];
+
+            foreach ($donorsData as $data) {
+                $donor = Donor::firstOrCreate(
+                    ['email' => $data['email']],
+                    ['name' => $data['name'], 'total_donation' => 0, 'is_active' => true]
+                );
+
+                Donation::create([
+                    'transaction_id' => 'DON-' . strtoupper(Str::random(10)),
+                    'campaign_id' => $campaign->id,
+                    'donor_id' => $donor->id,
+                    'amount' => $data['amount'],
+                    'status' => 'success',
+                    'prayer' => $data['prayer'],
+                    'is_anonymous' => $data['is_anon'] ?? false,
+                    'created_at' => now()->subMinutes(rand(5, 5000)),
+                ]);
+
+                $donor->increment('total_donation', $data['amount']);
+                $donor->update(['last_donation' => now()]);
+            }
         }
     }
 

@@ -29,6 +29,7 @@ Route::get('/moregallery', [LandingController::class, 'gallery'])->name('gallery
 Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
 Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
 Route::post('/contact', [LandingController::class, 'submitContact'])->name('contact.store');
+Route::get('/program/{campaign}', [LandingController::class, 'campaignDetail'])->name('campaign.detail');
 Route::get('/donasi/{campaign?}', [LandingController::class, 'donationForm'])->name('donation.form');
 Route::post('/donasi', [LandingController::class, 'submitDonation'])->name('donation.store');
 Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
@@ -77,6 +78,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/campaign', [AdminCampaignController::class, 'store'])->name('campaign.store');
     Route::put('/campaign/{campaign}', [AdminCampaignController::class, 'update'])->name('campaign.update');
     Route::delete('/campaign/{campaign}', [AdminCampaignController::class, 'destroy'])->name('campaign.destroy');
+    
+    Route::post('/campaign/{campaign}/updates', [\App\Http\Controllers\Admin\CampaignUpdateController::class, 'store'])->name('campaign.updates.store');
+    Route::delete('/campaign/updates/{update}', [\App\Http\Controllers\Admin\CampaignUpdateController::class, 'destroy'])->name('campaign.updates.destroy');
 
     Route::get('/identity', [AdminUiController::class, 'websiteIdentity'])->name('identity'); // Fix: route hilang
 

@@ -24,4 +24,20 @@ class Campaign extends Model
         'deadline' => 'date',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the donations for the campaign.
+     */
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    /**
+     * Get the updates for the campaign.
+     */
+    public function updates()
+    {
+        return $this->hasMany(CampaignUpdate::class);
+    }
 }

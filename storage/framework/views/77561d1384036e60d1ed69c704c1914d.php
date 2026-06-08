@@ -7,8 +7,8 @@
           <p class="text-emerald-100/80 text-xs font-bold mb-1">Total Saldo Terkumpul</p>
           <h3 id="kpiPemasukan" class="text-3xl font-bold"></h3>
         </div>
-        <div class="mt-4 flex items-center gap-2 text-sm text-emerald-50 bg-white/10 px-3 py-1.5 rounded-lg w-fit backdrop-blur-sm">
-          <i class="ph ph-trend-up"></i> +12% dari bulan lalu
+        <div class="mt-4 flex items-center gap-2 text-sm <?php echo e($incomeTrendStatus === 'up' ? 'text-emerald-50 bg-white/10' : 'text-amber-100 bg-amber-500/20'); ?> px-3 py-1.5 rounded-lg w-fit backdrop-blur-sm">
+          <i class="ph <?php echo e($incomeTrendStatus === 'up' ? 'ph-trend-up' : 'ph-trend-down'); ?>"></i> <?php echo e($incomeTrendText); ?> dari bulan lalu
         </div>
       </div>
       <i class="ph ph-chart-bar text-white opacity-5 text-[120px] absolute -right-6 -bottom-6"></i>
@@ -100,14 +100,16 @@
   </div>
 </div>
 
-<div id="incomeModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
-  <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-slide-up">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h3 class="text-lg font-bold text-slate-800">Input Manual Donasi</h3>
-      <button id="closeIncomeModal" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors">
-        <i class="ph ph-x text-base"></i>
-      </button>
-    </div>
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'incomeModal','title' => 'Input Manual Donasi','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeIncomeModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'incomeModal','title' => 'Input Manual Donasi','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeIncomeModal']); ?>
     <div class="p-6 space-y-4">
       <div class="bg-emerald-50 text-emerald-700 text-xs p-3 rounded-xl border border-emerald-100 mb-4 font-medium">Gunakan form ini hanya untuk mencatat donasi yang masuk di luar sistem (misal: Transfer langsung ke rekening yayasan atau setoran tunai).</div>
       <div class="grid grid-cols-2 gap-4">
@@ -118,9 +120,10 @@
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Campaign</label>
           <select id="manualCampaign" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors">
-            <option>Bantuan Banjir Demak</option>
-            <option>Beasiswa Yatim</option>
-            <option>Infaq Umum (Kas)</option>
+            <option value="">Donasi Umum (Kas)</option>
+            <?php $__currentLoopData = $campaigns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campaign): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($campaign->id); ?>"><?php echo e($campaign->title); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
       </div>
@@ -137,76 +140,146 @@
       <button id="cancelIncomeModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors">Batal</button>
       <button id="saveIncomeModal" class="px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg">Simpan Transaksi</button>
     </div>
-  </div>
-</div>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
 
-<div id="detailModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-  <div class="bg-white rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col">
-    <div class="flex items-start justify-between p-6 border-b border-slate-100">
-      <div class="flex-1 min-w-0 pr-4">
-        <div class="flex items-center gap-2 mb-1 flex-wrap">
-          <span id="detailModalKategori" class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md"></span>
-          <span id="detailModalStatus" class="px-3 py-1 rounded-full text-[11px] font-bold"></span>
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'detailModal','title' => 'Detail Program','maxWidth' => 'max-w-2xl','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeDetailModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'detailModal','title' => 'Detail Program','maxWidth' => 'max-w-2xl','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeDetailModal']); ?>
+     <?php $__env->slot('headerSlot', null, []); ?> 
+        <div class="flex items-center gap-2 mt-2 flex-wrap">
+          <span id="detailModalKategori" class="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-md"></span>
+          <span id="detailModalStatus" class="px-3 py-1 rounded-full text-[11px] font-bold bg-white/20 text-white"></span>
         </div>
-        <h3 id="detailModalProgram" class="text-lg font-bold text-slate-900 leading-tight"></h3>
-        <p id="detailModalPeriode" class="text-xs text-slate-400 mt-0.5"></p>
-      </div>
-      <button id="closeDetailModal" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors">
-        <i class="ph ph-x text-base"></i>
-      </button>
+        <p id="detailModalPeriode" class="text-xs text-white/80 mt-1"></p>
+     <?php $__env->endSlot(); ?>
+
+    <!-- Inner Tabs -->
+    <div class="flex border-b border-slate-100 bg-slate-50/50">
+      <button id="tabDetailPenerima" class="flex-1 py-3 text-sm font-bold border-b-2 transition-colors border-emerald-500 text-emerald-600">Alokasi & Penerima</button>
+      <button id="tabDetailDokumentasi" class="flex-1 py-3 text-sm font-bold border-b-2 transition-colors border-transparent text-slate-500 hover:text-emerald-600">Dokumentasi Publik</button>
     </div>
 
-    <div class="p-6 space-y-5 overflow-y-auto flex-1">
-      
-      <div class="grid grid-cols-3 gap-4">
-        <div class="bg-emerald-50 rounded-2xl p-4 text-center">
-          <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-1">Terkumpul</p>
-          <p id="detailModalPemasukan" class="text-lg font-black text-emerald-800"></p>
+    <div class="p-6 space-y-5 overflow-y-auto flex-1 bg-slate-50">
+      <!-- Content: Alokasi & Penerima -->
+      <div id="contentDetailPenerima" class="space-y-5 block">
+        
+        <div class="grid grid-cols-3 gap-4">
+          <div class="bg-emerald-50 rounded-2xl p-4 text-center border border-emerald-100/50">
+            <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-1">Terkumpul</p>
+            <p id="detailModalPemasukan" class="text-lg font-black text-emerald-800"></p>
+          </div>
+          <div class="bg-blue-50 rounded-2xl p-4 text-center border border-blue-100/50">
+            <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-1">Tersalurkan</p>
+            <p id="detailModalDisalurkan" class="text-lg font-black text-blue-800"></p>
+          </div>
+          <div class="bg-amber-50 rounded-2xl p-4 text-center border border-amber-100/50">
+            <p class="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1">Sisa Dana</p>
+            <p id="detailModalSisa" class="text-lg font-black text-amber-800"></p>
+          </div>
         </div>
-        <div class="bg-blue-50 rounded-2xl p-4 text-center">
-          <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-1">Tersalurkan</p>
-          <p id="detailModalDisalurkan" class="text-lg font-black text-blue-800"></p>
+
+        
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+          <div class="flex justify-between text-xs font-bold text-slate-600 mb-2">
+            <span>Tingkat Penyaluran</span>
+            <span id="detailModalPct" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md"></span>
+          </div>
+          <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+            <div id="detailModalBar" class="bg-emerald-500 h-full rounded-full transition-all duration-700" style="width:0%"></div>
+          </div>
         </div>
-        <div class="bg-amber-50 rounded-2xl p-4 text-center">
-          <p class="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1">Sisa Dana</p>
-          <p id="detailModalSisa" class="text-lg font-black text-amber-800"></p>
+
+        
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+          <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+            <i class="ph ph-users-three text-emerald-600"></i> Daftar Penerima Manfaat
+          </h4>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 border-b border-slate-100">
+                <tr>
+                  <th class="py-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Nama</th>
+                  <th class="py-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Lokasi</th>
+                  <th class="py-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Nilai Bantuan</th>
+                </tr>
+              </thead>
+              <tbody id="detailModalPenerimaRows"></tbody>
+            </table>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-2 italic">* Data penyaluran diambil dari tabel Penerima Bantuan yang telah diverifikasi admin.</p>
         </div>
       </div>
 
-      
-      <div>
-        <div class="flex justify-between text-xs font-bold text-slate-600 mb-1.5">
-          <span>Tingkat Penyaluran</span>
-          <span id="detailModalPct" class="text-emerald-600"></span>
+      <!-- Content: Dokumentasi Publik -->
+      <div id="contentDetailDokumentasi" class="space-y-6 hidden">
+        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-start gap-3">
+            <i class="ph ph-info text-emerald-600 text-lg mt-0.5"></i>
+            <div>
+                <p class="text-xs font-bold text-emerald-800 mb-1">Laporan Penyaluran Publik</p>
+                <p class="text-xs text-emerald-700">Setiap pembaruan/kabar yang Anda posting di sini akan langsung tampil secara real-time di halaman web publik sebagai bukti transparansi ke donatur.</p>
+            </div>
         </div>
-        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-          <div id="detailModalBar" class="bg-emerald-500 h-full rounded-full transition-all duration-700" style="width:0%"></div>
+
+        <!-- List Updates -->
+        <div>
+          <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i class="ph ph-clock-counter-clockwise text-emerald-500"></i> Riwayat Publikasi</h4>
+          <div id="updatesList" class="space-y-3">
+            <!-- Item diisi via JS -->
+          </div>
+        </div>
+
+        <!-- Form Tambah Update -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
+          <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="ph ph-plus-circle text-emerald-500"></i> Posting Laporan Baru</h4>
+          <form id="updatesForm" class="space-y-4">
+            <input type="hidden" id="uCampaignId">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Judul Laporan</label>
+              <input required id="uTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="Contoh: Penyaluran Sembako Tahap 1">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Keterangan / Deskripsi</label>
+              <textarea required id="uContent" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all resize-none" placeholder="Ceritakan detail penyaluran dana..."></textarea>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Foto Bukti (Opsional)</label>
+              <input id="uImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors">
+            </div>
+            <button type="submit" id="submitUpdateBtn" class="w-full py-3 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-2">
+              <i class="ph ph-paper-plane-tilt"></i> Publikasikan Laporan
+            </button>
+          </form>
         </div>
       </div>
 
-      
-      <div>
-        <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-          <i class="ph ph-users-three text-emerald-600"></i> Daftar Penerima Manfaat
-        </h4>
-        <div class="border border-slate-100 rounded-xl overflow-hidden">
-          <table class="w-full text-left">
-            <thead class="bg-slate-50 border-b border-slate-100">
-              <tr>
-                <th class="py-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Nama</th>
-                <th class="py-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Lokasi</th>
-                <th class="py-2 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Nilai Bantuan</th>
-              </tr>
-            </thead>
-            <tbody id="detailModalPenerimaRows"></tbody>
-          </table>
-        </div>
-        <p class="text-[10px] text-slate-400 mt-2 italic">* Data penyaluran diambil dari tabel Penerima Bantuan yang telah diverifikasi admin.</p>
-      </div>
     </div>
-  </div>
-</div>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
 <style>
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -403,6 +476,8 @@
           email: null,
           totalDonasi: amount,
           lastDonasi: new Date().toISOString().slice(0, 10),
+          campaign_id: campaign,
+          notes: notes,
         }),
       });
 
@@ -441,7 +516,9 @@
   function openDetailModal(idx) {
     const l = state.laporan[idx];
     if (!l) return;
-    document.getElementById('detailModalProgram').textContent = l.program;
+    document.getElementById('uCampaignId').value = l.id || '';
+    renderUpdatesList(l.updates || []);
+    document.getElementById('detailModalTitle').textContent = l.program;
     document.getElementById('detailModalKategori').textContent = l.kategori;
     document.getElementById('detailModalStatus').textContent = l.status === 'selesai' ? 'SELESAI' : 'AKTIF';
     document.getElementById('detailModalStatus').className = 'px-3 py-1 rounded-full text-[11px] font-bold ' + (l.status === 'selesai' ? 'bg-slate-200 text-slate-700' : 'bg-emerald-100 text-emerald-700');
@@ -455,7 +532,7 @@
 
     const tbody = document.getElementById('detailModalPenerimaRows');
     if (!l.penerimaList || l.penerimaList.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="3" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>`;
+      tbody.innerHTML = emptyTableRow(3);
     } else {
       tbody.innerHTML = l.penerimaList.map((p, i) => `
         <tr class="border-t border-slate-100 hover:bg-slate-50">
@@ -471,16 +548,129 @@
     modal.classList.add('flex');
   }
 
-  document.getElementById('closeDetailModal').addEventListener('click', () => {
-    document.getElementById('detailModal').classList.add('hidden');
-    document.getElementById('detailModal').classList.remove('flex');
+  // Detail Modal Tabs Logic
+  document.getElementById('tabDetailPenerima').addEventListener('click', function() {
+    this.classList.add('border-emerald-500', 'text-emerald-600');
+    this.classList.remove('border-transparent', 'text-slate-500');
+    const tabDok = document.getElementById('tabDetailDokumentasi');
+    tabDok.classList.remove('border-emerald-500', 'text-emerald-600');
+    tabDok.classList.add('border-transparent', 'text-slate-500');
+    document.getElementById('contentDetailPenerima').classList.remove('hidden');
+    document.getElementById('contentDetailPenerima').classList.add('block');
+    document.getElementById('contentDetailDokumentasi').classList.add('hidden');
+    document.getElementById('contentDetailDokumentasi').classList.remove('block');
   });
-  document.getElementById('detailModal').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('detailModal')) {
-      document.getElementById('detailModal').classList.add('hidden');
-      document.getElementById('detailModal').classList.remove('flex');
+
+  document.getElementById('tabDetailDokumentasi').addEventListener('click', function() {
+    this.classList.add('border-emerald-500', 'text-emerald-600');
+    this.classList.remove('border-transparent', 'text-slate-500');
+    const tabPen = document.getElementById('tabDetailPenerima');
+    tabPen.classList.remove('border-emerald-500', 'text-emerald-600');
+    tabPen.classList.add('border-transparent', 'text-slate-500');
+    document.getElementById('contentDetailDokumentasi').classList.remove('hidden');
+    document.getElementById('contentDetailDokumentasi').classList.add('block');
+    document.getElementById('contentDetailPenerima').classList.add('hidden');
+    document.getElementById('contentDetailPenerima').classList.remove('block');
+  });
+
+  function renderUpdatesList(updates) {
+    const list = document.getElementById('updatesList');
+    if (!updates || updates.length === 0) {
+      list.innerHTML = '<div class="text-center py-6 text-sm text-slate-400 bg-white border border-slate-100 rounded-xl">Belum ada laporan penyaluran publik.</div>';
+      return;
+    }
+    list.innerHTML = updates.map(u => `
+      <div class="bg-white p-4 rounded-xl border border-slate-100 flex flex-col sm:flex-row gap-4 shadow-sm group">
+        ${u.image ? `<img src="${u.image}" class="w-full sm:w-24 h-24 object-cover rounded-lg">` : ''}
+        <div class="flex-1">
+          <div class="flex justify-between items-start mb-1">
+            <h5 class="font-bold text-slate-800 text-sm">${u.title}</h5>
+            <button onclick="deleteUpdate(${u.id})" class="text-rose-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity"><i class="ph ph-trash text-lg"></i></button>
+          </div>
+          <p class="text-[10px] text-slate-400 font-bold mb-2">${u.created_at}</p>
+          <p class="text-xs text-slate-600 line-clamp-2">${u.content}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('updatesForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitUpdateBtn');
+    const campaignId = document.getElementById('uCampaignId').value;
+    const title = document.getElementById('uTitle').value;
+    const content = document.getElementById('uContent').value;
+    const imageInput = document.getElementById('uImageFile');
+
+    if (!campaignId) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Menyimpan...';
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    if (imageInput.files[0]) {
+      formData.append('image', imageInput.files[0]);
+    }
+
+    try {
+      const res = await fetch(\`/admin/campaign/\${campaignId}/updates\`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken,
+          'Accept': 'application/json'
+        },
+        body: formData
+      });
+      const data = await res.json();
+      if(res.ok) {
+        // Cari laporan item dan update listnya
+        const laporanItem = state.laporan.find(l => l.id == campaignId);
+        if(laporanItem) {
+          if(!laporanItem.updates) laporanItem.updates = [];
+          laporanItem.updates.unshift(data.update);
+          renderUpdatesList(laporanItem.updates);
+        }
+        document.getElementById('updatesForm').reset();
+        customAlert('Berhasil', 'Laporan publik berhasil diposting!');
+      } else {
+        throw new Error(data.message || 'Gagal menyimpan');
+      }
+    } catch (error) {
+      customAlert('Kesalahan', error.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ph ph-paper-plane-tilt"></i> Publikasikan Laporan';
     }
   });
+
+  window.deleteUpdate = async function(updateId) {
+    if(!confirm('Hapus laporan publik ini?')) return;
+    try {
+      const res = await fetch(\`/admin/campaign/updates/\${updateId}\`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken,
+          'Accept': 'application/json'
+        }
+      });
+      if(res.ok) {
+        // Hapus dari state
+        const campaignId = document.getElementById('uCampaignId').value;
+        const laporanItem = state.laporan.find(l => l.id == campaignId);
+        if(laporanItem && laporanItem.updates) {
+          laporanItem.updates = laporanItem.updates.filter(u => u.id !== updateId);
+          renderUpdatesList(laporanItem.updates);
+        }
+        customAlert('Berhasil', 'Laporan terhapus.');
+      } else {
+        customAlert('Gagal', 'Gagal menghapus', 'error');
+      }
+    } catch (e) {
+      customAlert('Kesalahan', 'Terjadi kesalahan sistem', 'error');
+    }
+  };
 
   window.openDetailModal = openDetailModal;
 

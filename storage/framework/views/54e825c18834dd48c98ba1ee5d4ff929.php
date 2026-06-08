@@ -75,7 +75,7 @@
                         $campaignImage = $campaign->image ?? '';
                 ?>
                 <article data-card data-title="<?php echo e(strtolower($campaign->title)); ?>" data-category="<?php echo e($campaign->category ?? 'Umum'); ?>" class="program-card group flex h-full flex-col overflow-hidden rounded-[40px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50 transition-transform duration-300 hover:-translate-y-2">
-                    <div class="relative h-64 overflow-hidden">
+                    <a href="<?php echo e(route('campaign.detail', ['campaign' => $campaign->id])); ?>" class="relative h-64 overflow-hidden block">
                         <img src="<?php echo e($campaignImage); ?>" alt="<?php echo e($campaign->title); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-[10px] font-black tracking-widest text-slate-700 shadow-sm">
                             <?php echo e($campaign->category ?? 'Umum'); ?>
@@ -87,10 +87,12 @@
                             </div>
                         <?php endif; ?>
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                    </div>
+                    </a>
 
                     <div class="p-8 flex flex-col flex-1">
-                        <h3 class="text-xl font-bold text-slate-900 leading-snug mb-6 group-hover:text-emerald-600 transition-colors line-clamp-2"><?php echo e($campaign->title); ?></h3>
+                        <a href="<?php echo e(route('campaign.detail', ['campaign' => $campaign->id])); ?>" class="block">
+                            <h3 class="text-xl font-bold text-slate-900 leading-snug mb-6 group-hover:text-emerald-600 transition-colors line-clamp-2"><?php echo e($campaign->title); ?></h3>
+                        </a>
 
                         <div class="mt-auto">
                             <div class="flex justify-between items-end mb-3">

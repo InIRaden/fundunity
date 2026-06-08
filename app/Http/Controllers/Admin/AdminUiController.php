@@ -7,6 +7,7 @@ use App\Models\AboutUsItem;
 use App\Models\AdminActivityLog;
 use App\Models\Beneficiary;
 use App\Models\Campaign;
+use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Faq;
 use App\Models\FocusArea;
@@ -137,7 +138,7 @@ class AdminUiController extends Controller
 
     public function campaign(): View
     {
-        $campaigns = Campaign::orderByDesc('created_at')
+        $campaigns = Campaign::with('updates')->orderByDesc('created_at')
             ->get()
             ->map(static function (Campaign $campaign): array {
                 return [
@@ -149,6 +150,13 @@ class AdminUiController extends Controller
                     'deadline' => $campaign->deadline ? substr((string) $campaign->deadline, 0, 10) : null,
                     'category' => $campaign->category ?? 'Umum',
                     'status' => $campaign->status,
+                    'updates' => $campaign->updates->map(fn($u) => [
+                        'id' => $u->id,
+                        'title' => $u->title,
+                        'content' => $u->content,
+                        'image' => $u->image,
+                        'created_at' => $u->created_at->format('Y-m-d H:i'),
+                    ])->all(),
                 ];
             })
             ->values();
@@ -419,32 +427,46 @@ class AdminUiController extends Controller
         $incomeSearch = '';
         $incomeFilterTab = 'semua';
 
-        $campaigns = Campaign::orderByDesc('created_at')->get();
+        // Calculate dynamic trend for Pemasukan
+        $currentMonthIncomes = Donation::where('status', 'success')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('amount');
+
+        $lastMonthIncomes = Donation::where('status', 'success')
+            ->whereMonth('created_at', now()->subMonth()->month)
+            ->whereYear('created_at', now()->subMonth()->year)
+            ->sum('amount');
+
+        if ($lastMonthIncomes > 0) {
+            $incomeTrend = round((($currentMonthIncomes - $lastMonthIncomes) / $lastMonthIncomes) * 100);
+        } else {
+            $incomeTrend = $currentMonthIncomes > 0 ? 100 : 0;
+        }
+
+        $incomeTrendStatus = $incomeTrend >= 0 ? 'up' : 'down';
+        $incomeTrendText = ($incomeTrend >= 0 ? '+' : '') . $incomeTrend . '%';
+
+        $campaigns = Campaign::with('updates')->orderByDesc('created_at')->get();
         $donors = Donor::orderByDesc('last_donation')->orderByDesc('created_at')->get();
 
         $campaignPool = $campaigns->values();
         $campaignPoolCount = max($campaignPool->count(), 1);
 
-        $filteredIncomes = $donors
-            ->values()
-            ->map(function (Donor $donor, int $index) use ($campaignPool, $campaignPoolCount): array {
-                /** @var Campaign|null $mappedCampaign */
-                $mappedCampaign = $campaignPool->get($index % $campaignPoolCount);
-                $amount = (int) $donor->total_donation;
-
+        $filteredIncomes = Donation::with(['donor', 'campaign'])
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(function (Donation $donation) {
                 return [
-                    'id'       => $donor->id,
-                    'nama'     => $donor->name,
-                    'category' => $mappedCampaign?->title ?: ($mappedCampaign?->category ?: 'Donasi Umum'),
-                    'notes'    => $amount > 0
-                        ? 'Sinkron otomatis dari database donatur.'
-                        : 'Menunggu pembaruan nominal donasi.',
-                    'amount'   => $amount,
-                    'status'   => $amount > 0 ? 'berhasil' : 'pending',
-                    'date'     => ($donor->last_donation ?? $donor->created_at)?->format('Y-m-d'),
+                    'id'       => $donation->id,
+                    'nama'     => $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Anonim'),
+                    'category' => $donation->campaign->title ?? ($donation->campaign->category ?? 'Donasi Umum'),
+                    'notes'    => $donation->prayer,
+                    'amount'   => (int) $donation->amount,
+                    'status'   => $donation->status === 'success' ? 'berhasil' : $donation->status,
+                    'date'     => $donation->created_at->format('Y-m-d'),
                 ];
             })
-            ->values()
             ->all();
 
         // Ambil data penyaluran REAL dari tabel beneficiaries (bukan estimasi ratio)
@@ -478,6 +500,7 @@ class AdminUiController extends Controller
                     : [];
 
                 return [
+                    'id'           => $campaign->id,
                     'program'      => $campaign->title,
                     'kategori'     => $campaign->category ?: 'Umum',
                     'pemasukan'    => $pemasukan,
@@ -485,6 +508,13 @@ class AdminUiController extends Controller
                     'sisa'         => $sisa,
                     'penerima'     => $penerima,
                     'penerimaList' => $penerimaList,
+                    'updates'      => $campaign->updates->map(fn($u) => [
+                        'id' => $u->id,
+                        'title' => $u->title,
+                        'content' => $u->content,
+                        'image' => $u->image,
+                        'created_at' => $u->created_at->format('Y-m-d H:i')
+                    ])->all(),
                     'periode'      => $campaign->deadline
                         ? date('M Y', strtotime((string) $campaign->deadline))
                         : ($campaign->created_at ? date('M Y', strtotime((string) $campaign->created_at)) : null),
@@ -507,11 +537,14 @@ class AdminUiController extends Controller
             'activeMasterTab',
             'incomeSearch',
             'incomeFilterTab',
+            'campaigns',
             'filteredIncomes',
             'laporanItems',
             'totalPemasukanGlobal',
             'totalDisalurkanGlobal',
             'totalSisaGlobal',
+            'incomeTrendStatus',
+            'incomeTrendText',
             'pageMeta'
         ));
     }

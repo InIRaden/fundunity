@@ -57,20 +57,7 @@ export default function initAdminPartners() {
     if (spinner) spinner.classList.toggle('hidden', !loading);
   }
 
-  function setPartnerDeleteLoading(loading) {
-    const button = document.getElementById('confirmPartnerDelete');
-    if (!button) return;
-    if (loading) {
-      button.dataset.originalLabel = button.textContent;
-      button.disabled = true;
-      button.classList.add('opacity-70', 'cursor-not-allowed');
-      button.textContent = 'Menghapus...';
-      return;
-    }
-    button.disabled = false;
-    button.classList.remove('opacity-70', 'cursor-not-allowed');
-    if (button.dataset.originalLabel) button.textContent = button.dataset.originalLabel;
-  }
+
 
   function filteredPartners() {
     const q = partnerState.search.toLowerCase();
@@ -99,7 +86,7 @@ export default function initAdminPartners() {
         <td class="py-5 px-6"><span class="text-sm font-semibold text-slate-900">${p.name}</span></td>
         <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" data-action="edit" data-id="${p.id}">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" data-action="delete" data-id="${p.id}">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="4" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    `).join('') : emptyTableRow(4);
 
     if (countEl) countEl.textContent = 'Menampilkan ' + data.length + ' mitra';
 
@@ -160,20 +147,21 @@ export default function initAdminPartners() {
     if (found) showPartnerModal(found);
   }
 
-  function promptDeletePartner(id) {
-    partnerState.deletingId = id;
-    const modal = document.getElementById('partnerDeleteModal');
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-  }
+  async function promptDeletePartner(id) {
+    if (partnerState.isDeleting) return;
+    const isConfirm = await window.customConfirm('Hapus Mitra?', 'Tindakan ini tidak dapat dibatalkan. Data mitra akan dihapus secara permanen dari sistem.');
+    if (!isConfirm) return;
 
-  function hideDeleteModal() {
-    const modal = document.getElementById('partnerDeleteModal');
-    if (!modal) return;
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    partnerState.deletingId = null;
+    partnerState.isDeleting = true;
+    try {
+        await requestPartner(`${partnerBaseUrl}/${id}`, 'DELETE');
+        partnerState.data = partnerState.data.filter((p) => p.id !== id);
+        renderPartners();
+        window.customAlert('Berhasil', 'Mitra berhasil dihapus.');
+    } catch (error) {
+        window.customAlert('Kesalahan', error.message, 'error');
+    }
+    partnerState.isDeleting = false;
   }
 
   function attachEvents() {
@@ -239,19 +227,7 @@ export default function initAdminPartners() {
       });
     });
 
-    const cancelDelete = document.getElementById('cancelPartnerDelete'); if (cancelDelete) cancelDelete.addEventListener('click', hideDeleteModal);
-    const confirmDelete = document.getElementById('confirmPartnerDelete'); if (confirmDelete) confirmDelete.addEventListener('click', function () {
-      if (partnerState.deletingId === null || partnerState.isDeleting) return;
-      partnerState.isDeleting = true; setPartnerDeleteLoading(true);
-      requestPartner(`${partnerBaseUrl}/${partnerState.deletingId}`, 'DELETE').then(() => {
-        partnerState.data = partnerState.data.filter((p) => p.id !== partnerState.deletingId);
-        hideDeleteModal(); renderPartners();
-      }).catch((error) => {
-        window.alert(error.message);
-      }).finally(() => {
-        partnerState.isDeleting = false; setPartnerDeleteLoading(false);
-      });
-    });
+
   }
 
   attachEvents();

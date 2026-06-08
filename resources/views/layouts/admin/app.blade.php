@@ -25,6 +25,16 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
+
+    <script>
+        window.emptyTableRow = function(colspan, message = 'Tidak ada data ditemukan.') {
+            return `<tr><td colspan="${colspan}" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>${message}</p></div></td></tr>`;
+        };
+
+        window.emptyGridItem = function(message = 'Tidak ada data ditemukan.') {
+            return `<div class="col-span-full py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>${message}</p></div></div>`;
+        };
+    </script>
 </head>
 <body data-page="@yield('body-data','')" class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen bg-gray-50">

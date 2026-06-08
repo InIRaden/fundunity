@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Beneficiary;
+use App\Models\Campaign;
+use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Volunteer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class StakeholderController extends Controller
 {
@@ -48,19 +51,45 @@ class StakeholderController extends Controller
             'email' => ['nullable', 'email', 'max:255'],
             'totalDonasi' => ['nullable', 'integer', 'min:0'],
             'lastDonasi' => ['nullable', 'date'],
+            'campaign_id' => ['nullable', 'integer', 'exists:campaigns,id'],
+            'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
         $donor = Donor::create([
             'name' => $validated['nama'],
             'email' => $validated['email'] ?? null,
             'total_donation' => $validated['totalDonasi'] ?? 0,
-            'last_donation' => $validated['lastDonasi'] ?? null,
+            'last_donation' => $validated['lastDonasi'] ?? now()->toDateString(),
             'is_active' => true,
         ]);
 
+        // Create a donation record for this manual entry
+        $donation = Donation::create([
+            'transaction_id' => 'MAN-' . strtoupper(Str::random(10)),
+            'campaign_id' => $validated['campaign_id'] ?? null,
+            'donor_id' => $donor->id,
+            'amount' => $validated['totalDonasi'] ?? 0,
+            'status' => 'success',
+            'payment_method' => 'manual',
+            'prayer' => $validated['notes'] ?? null,
+            'is_anonymous' => false,
+        ]);
+
+        // Increment campaign collected amount
+        if (! empty($validated['campaign_id'])) {
+            $campaign = Campaign::find($validated['campaign_id']);
+            if ($campaign) {
+                $campaign->increment('collected', (int) ($validated['totalDonasi'] ?? 0));
+            }
+        }
+
         return response()->json([
-            'message' => 'Data donatur berhasil ditambahkan.',
-            'data' => $this->transformDonor($donor),
+            'message' => 'Data donasi manual berhasil ditambahkan.',
+            'data' => [
+                'id' => $donation->id,
+                'nama' => $donor->name,
+                'lastDonasi' => $donation->created_at->format('Y-m-d'),
+            ],
         ], 201);
     }
 

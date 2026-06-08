@@ -4,7 +4,6 @@
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
       <div>
         <h2 class="text-lg font-bold text-slate-900">Daftar Mitra</h2>
-        <p class="text-sm text-slate-500 mt-1"><span id="partnerTotal"></span> organisasi terdaftar</p>
       </div>
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
@@ -34,12 +33,16 @@
   </div>
 </div>
 
-<div id="partnerModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[100] p-4 overflow-y-auto">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto animate-scale-in">
-    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-      <h3 id="partnerModalTitle" class="text-base font-semibold text-slate-900">Tambah Mitra</h3>
-      <button id="closePartnerModal" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
-    </div>
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'partnerModal','title' => 'Tambah Mitra','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closePartnerModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'partnerModal','title' => 'Tambah Mitra','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closePartnerModal']); ?>
     <form id="partnerForm" class="flex flex-col flex-1 overflow-hidden">
       <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
@@ -73,7 +76,7 @@
           </div>
         </div>
       </div>
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0 rounded-b-3xl">
         <button type="button" id="cancelPartnerModal" class="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Batal</button>
         <button id="submitPartnerModal" type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-2 min-w-[140px] justify-center">
           <span id="partnerBtnText">Konfirmasi Simpan</span>
@@ -100,20 +103,16 @@
         </button>
       </div>
     </form>
-  </div>
-</div>
-
-<div id="partnerDeleteModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[110] p-4">
-  <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-scale-in border border-slate-100 p-6 flex flex-col items-center text-center">
-    <div class="w-16 h-16 bg-rose-50 border border-rose-100 text-rose-500 rounded-full flex items-center justify-center mb-4"><i class="ph ph-trash text-[28px]"></i></div>
-    <h3 class="text-lg font-semibold text-slate-900 mb-2">Hapus Mitra?</h3>
-    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Tindakan ini tidak dapat dibatalkan. Data mitra akan dihapus secara permanen dari sistem.</p>
-    <div class="flex w-full gap-3">
-      <button id="cancelPartnerDelete" class="flex-1 py-2.5 px-4 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-100 hover:text-slate-800 transition-colors">Batal</button>
-      <button id="confirmPartnerDelete" class="flex-1 py-2.5 px-4 bg-rose-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-rose-600/20 hover:bg-rose-700 transition-colors transform hover:-translate-y-0.5">Ya, Hapus</button>
-    </div>
-  </div>
-</div>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
 <style>
   @keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }

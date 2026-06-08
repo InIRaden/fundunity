@@ -41,26 +41,14 @@
 </div>
 
 {{-- Modals --}}
-<div id="deleteMemberModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-  <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden animate-slide-up">
-    <div class="p-6 text-center">
-      <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="ph ph-trash text-[32px]"></i></div>
-      <h3 class="text-lg font-bold text-slate-900 mb-2">Hapus Anggota?</h3>
-      <p class="text-sm text-slate-500">Anda yakin ingin menghapus data anggota ini secara permanen?</p>
-    </div>
-    <div class="p-4 bg-slate-50 flex gap-3">
-      <button id="cancelDeleteMember" class="flex-1 py-2.5 bg-white text-slate-600 font-bold border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors">Batal</button>
-      <button id="confirmDeleteMember" class="flex-1 py-2.5 bg-rose-500 text-white font-bold rounded-xl hover:bg-rose-600 transition-colors shadow-lg shadow-rose-500/20">Ya, Hapus</button>
-    </div>
-  </div>
-</div>
 
-<div id="memberEditModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
-  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h3 class="text-lg font-bold text-slate-800">Edit Anggota</h3>
-      <button id="closeMemberEdit" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
-    </div>
+
+<x-admin.modal 
+    id="memberEditModal" 
+    title="Edit Anggota" 
+    maxWidth="max-w-lg" 
+    headerColor="bg-emerald-600"
+    closeButtonId="closeMemberEdit">
     <form id="memberEditForm" class="flex flex-col flex-1 overflow-hidden">
       <div class="p-6 space-y-4 overflow-y-auto flex-1">
         <div>
@@ -85,15 +73,14 @@
         <button id="editMemberSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Perubahan</button>
       </div>
     </form>
-  </div>
-</div>
+</x-admin.modal>
 
-<div id="memberAddModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
-  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h3 class="text-lg font-bold text-slate-800">Tambah Anggota</h3>
-      <button id="closeMemberAdd" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
-    </div>
+<x-admin.modal 
+    id="memberAddModal" 
+    title="Tambah Anggota" 
+    maxWidth="max-w-lg" 
+    headerColor="bg-emerald-600"
+    closeButtonId="closeMemberAdd">
     <form id="memberAddForm" class="flex flex-col flex-1 overflow-hidden">
       <div class="p-6 space-y-4 overflow-y-auto flex-1">
         <div>
@@ -118,8 +105,7 @@
         <button id="addMemberSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-emerald-700">Simpan Data Baru</button>
       </div>
     </form>
-  </div>
-</div>
+</x-admin.modal>
 
 <style>
   @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -187,20 +173,23 @@
         <td class="px-6 py-5 align-top text-center">${item.imageUrl ? `<div class="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden mx-auto bg-slate-50"><img src="${item.imageUrl}" alt="${item.nama}" class="w-full h-full object-cover"></div>` : `<div class="w-12 h-12 rounded-lg border border-slate-200 border-dashed mx-auto flex items-center justify-center bg-slate-50 text-slate-400"><i class="ph ph-image text-xl"></i></div>`}</td>
         <td class="p-5"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditMember(${item.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="openDeleteMember(${item.id})">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="5" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    `).join('') : emptyTableRow(5);
     document.getElementById('memberFooterText').textContent = 'Menampilkan ' + data.length + ' data anggota';
   }
 
-  function openDeleteMember(id) {
-    memberState.deletingId = id;
-    document.getElementById('deleteMemberModal').classList.remove('hidden');
-    document.getElementById('deleteMemberModal').classList.add('flex');
-  }
-
-  function closeDeleteMember() {
-    document.getElementById('deleteMemberModal').classList.add('hidden');
-    document.getElementById('deleteMemberModal').classList.remove('flex');
-    memberState.deletingId = null;
+  async function openDeleteMember(id) {
+    if (memberState.isDeleting) return;
+    const isConfirm = await customConfirm('Hapus Anggota?', 'Anda yakin ingin menghapus data anggota ini secara permanen?');
+    if (!isConfirm) return;
+    
+    memberState.isDeleting = true;
+    try {
+      await requestMember(`${memberBaseUrl}/${id}`, 'DELETE');
+      memberState.data = memberState.data.filter(v => v.id !== id);
+      renderMemberRows();
+      customAlert('Berhasil', 'Anggota berhasil dihapus.');
+    } catch (e) { customAlert('Kesalahan', e.message, 'error'); }
+    memberState.isDeleting = false;
   }
 
   function openEditMember(id) {
@@ -240,18 +229,7 @@
   });
 
   document.getElementById('openMemberAdd').addEventListener('click', openAddMember);
-  document.getElementById('cancelDeleteMember').addEventListener('click', closeDeleteMember);
-  document.getElementById('confirmDeleteMember').addEventListener('click', async () => {
-    if (!memberState.deletingId || memberState.isDeleting) return;
-    memberState.isDeleting = true;
-    try {
-      await requestMember(`${memberBaseUrl}/${memberState.deletingId}`, 'DELETE');
-      memberState.data = memberState.data.filter(v => v.id !== memberState.deletingId);
-      closeDeleteMember();
-      renderMemberRows();
-    } catch (e) { alert(e.message); }
-    memberState.isDeleting = false;
-  });
+
 
   document.getElementById('closeMemberEdit').addEventListener('click', closeEditMember);
   document.getElementById('cancelMemberEdit').addEventListener('click', closeEditMember);

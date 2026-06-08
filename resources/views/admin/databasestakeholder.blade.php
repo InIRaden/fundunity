@@ -72,19 +72,18 @@
   </div>
 </div>
 
-<div id="stakeModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in overflow-y-auto">
-  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h3 id="stakeModalTitle" class="text-lg font-bold text-slate-800">Tambah Donatur</h3>
-      <button id="closeStakeModal" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"><i class="ph ph-x text-base"></i></button>
-    </div>
+<x-admin.modal 
+    id="stakeModal" 
+    title="Tambah Donatur" 
+    maxWidth="max-w-lg" 
+    headerColor="bg-emerald-600"
+    closeButtonId="closeStakeModal">
     <div class="p-6 space-y-4 overflow-y-auto flex-1" id="stakeModalBody"></div>
-    <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
+    <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0 rounded-b-3xl">
       <button id="cancelStakeModal" class="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">Batal</button>
       <button id="saveStakeModal" class="px-8 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all">Simpan Data</button>
     </div>
-  </div>
-</div>
+</x-admin.modal>
 
 <style>
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -285,7 +284,7 @@
         <td class="py-4 px-6 text-sm font-semibold text-emerald-600">${rp(p.nilai)}</td>
         <td class="py-4 px-6"><div class="flex items-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-semibold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditStake(${p.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-semibold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteStake(${p.id}, this)">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="5" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    `).join('') : emptyTableRow(5);
     document.getElementById('stakeTitle').textContent = 'Penerima Bantuan';
     document.getElementById('stakeCount').textContent = data.length + ' Data';
   }
@@ -300,7 +299,7 @@
         <td class="py-4 px-6">${r.isVerified ? '<span class="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100 w-fit"><i class="ph ph-check-circle text-xs"></i>Terverifikasi</span>' : '<span class="flex items-center gap-1.5 text-[10px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100 w-fit"><i class="ph ph-warning-circle text-xs"></i>Belum Verifikasi</span>'}</td>
         <td class="py-4 px-6"><div class="flex items-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white font-semibold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openEditStake(${r.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white font-semibold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteStake(${r.id}, this)">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="5" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    `).join('') : emptyTableRow(5);
     document.getElementById('stakeTitle').textContent = 'Pendaftar Relawan';
     document.getElementById('stakeCount').textContent = data.length + ' Data';
   }

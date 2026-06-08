@@ -158,7 +158,7 @@
         <td class="py-5 px-6"><p class="text-sm text-slate-500 line-clamp-2 max-w-md">${f.answer}</p></td>
         <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editFaq(${f.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteFaq(${f.id}, this)">Hapus</button></div></td>
       </tr>
-    `).join('') : '<tr><td colspan="4" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    `).join('') : emptyTableRow(4);
     document.getElementById('faqCount').textContent = 'Menampilkan ' + data.length + ' baris data';
   }
 

@@ -40,18 +40,13 @@
   </div>
 </div>
 
-<div id="campaignModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-[100] p-4 overflow-y-auto">
-  <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto animate-scale-in">
-    <div class="bg-emerald-600 px-6 py-5 flex items-center justify-between">
-      <div>
-        <h3 id="campaignModalTitle" class="text-base font-bold text-white">Buat Campaign Baru</h3>
-        <p id="campaignModalSub" class="text-xs text-emerald-100/80">Isi detail campaign yang akan dipublikasikan</p>
-      </div>
-      <button id="closeCampaignModal" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white/20 text-white hover:bg-white/30 transition-all">
-        <i class="ph ph-x text-lg"></i>
-      </button>
-    </div>
-
+<x-admin.modal 
+    id="campaignModal" 
+    title="Buat Campaign Baru" 
+    subtitle="Isi detail campaign yang akan dipublikasikan" 
+    maxWidth="max-w-lg" 
+    headerColor="bg-emerald-600"
+    closeButtonId="closeCampaignModal">
     <form id="campaignForm" class="flex flex-col flex-1 overflow-hidden">
       <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
@@ -113,15 +108,16 @@
         </div>
       </div>
 
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0 rounded-b-3xl">
         <button type="button" id="cancelCampaignModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-white transition-all">Batal</button>
         <button type="submit" id="submitCampaignBtn" class="px-8 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
           <i class="ph ph-plus text-base"></i> Buat Campaign
         </button>
       </div>
     </form>
-  </div>
-</div>
+</x-admin.modal>
+
+
 
 <style>
   @keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -278,7 +274,7 @@
           </td>
         </tr>
       `;
-    }).join('') : '<tr><td colspan="6" class="py-20 text-center text-slate-400"><div class="flex flex-col items-center justify-center gap-3"><i class="ph ph-info text-[32px] text-slate-300"></i><p>Tidak ada data ditemukan.</p></div></td></tr>';
+    }).join('') : emptyTableRow(6);
     document.getElementById('campaignRows').innerHTML = rows;
     document.getElementById('campaignCount').textContent = `Menampilkan ${filtered.length} campaign`;
   }
@@ -340,6 +336,7 @@
     modal.classList.add('hidden');
     modal.classList.remove('flex');
   }
+
 
   function editCampaign(id) {
     const found = campaignState.campaigns.find(c => c.id === id);

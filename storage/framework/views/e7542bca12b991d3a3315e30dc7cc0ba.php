@@ -239,7 +239,7 @@
                 ?>
 
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-transform duration-300 group flex flex-col h-full">
-                    <div class="relative h-56 overflow-hidden">
+                    <a href="<?php echo e(route('campaign.detail', ['campaign' => $campaign->id])); ?>" class="relative h-56 overflow-hidden block">
                         <img src="<?php echo e($campaignImage); ?>" alt="<?php echo e($campaign->title); ?>" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 shadow-sm">
                             <?php echo e($campaign->category ?? 'Umum'); ?>
@@ -251,7 +251,7 @@
                             </div>
                         <?php endif; ?>
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                    </div>
+                    </a>
 
                     <div class="p-6 flex flex-col flex-1">
                         <h3 class="text-xl font-bold text-slate-900 leading-snug mb-4 group-hover:text-emerald-600 transition-colors line-clamp-2">
