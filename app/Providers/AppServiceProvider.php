@@ -48,7 +48,35 @@ class AppServiceProvider extends ServiceProvider
             'nav_faq_label' => 'FAQ (Tanya Jawab)',
             'nav_get_involved_label' => 'Pendaftaran Relawan',
             'nav_donate_button_text' => 'Donasi Sekarang',
+
+            // Menu enabled/disabled flags (default: enabled)
+            'admin_menu_dashboard_enabled' => '1',
+            'admin_menu_campaign_enabled' => '1',
+            'admin_menu_keuangantransparansi_enabled' => '1',
+            'admin_menu_databasestakeholder_enabled' => '1',
+            'admin_menu_messages_enabled' => '1',
+            'admin_menu_gallery_enabled' => '1',
+            'admin_menu_aboutus_enabled' => '1',
+            'admin_menu_members_enabled' => '1',
+            'admin_menu_focusareas_enabled' => '1',
+            'admin_menu_imageslider_enabled' => '1',
+            'admin_menu_partners_enabled' => '1',
+            'admin_menu_faqs_enabled' => '1',
+            'admin_menu_legal_enabled' => '1',
+            'admin_menu_settings_enabled' => '1',
+            'admin_menu_management_enabled' => '1',
+
+            'landing_menu_home_enabled' => '1',
+            'landing_menu_about_enabled' => '1',
+            'landing_menu_team_enabled' => '1',
+            'landing_menu_focus_areas_enabled' => '1',
+            'landing_menu_programs_enabled' => '1',
+            'landing_menu_gallery_enabled' => '1',
+            'landing_menu_faq_enabled' => '1',
+            'landing_menu_get_involved_enabled' => '1',
+            'landing_menu_donate_enabled' => '1',
         ];
+
 
         $siteSettings = $defaults;
 

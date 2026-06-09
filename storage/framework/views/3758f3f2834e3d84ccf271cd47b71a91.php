@@ -1,12 +1,10 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
-@php
+<?php $__env->startSection('admin-content'); ?>
+<?php
   $profile = $profile ?? [];
   $identity = $identity ?? [];
   $payment = $payment ?? [];
   $seo = $seo ?? [];
-@endphp
+?>
 
 <div class="max-w-6xl mx-auto space-y-6">
   <div id="settingToast" class="hidden items-center gap-3 px-5 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold fixed top-24 right-8 z-[100] shadow-lg">
@@ -35,19 +33,19 @@
             <div class="relative group cursor-pointer" id="profilePhotoTrigger">
               <input id="profilePhotoInput" type="file" accept="image/*" class="hidden">
               <div class="w-24 h-24 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shadow-sm transition-transform group-hover:scale-105">
-                <img id="profilePhotoPreview" class="{{ !empty($profile['photoUrl']) ? '' : 'hidden' }} w-full h-full object-cover" alt="Profile" @if(!empty($profile['photoUrl'])) src="{{ $profile['photoUrl'] }}" @endif>
-                <i id="profilePhotoIcon" class="ph ph-user text-[36px] text-emerald-600 {{ !empty($profile['photoUrl']) ? 'hidden' : '' }}"></i>
+                <img id="profilePhotoPreview" class="<?php echo e(!empty($profile['photoUrl']) ? '' : 'hidden'); ?> w-full h-full object-cover" alt="Profile" <?php if(!empty($profile['photoUrl'])): ?> src="<?php echo e($profile['photoUrl']); ?>" <?php endif; ?>>
+                <i id="profilePhotoIcon" class="ph ph-user text-[36px] text-emerald-600 <?php echo e(!empty($profile['photoUrl']) ? 'hidden' : ''); ?>"></i>
               </div>
               <div class="absolute -bottom-2 -right-2 bg-emerald-600 text-white p-3 rounded-full shadow-md transition-all group-hover:scale-110 w-10 h-10 flex items-center justify-center"><i class="ph ph-camera text-[14px]"></i></div>
             </div>
             <div class="text-center sm:text-left flex-1 space-y-3">
               <div>
                 <label class="block text-xs font-bold text-slate-400 mb-1.5">Nama Pengguna</label>
-                <input id="displayName" type="text" value="{{ $profile['displayName'] ?? '' }}" class="w-full max-w-sm px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20">
+                <input id="displayName" type="text" value="<?php echo e($profile['displayName'] ?? ''); ?>" class="w-full max-w-sm px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20">
               </div>
               <div>
                 <p class="text-[11px] text-slate-400 font-bold mb-0.5">Email Saat Ini</p>
-                <p id="currentEmail" class="text-sm font-bold text-slate-800">{{ $profile['email'] ?? '' }}</p>
+                <p id="currentEmail" class="text-sm font-bold text-slate-800"><?php echo e($profile['email'] ?? ''); ?></p>
               </div>
               <div class="max-w-sm">
                 <label class="block text-xs font-bold text-slate-500 mb-2">Ganti Email (opsional)</label>
@@ -72,8 +70,8 @@
               <div class="relative group cursor-pointer" id="logoTrigger">
                 <input id="logoInput" type="file" accept="image/*" class="hidden">
                 <div class="w-full aspect-video sm:aspect-square md:w-40 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center p-4 overflow-hidden shadow-sm">
-                  <img id="logoPreview" class="{{ !empty($identity['logoUrl']) ? '' : 'hidden' }} w-full h-full object-contain" alt="Logo" @if(!empty($identity['logoUrl'])) src="{{ $identity['logoUrl'] }}" @endif>
-                  <i id="logoIcon" class="ph ph-image text-[40px] text-slate-300 {{ !empty($identity['logoUrl']) ? 'hidden' : '' }}"></i>
+                  <img id="logoPreview" class="<?php echo e(!empty($identity['logoUrl']) ? '' : 'hidden'); ?> w-full h-full object-contain" alt="Logo" <?php if(!empty($identity['logoUrl'])): ?> src="<?php echo e($identity['logoUrl']); ?>" <?php endif; ?>>
+                  <i id="logoIcon" class="ph ph-image text-[40px] text-slate-300 <?php echo e(!empty($identity['logoUrl']) ? 'hidden' : ''); ?>"></i>
                 </div>
                 <div class="absolute bg-emerald-600 text-white p-3 rounded-full shadow-md w-10 h-10 flex items-center justify-center"><i class="ph ph-camera text-[14px]"></i></div>
               </div>
@@ -81,23 +79,23 @@
             <div class="md:col-span-2 space-y-4 justify-center flex flex-col">
               <div>
                 <label class="flex items-center gap-2 text-xs font-bold text-slate-500 mb-1.5"><i class="ph ph-flag text-[14px] text-emerald-500"></i> Nama Organisasi</label>
-                <input id="orgName" type="text" value="{{ $identity['orgName'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required>
+                <input id="orgName" type="text" value="<?php echo e($identity['orgName'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required>
               </div>
               <div>
                 <label class="flex items-center gap-2 text-xs font-bold text-slate-500 mb-1.5"><i class="ph ph-tag text-[14px] text-emerald-500"></i> Singkatan / Alias</label>
-                <input id="shortName" type="text" value="{{ $identity['shortName'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
+                <input id="shortName" type="text" value="<?php echo e($identity['shortName'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
               </div>
             </div>
           </div>
           <div class="space-y-1.5 pt-2 border-t border-slate-50">
             <label class="block text-xs font-bold text-slate-500 mb-1.5">Tagline Utama</label>
-            <input id="tagline" type="text" value="{{ $identity['tagline'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
+            <input id="tagline" type="text" value="<?php echo e($identity['tagline'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-envelope text-[14px] text-emerald-500"></i> Email Korespondensi</label><input id="identityEmail" type="email" value="{{ $identity['email'] ?? '' }}" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
-            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-phone text-[14px] text-emerald-500"></i> WhatsApp / Kontak</label><input id="identityPhone" type="text" value="{{ $identity['phone'] ?? '' }}" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
-            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-instagram-logo text-[14px] text-emerald-500"></i> URL Instagram</label><input id="identityInstagram" type="url" value="{{ $identity['instagramUrl'] ?? '' }}" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
-            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-map-pin text-[14px] text-emerald-500"></i> Alamat Sekretariat</label><input id="identityAddress" type="text" value="{{ $identity['address'] ?? '' }}" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
+            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-envelope text-[14px] text-emerald-500"></i> Email Korespondensi</label><input id="identityEmail" type="email" value="<?php echo e($identity['email'] ?? ''); ?>" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm" required></div>
+            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-phone text-[14px] text-emerald-500"></i> WhatsApp / Kontak</label><input id="identityPhone" type="text" value="<?php echo e($identity['phone'] ?? ''); ?>" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
+            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-instagram-logo text-[14px] text-emerald-500"></i> URL Instagram</label><input id="identityInstagram" type="url" value="<?php echo e($identity['instagramUrl'] ?? ''); ?>" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
+            <div><label class="flex items-center gap-2 text-xs font-bold text-slate-500"><i class="ph ph-map-pin text-[14px] text-emerald-500"></i> Alamat Sekretariat</label><input id="identityAddress" type="text" value="<?php echo e($identity['address'] ?? ''); ?>" class="w-full mt-1.5 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
           </div>
           <div class="flex justify-end pt-4 border-t border-slate-50"><button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 flex items-center gap-1.5"><i class="ph ph-floppy-disk text-base"></i> Simpan Identitas</button></div>
         </form>
@@ -109,9 +107,9 @@
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Bank</label><input id="bankName" type="text" value="{{ $payment['bankName'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Atas Nama (Pemilik Rekening)</label><input id="bankHolder" type="text" value="{{ $payment['bankHolder'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
-            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-500 mb-1.5">Nomor Rekening</label><input id="bankAccount" type="text" value="{{ $payment['bankAccount'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Bank</label><input id="bankName" type="text" value="<?php echo e($payment['bankName'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Atas Nama (Pemilik Rekening)</label><input id="bankHolder" type="text" value="<?php echo e($payment['bankHolder'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
+            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-500 mb-1.5">Nomor Rekening</label><input id="bankAccount" type="text" value="<?php echo e($payment['bankAccount'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
           </div>
           <div class="flex justify-center pt-2">
             <div class="space-y-4 w-full md:w-auto">
@@ -119,15 +117,15 @@
               <div class="relative group cursor-pointer" id="qrisTrigger">
                 <input id="qrisInput" type="file" accept="image/*" class="hidden">
                 <div class="w-full aspect-square md:w-56 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[32px] flex flex-col items-center justify-center p-6 overflow-hidden shadow-inner">
-                  <img id="qrisPreview" class="{{ !empty($payment['qrisUrl']) ? '' : 'hidden' }} w-full h-full object-contain" alt="QRIS" @if(!empty($payment['qrisUrl'])) src="{{ $payment['qrisUrl'] }}" @endif>
-                  <div id="qrisPlaceholder" class="{{ !empty($payment['qrisUrl']) ? 'hidden' : 'contents' }}">
+                  <img id="qrisPreview" class="<?php echo e(!empty($payment['qrisUrl']) ? '' : 'hidden'); ?> w-full h-full object-contain" alt="QRIS" <?php if(!empty($payment['qrisUrl'])): ?> src="<?php echo e($payment['qrisUrl']); ?>" <?php endif; ?>>
+                  <div id="qrisPlaceholder" class="<?php echo e(!empty($payment['qrisUrl']) ? 'hidden' : 'contents'); ?>">
                     <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-50 mb-3"><i class="ph ph-image text-2xl"></i></div>
                     <p class="text-[10px] font-bold text-slate-400 text-center">Tap untuk Upload QRIS</p>
                   </div>
                 </div>
               </div>
               <div class="flex items-center gap-3 p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl">
-                <input id="qrisReady" type="checkbox" {{ !empty($payment['qrisEnabled']) ? 'checked' : '' }} class="w-5 h-5 rounded-lg text-emerald-600 focus:ring-emerald-500 border-emerald-300">
+                <input id="qrisReady" type="checkbox" <?php echo e(!empty($payment['qrisEnabled']) ? 'checked' : ''); ?> class="w-5 h-5 rounded-lg text-emerald-600 focus:ring-emerald-500 border-emerald-300">
                 <div><p class="text-[11px] font-bold text-emerald-800">Aktifkan Metode QRIS</p><p class="text-[10px] text-emerald-600">Scan QRIS akan muncul di setiap modal donasi.</p></div>
               </div>
             </div>
@@ -138,9 +136,9 @@
         <form id="seoPane" class="hidden setting-pane space-y-8 animate-fade-in">
           <div><h3 class="text-base font-bold text-slate-900 mb-1">SEO & Pengaturan Global</h3><p class="text-xs text-slate-400">Optimasi pencarian Google dan status operasional website.</p></div>
           <div class="space-y-5">
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Meta Description (SEO)</label><textarea id="seoMetaDescription" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">{{ $seo['metaDescription'] ?? '' }}</textarea></div>
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Deskripsi Footer (Tagline)</label><textarea id="seoFooterTagline" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">{{ $seo['footerTagline'] ?? '' }}</textarea></div>
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Copyright Text Footer</label><input id="seoFooterCopyright" type="text" value="{{ $seo['footerCopyright'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Meta Description (SEO)</label><textarea id="seoMetaDescription" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"><?php echo e($seo['metaDescription'] ?? ''); ?></textarea></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Deskripsi Footer (Tagline)</label><textarea id="seoFooterTagline" rows="2" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"><?php echo e($seo['footerTagline'] ?? ''); ?></textarea></div>
+            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Copyright Text Footer</label><input id="seoFooterCopyright" type="text" value="<?php echo e($seo['footerCopyright'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></div>
             <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50 flex items-center justify-between">
               <div><p class="text-sm font-bold text-rose-900">Mode Pemeliharaan (Maintenance)</p><p class="text-xs text-rose-600">Pengunjung tidak dapat mengakses landing page saat aktif.</p></div>
               <button type="button" id="maintenanceToggle" class="px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all">Nonaktif</button>
@@ -180,7 +178,7 @@
               <h4 class="text-sm font-bold text-slate-700">Sidebar Admin</h4>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              @php
+              <?php
                 $adminMenuItems = [
                   ['key' => 'admin_menu_dashboard_enabled', 'label' => 'Dashboard'],
                   ['key' => 'admin_menu_campaign_enabled', 'label' => 'Campaign'],
@@ -198,16 +196,16 @@
                   ['key' => 'admin_menu_settings_enabled', 'label' => 'Akun & Sistem'],
                   ['key' => 'admin_menu_management_enabled', 'label' => 'Manajemen Admin'],
                 ];
-              @endphp
-              @foreach($adminMenuItems as $item)
+              ?>
+              <?php $__currentLoopData = $adminMenuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition-colors">
-                  <span class="text-xs font-semibold text-slate-700">{{ $item['label'] }}</span>
+                  <span class="text-xs font-semibold text-slate-700"><?php echo e($item['label']); ?></span>
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="menu-toggle sr-only peer" data-key="{{ $item['key'] }}" value="1" {{ ($siteSettings[$item['key']] ?? '1') === '1' ? 'checked' : '' }}>
+                    <input type="checkbox" class="menu-toggle sr-only peer" data-key="<?php echo e($item['key']); ?>" value="1" <?php echo e(($siteSettings[$item['key']] ?? '1') === '1' ? 'checked' : ''); ?>>
                     <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                   </label>
                 </div>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
           </div>
 
@@ -218,7 +216,7 @@
               <h4 class="text-sm font-bold text-slate-700">Menu Halaman Depan</h4>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              @php
+              <?php
                 $landingMenuItems = [
                   ['key' => 'landing_menu_home_enabled', 'label' => 'Beranda'],
                   ['key' => 'landing_menu_about_enabled', 'label' => 'Tentang Kami'],
@@ -230,16 +228,16 @@
                   ['key' => 'landing_menu_get_involved_enabled', 'label' => 'Pendaftaran Relawan'],
                   ['key' => 'landing_menu_donate_enabled', 'label' => 'Tombol Donasi'],
                 ];
-              @endphp
-              @foreach($landingMenuItems as $item)
+              ?>
+              <?php $__currentLoopData = $landingMenuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition-colors">
-                  <span class="text-xs font-semibold text-slate-700">{{ $item['label'] }}</span>
+                  <span class="text-xs font-semibold text-slate-700"><?php echo e($item['label']); ?></span>
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="menu-toggle sr-only peer" data-key="{{ $item['key'] }}" value="1" {{ ($siteSettings[$item['key']] ?? '1') === '1' ? 'checked' : '' }}>
+                    <input type="checkbox" class="menu-toggle sr-only peer" data-key="<?php echo e($item['key']); ?>" value="1" <?php echo e(($siteSettings[$item['key']] ?? '1') === '1' ? 'checked' : ''); ?>>
                     <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                   </label>
                 </div>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
           </div>
 
@@ -258,15 +256,15 @@
 </style>
 
 <script>
-  const ss = { active: 'profil', maintenance: @json(!empty($seo['maintenanceMode'])) };
-  const csrfToken = @json(csrf_token());
+  const ss = { active: 'profil', maintenance: <?php echo json_encode(!empty($seo['maintenanceMode']), 15, 512) ?> };
+  const csrfToken = <?php echo json_encode(csrf_token(), 15, 512) ?>;
   const endpoints = {
-    profile: @json(route('admin.settings.profile.update')),
-    identity: @json(route('admin.settings.identity.update')),
-    payment: @json(route('admin.settings.payment.update')),
-    seo: @json(route('admin.settings.seo.update')),
-    security: @json(route('admin.settings.security.update')),
-    menu: @json(route('admin.settings.menu.update')),
+    profile: <?php echo json_encode(route('admin.settings.profile.update'), 15, 512) ?>,
+    identity: <?php echo json_encode(route('admin.settings.identity.update'), 15, 512) ?>,
+    payment: <?php echo json_encode(route('admin.settings.payment.update'), 15, 512) ?>,
+    seo: <?php echo json_encode(route('admin.settings.seo.update'), 15, 512) ?>,
+    security: <?php echo json_encode(route('admin.settings.security.update'), 15, 512) ?>,
+    menu: <?php echo json_encode(route('admin.settings.menu.update'), 15, 512) ?>,
   };
 
   function toast(msg) {
@@ -537,4 +535,6 @@
     }
   });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/admin/settings.blade.php ENDPATH**/ ?>

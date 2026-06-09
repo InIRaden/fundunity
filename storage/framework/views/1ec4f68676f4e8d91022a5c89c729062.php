@@ -1,4 +1,4 @@
-@php
+<?php
   // Menu items for admin sidebar
   $menuItems = [
     ['route' => 'admin.dashboard', 'icon' => 'ph ph-house', 'label' => 'Dashboard', 'key' => 'admin_menu_dashboard_enabled'],
@@ -16,55 +16,74 @@
     ['route' => 'admin.legal', 'icon' => 'ph ph-book-open', 'label' => 'Kebijakan & Privasi', 'key' => 'admin_menu_legal_enabled'],
     ['route' => 'admin.settings', 'icon' => 'ph ph-gear-six', 'label' => 'Akun & Sistem', 'key' => 'admin_menu_settings_enabled'],
   ];
-@endphp
+?>
 
 <div class="relative">
   <!-- Sidebar -->
   <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out bg-emerald-600 text-white rounded-r-3xl w-56 z-40">
     <!-- Logo Area -->
     <div id="sidebarLogo" class="flex items-center shrink-0 mt-4 mb-4 px-5 gap-3 transition-all duration-300 sidebar-logo-open">
-      <x-logo class="h-8 w-auto min-w-[32px] transition-all duration-300" containerClass="bg-white/20 text-white rounded-lg" iconClass="text-lg" />
-      <span class="text-sm font-bold text-white tracking-tight opacity-90 whitespace-nowrap sidebar-text-show">{{ $siteSettings['site_short_name'] ?? 'FundUnity' }}</span>
+      <?php if (isset($component)) { $__componentOriginal987d96ec78ed1cf75b349e2e5981978f = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal987d96ec78ed1cf75b349e2e5981978f = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.logo','data' => ['class' => 'h-8 w-auto min-w-[32px] transition-all duration-300','containerClass' => 'bg-white/20 text-white rounded-lg','iconClass' => 'text-lg']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('logo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'h-8 w-auto min-w-[32px] transition-all duration-300','containerClass' => 'bg-white/20 text-white rounded-lg','iconClass' => 'text-lg']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal987d96ec78ed1cf75b349e2e5981978f)): ?>
+<?php $attributes = $__attributesOriginal987d96ec78ed1cf75b349e2e5981978f; ?>
+<?php unset($__attributesOriginal987d96ec78ed1cf75b349e2e5981978f); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal987d96ec78ed1cf75b349e2e5981978f)): ?>
+<?php $component = $__componentOriginal987d96ec78ed1cf75b349e2e5981978f; ?>
+<?php unset($__componentOriginal987d96ec78ed1cf75b349e2e5981978f); ?>
+<?php endif; ?>
+      <span class="text-sm font-bold text-white tracking-tight opacity-90 whitespace-nowrap sidebar-text-show"><?php echo e($siteSettings['site_short_name'] ?? 'FundUnity'); ?></span>
     </div>
 
     <nav class="flex-1 space-y-0.5 px-3 mt-1 overflow-y-auto overflow-x-hidden relative hide-scrollbar">
-      @foreach($menuItems as $item)
-        @php
+      <?php $__currentLoopData = $menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php
           $enabled = (string)($siteSettings[$item['key']] ?? '1') === '1';
-        @endphp
+        ?>
 
-        @if($enabled)
-          <a href="{{ route($item['route']) }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ request()->routeIs($item['route']) ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-slate-300 hover:bg-emerald-700 hover:text-white rounded-2xl px-4' }}">
-            @if(request()->routeIs($item['route']))
+        <?php if($enabled): ?>
+          <a href="<?php echo e(route($item['route'])); ?>" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer <?php echo e(request()->routeIs($item['route']) ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-slate-300 hover:bg-emerald-700 hover:text-white rounded-2xl px-4'); ?>">
+            <?php if(request()->routeIs($item['route'])): ?>
               <!-- Top Inverted Curve -->
               <div class="absolute right-0 -top-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at top left, transparent 20px, #f8fafc 0);"></div>
               <!-- Bottom Inverted Curve -->
               <div class="absolute right-0 -bottom-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at bottom left, transparent 20px, #f8fafc 0);"></div>
-            @endif
-            <i class="{{ $item['icon'] }} shrink-0 text-[19px] leading-none"></i>
-            <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ request()->routeIs($item['route']) ? 'text-emerald-600' : '' }}">{{ $item['label'] }}</span>
+            <?php endif; ?>
+            <i class="<?php echo e($item['icon']); ?> shrink-0 text-[19px] leading-none"></i>
+            <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show <?php echo e(request()->routeIs($item['route']) ? 'text-emerald-600' : ''); ?>"><?php echo e($item['label']); ?></span>
           </a>
-        @endif
-      @endforeach
+        <?php endif; ?>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
-      {{-- Menu Manajemen Admin - hanya tampil untuk Super Admin --}}
-      @if(Auth::user()?->isSuperAdmin() && (string)($siteSettings['admin_menu_management_enabled'] ?? '1') === '1')
-        <a href="{{ route('admin.management') }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ request()->routeIs('admin.management') ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-amber-200 hover:bg-emerald-700 hover:text-white rounded-2xl px-4' }}">
-          @if(request()->routeIs('admin.management'))
+      
+      <?php if(Auth::user()?->isSuperAdmin() && (string)($siteSettings['admin_menu_management_enabled'] ?? '1') === '1'): ?>
+        <a href="<?php echo e(route('admin.management')); ?>" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer <?php echo e(request()->routeIs('admin.management') ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-amber-200 hover:bg-emerald-700 hover:text-white rounded-2xl px-4'); ?>">
+          <?php if(request()->routeIs('admin.management')): ?>
             <div class="absolute right-0 -top-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at top left, transparent 20px, #f8fafc 0);"></div>
             <div class="absolute right-0 -bottom-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at bottom left, transparent 20px, #f8fafc 0);"></div>
-          @endif
+          <?php endif; ?>
           <i class="ph ph-crown shrink-0 text-[19px] leading-none"></i>
-          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ request()->routeIs('admin.management') ? 'text-emerald-600' : '' }}">Manajemen Admin</span>
+          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show <?php echo e(request()->routeIs('admin.management') ? 'text-emerald-600' : ''); ?>">Manajemen Admin</span>
         </a>
-      @endif
+      <?php endif; ?>
     </nav>
 
     <!-- Logout -->
     <div class="px-3 pb-4 pt-2 mt-auto">
-      <form method="POST" action="{{ route('logout') }}">
-        @csrf
+      <form method="POST" action="<?php echo e(route('logout')); ?>">
+        <?php echo csrf_field(); ?>
         <button type="submit" class="sidebar-item relative group w-full flex items-center gap-3 py-2.5 rounded-xl text-slate-200 hover:bg-rose-600/10 hover:text-rose-400 transition-all px-4">
           <i class="ph ph-door-open shrink-0 text-[19px] leading-none"></i>
           <span class="text-[13px] font-semibold tracking-wide sidebar-text-show">Keluar</span>
@@ -105,3 +124,4 @@
     }
   </style>
 </div>
+<?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/layouts/admin/sidebar.blade.php ENDPATH**/ ?>

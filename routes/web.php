@@ -76,6 +76,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-passwo
     Route::post('/settings/payment', [AdminSettingsController::class, 'updatePayment'])->name('settings.payment.update');
     Route::post('/settings/seo', [AdminSettingsController::class, 'updateSeo'])->name('settings.seo.update');
     Route::post('/settings/security', [AdminSettingsController::class, 'updateSecurity'])->name('settings.security.update');
+    Route::post('/settings/menu', [AdminSettingsController::class, 'updateMenu'])->name('settings.menu.update');
 
     // Legal management routes
     Route::get('/legal', [AdminUiController::class, 'legal'])->name('legal');
