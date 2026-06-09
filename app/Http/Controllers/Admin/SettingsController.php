@@ -156,7 +156,7 @@ class SettingsController extends Controller
             'qrisEnabled' => ['nullable', 'boolean'],
             'qrisUrl' => ['nullable', 'url', 'max:500'],
             'qris_file' => [
-                $hasExistingQris ? 'nullable' : 'required', 
+                $hasExistingQris ? 'nullable' : 'required',
                 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'
             ],
         ], [
@@ -288,6 +288,15 @@ class SettingsController extends Controller
 
     public function updateMenu(Request $request): JsonResponse
     {
+        // Termasuk setting tema admin lewat endpoint yang sama (agar UI cukup 1 tombol "Simpan")
+        $themePreset = $request->string('admin_theme_preset')->toString();
+        $allowedPresets = ['emerald', 'indigo', 'slate', 'rose'];
+        if (!in_array($themePreset, $allowedPresets, true)) {
+            $themePreset = 'emerald';
+        }
+
+        $this->upsertSetting('admin_theme_preset', $themePreset, 'text', 'menu', 'Admin Theme Preset');
+
         $allowedKeys = [
             'admin_menu_dashboard_enabled',
             'admin_menu_campaign_enabled',
@@ -315,10 +324,27 @@ class SettingsController extends Controller
             'landing_menu_donate_enabled',
         ];
 
+        // Ambil payload yang valid saja (key lain diabaikan)
         $payload = $request->all();
 
         foreach ($allowedKeys as $key) {
-            $value = array_key_exists($key, $payload) ? '1' : '0';
+            $incoming = $payload[$key] ?? null;
+            $value = null;
+
+            if ($incoming === '1' || $incoming === 1 || $incoming === true || $incoming === 'true') {
+                $value = '1';
+            } elseif ($incoming === '0' || $incoming === 0 || $incoming === false || $incoming === 'false') {
+                $value = '0';
+            } else {
+                // Jika key tidak dikirim dari UI, anggap tidak berubah.
+                $existing = SiteSetting::query()->where('key', $key)->value('value');
+                if ($existing === null) {
+                    $value = '1';
+                } else {
+                    $value = $existing;
+                }
+            }
+
             $this->upsertSetting($key, $value, 'text', 'menu', ucwords(str_replace('_', ' ', $key)));
         }
 

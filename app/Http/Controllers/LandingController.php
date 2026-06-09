@@ -22,8 +22,21 @@ use Illuminate\Support\Facades\Schema;
 
 class LandingController extends Controller
 {
+    private function loadSiteSettings(): array
+    {
+        return \App\Models\SiteSetting::query()->pluck('value', 'key')->all();
+    }
+
     public function index()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_home_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $page = Page::where('slug', 'home')->first();
 
         $sliderItems = ImageSlider::where('is_active', true)
@@ -59,6 +72,7 @@ class LandingController extends Controller
         ];
 
         return view('landing.home', compact(
+            'siteSettings',
             'page',
             'sliderItems',
             'homeCampaigns',
@@ -70,6 +84,14 @@ class LandingController extends Controller
 
     public function about()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_about_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $page = Page::where('slug', 'about')->first();
 
         $generalProfile = AboutUsItem::where('section', 'general')
@@ -91,21 +113,37 @@ class LandingController extends Controller
             'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
         ];
 
-        return view('landing.about', compact('page', 'generalProfile', 'homePartners', 'impactStats'));
+        return view('landing.about', compact('siteSettings', 'page', 'generalProfile', 'homePartners', 'impactStats'));
     }
 
     public function team()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_team_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $teamMembers = TeamMember::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
             ->get();
 
-        return view('landing.team', compact('teamMembers'));
+        return view('landing.team', compact('siteSettings', 'teamMembers'));
     }
 
     public function programs()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_programs_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $campaigns = Campaign::where('is_active', true)
             ->where('status', 'aktif')
             ->orderBy('deadline')
@@ -118,7 +156,7 @@ class LandingController extends Controller
             ->unique()
             ->values();
 
-        return view('landing.programs', compact('campaigns', 'categories'));
+        return view('landing.programs', compact('siteSettings', 'campaigns', 'categories'));
     }
 
     public function campaignDetail(Campaign $campaign)
@@ -150,6 +188,14 @@ class LandingController extends Controller
 
     public function focusAreas()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_focus_areas_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $focusAreas = FocusArea::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
@@ -164,21 +210,31 @@ class LandingController extends Controller
 
         $activeCampaignCount = Campaign::where('is_active', true)->where('status', 'aktif')->count();
 
-        return view('landing.focus-areas', compact('focusAreas', 'impactStats', 'activeCampaignCount'));
+        return view('landing.focus-areas', compact('siteSettings', 'focusAreas', 'impactStats', 'activeCampaignCount'));
     }
 
     public function gallery()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_gallery_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $galleryItems = GalleryItem::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
             ->get();
 
-        return view('landing.gallery', compact('galleryItems'));
+        return view('landing.gallery', compact('siteSettings', 'galleryItems'));
     }
 
     public function partners()
     {
+        $siteSettings = $this->loadSiteSettings();
+
         $partners = Partner::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
@@ -198,17 +254,29 @@ class LandingController extends Controller
             'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
         ];
 
-        return view('landing.partners', compact('partnerGroups', 'impactStats'));
+        return view('landing.partners', compact('siteSettings', 'partnerGroups', 'impactStats'));
     }
 
     public function contact()
     {
-        return view('landing.contact');
+        $siteSettings = $this->loadSiteSettings();
+        // Tidak ada flag landing_menu_contact_enabled di UI saat ini, jadi tidak diblokir.
+
+
+        return view('landing.contact', compact('siteSettings'));
     }
 
     public function donationForm(?Campaign $campaign = null)
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_donate_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
         $qrisUrl = \App\Models\SiteSetting::where('key', 'payment_qris_url')->value('value');
+
 
         return view('landing.donation', [
             'selectedCampaign' => $campaign,
@@ -295,17 +363,34 @@ class LandingController extends Controller
 
     public function faq()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_faq_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $faqs = Faq::where('is_active', true)
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
             ->get();
 
-        return view('landing.faq', compact('faqs'));
+        return view('landing.faq', compact('siteSettings', 'faqs'));
     }
 
     public function getInvolved()
     {
+        $siteSettings = $this->loadSiteSettings();
+        if (($siteSettings['landing_menu_get_involved_enabled'] ?? '1') !== '1') {
+            return response()->view('feature-off', [
+                'message' => 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!',
+            ], 503);
+        }
+
+
         $involvementTypes = collect();
+
 
         if (Schema::hasTable('involvement_types')) {
             $involvementTypes = DB::table('involvement_types')
@@ -332,7 +417,7 @@ class LandingController extends Controller
                 ->get();
         }
 
-        return view('landing.get-involved', compact('involvementTypes', 'involvementBenefits'));
+        return view('landing.get-involved', compact('siteSettings', 'involvementTypes', 'involvementBenefits'));
     }
 
     public function submitGetInvolved(Request $request)

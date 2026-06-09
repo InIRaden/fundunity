@@ -35,6 +35,28 @@
     ];
 @endphp
 
+@php
+    // Ambil ulang setting menu dari DB agar selalu sinkron (tanpa bergantung cache/share sebelumnya)
+    use App\Models\SiteSetting;
+
+    $landingMenuKeys = [
+        'landing_menu_home_enabled',
+        'landing_menu_about_enabled',
+        'landing_menu_team_enabled',
+        'landing_menu_focus_areas_enabled',
+        'landing_menu_programs_enabled',
+        'landing_menu_gallery_enabled',
+        'landing_menu_faq_enabled',
+        'landing_menu_get_involved_enabled',
+        'landing_menu_donate_enabled',
+    ];
+
+    $landingMenuSettings = SiteSetting::query()
+        ->whereIn('key', $landingMenuKeys)
+        ->pluck('value', 'key')
+        ->all();
+@endphp
+
 <header
     id="landingHeader"
     data-home="{{ $isLandingHome ? 'true' : 'false' }}"

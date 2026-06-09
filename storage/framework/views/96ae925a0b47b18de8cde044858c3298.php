@@ -36,7 +36,25 @@
         };
     </script>
 </head>
+<?php
+    $adminThemePreset = (string)($siteSettings['admin_theme_preset'] ?? 'emerald');
+    $theme = match($adminThemePreset) {
+        'indigo' => ['primary' => 'indigo', 'ring' => 'indigo-500', 'sidebar' => 'indigo-600', 'sidebarHover' => 'indigo-700'],
+        'slate'  => ['primary' => 'slate',  'ring' => 'slate-500',  'sidebar' => 'slate-700',  'sidebarHover' => 'slate-800'],
+        'rose'   => ['primary' => 'rose',   'ring' => 'rose-500',   'sidebar' => 'rose-600',   'sidebarHover' => 'rose-700'],
+        default  => ['primary' => 'emerald', 'ring' => 'emerald-500', 'sidebar' => 'emerald-600', 'sidebarHover' => 'emerald-700'],
+    };
+?>
+
 <body data-page="<?php echo $__env->yieldContent('body-data',''); ?>" class="font-sans antialiased bg-gray-50">
+
+<script>
+  // pass theme to CSS vars
+  (function(){
+    document.documentElement.style.setProperty('--admin-primary-600', '<?php echo e($theme['sidebar']); ?>');
+  })();
+</script>
+
     <div class="min-h-screen bg-gray-50">
         <?php echo $__env->make('layouts.admin.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
@@ -89,7 +107,7 @@
                 })();
             </script>
             <?php echo $__env->make('layouts.admin.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-            
+
             <?php if(isset($siteSettings['maintenance_mode']) && $siteSettings['maintenance_mode'] === '1'): ?>
             <div class="bg-rose-500 text-white px-4 py-3 text-center text-sm font-bold flex items-center justify-center gap-2 shadow-sm relative z-20">
                 <i class="ph ph-warning-circle text-lg animate-pulse"></i>

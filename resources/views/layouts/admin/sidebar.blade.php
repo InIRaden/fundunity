@@ -20,7 +20,18 @@
 
 <div class="relative">
   <!-- Sidebar -->
-  <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out bg-emerald-600 text-white rounded-r-3xl w-56 z-40">
+  @php
+    $adminThemePreset = (string)($siteSettings['admin_theme_preset'] ?? 'emerald');
+    $sidebarBgClass = match($adminThemePreset) {
+      'indigo' => 'bg-indigo-600',
+      'slate' => 'bg-slate-700',
+      'rose' => 'bg-rose-600',
+      default => 'bg-emerald-600',
+    };
+  @endphp
+
+  <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out {{ $sidebarBgClass }} text-white rounded-r-3xl w-56 z-40">
+
     <!-- Logo Area -->
     <div id="sidebarLogo" class="flex items-center shrink-0 mt-4 mb-4 px-5 gap-3 transition-all duration-300 sidebar-logo-open">
       <x-logo class="h-8 w-auto min-w-[32px] transition-all duration-300" containerClass="bg-white/20 text-white rounded-lg" iconClass="text-lg" />

@@ -105,7 +105,7 @@
             <h3 class="text-base font-bold text-slate-900 mb-1">Rekening Donasi Utama</h3>
             <p class="text-xs text-slate-400">Konfigurasi rekening bank dan upload QRIS global yayasan.</p>
           </div>
-          
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
             <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Bank</label><input id="bankName" type="text" value="<?php echo e($payment['bankName'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
             <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Atas Nama (Pemilik Rekening)</label><input id="bankHolder" type="text" value="<?php echo e($payment['bankHolder'] ?? ''); ?>" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
@@ -170,6 +170,28 @@
             <h3 class="text-base font-bold text-slate-900 mb-1">Manajemen Menu</h3>
             <p class="text-xs text-slate-400">Aktifkan atau nonaktifkan menu di sidebar admin dan halaman depan. Hanya Super Admin yang dapat mengakses pengaturan ini.</p>
           </div>
+
+          <!-- Admin Theme Preset -->
+          <div class="p-5 rounded-2xl border border-slate-100 bg-slate-50">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <h4 class="text-sm font-bold text-slate-800">Tema Warna Admin</h4>
+                <p class="text-xs text-slate-500">Pilih preset warna untuk sidebar & tombol admin.</p>
+              </div>
+              <div class="min-w-[210px]">
+                <select id="adminThemePreset" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20">
+                  <?php
+                    $currentTheme = (string)($siteSettings['admin_theme_preset'] ?? 'emerald');
+                  ?>
+                  <option value="emerald" <?php echo e($currentTheme === 'emerald' ? 'selected' : ''); ?>>Emerald</option>
+                  <option value="indigo" <?php echo e($currentTheme === 'indigo' ? 'selected' : ''); ?>>Indigo</option>
+                  <option value="slate" <?php echo e($currentTheme === 'slate' ? 'selected' : ''); ?>>Slate</option>
+                  <option value="rose" <?php echo e($currentTheme === 'rose' ? 'selected' : ''); ?>>Rose</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
 
           <!-- Admin Sidebar Menu -->
           <div class="space-y-4">
@@ -521,9 +543,14 @@
 
     try {
       const payload = {};
-      document.querySelectorAll('.menu-toggle').forEach(function (toggle) {
+      // Tema admin
+      payload.admin_theme_preset = document.getElementById('adminThemePreset')?.value || 'emerald';
+
+      // ambil checkbox yang memang punya data-key
+      document.querySelectorAll('input[type="checkbox"][data-key]').forEach(function (toggle) {
         payload[toggle.dataset.key] = toggle.checked ? '1' : '0';
       });
+
 
       const result = await requestJson(endpoints.menu, payload);
       toast(result.message || 'Pengaturan menu berhasil disimpan.');
