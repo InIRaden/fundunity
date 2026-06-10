@@ -11,13 +11,13 @@
   <div class="flex items-center gap-3">
     <!-- Avatar → Settings -->
     <div class="flex items-center gap-2 cursor-pointer group" onclick="window.location.href='<?php echo e(route('admin.settings')); ?>'">
-      <p class="text-xs font-bold text-slate-700 hidden sm:block group-hover:text-emerald-700 transition-colors"><?php echo e(auth()->user()?->name ?? 'Admin'); ?></p>
+      <p class="text-xs font-bold text-slate-700 hidden sm:block group-hover:text-admin-700 transition-colors"><?php echo e(auth()->user()?->name ?? 'Admin'); ?></p>
       <div class="relative">
-        <div class="w-8 h-8 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center text-emerald-600 group-hover:bg-emerald-100 transition-all">
+        <div class="w-8 h-8 bg-admin-50 border border-admin-200 rounded-full flex items-center justify-center text-admin-600 group-hover:bg-admin-100 transition-all">
           <i class="ph ph-user text-sm leading-none"></i>
         </div>
         <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-white rounded-full border border-slate-200 flex items-center justify-center">
-          <i class="ph ph-gear-six text-[9px] text-slate-400 group-hover:text-emerald-600 leading-none"></i>
+          <i class="ph ph-gear-six text-[9px] text-slate-400 group-hover:text-admin-600 leading-none"></i>
         </div>
       </div>
     </div>

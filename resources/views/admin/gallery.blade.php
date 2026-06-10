@@ -7,10 +7,10 @@
       <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">Galeri Aktivitas</h2>
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-          <input id="gallerySearch" type="text" placeholder="Cari dokumentasi..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-admin-500"></i>
+          <input id="gallerySearch" type="text" placeholder="Cari dokumentasi..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-admin-500 text-admin-900 rounded-xl text-sm focus:ring-4 focus:ring-admin-500/20 outline-none transition-all placeholder:text-admin-500/50 shadow-sm">
         </div>
-        <button id="openGalleryModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+        <button id="openGalleryModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-admin-600 text-white rounded-lg text-xs font-bold hover:bg-admin-700 transition-colors shadow-sm whitespace-nowrap">
           <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Foto</span>
         </button>
       </div>
@@ -25,20 +25,20 @@
     title="Dokumentasi Baru" 
     subtitle="Unggah bukti kegiatan lapangan untuk transparansi publik."
     maxWidth="max-w-xl" 
-    headerColor="bg-emerald-600"
+    headerColor="bg-admin-600"
     closeButtonId="closeGalleryModal">
     <form id="galleryForm" class="flex flex-col flex-1 overflow-hidden">
       <input id="galleryEditingId" type="hidden">
       <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-2">Judul Aktivitas</label>
-          <input id="galleryTitle" required class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 outline-none focus:border-emerald-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-300" placeholder="Cth: Penyerahan Beasiswa Tahap II">
+          <input id="galleryTitle" required class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 outline-none focus:border-admin-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-300" placeholder="Cth: Penyerahan Beasiswa Tahap II">
         </div>
 
         <div class="grid grid-cols-2 gap-5">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-2">Kategori</label>
-            <select id="galleryCategory" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-all font-semibold text-slate-700">
+            <select id="galleryCategory" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 outline-none focus:border-admin-500 transition-all font-semibold text-slate-700">
               <option>Pendidikan</option>
               <option>Kesehatan</option>
               <option>Bencana Alam</option>
@@ -47,14 +47,14 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-2">Tanggal Kegiatan</label>
-            <input id="galleryDate" type="date" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-all font-semibold">
+            <input id="galleryDate" type="date" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 outline-none focus:border-admin-500 transition-all font-semibold">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-2">Foto Utama (Upload)</label>
           <div class="border border-dashed border-slate-300 rounded-xl p-4 bg-slate-50">
-            <input id="galleryImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 file:font-semibold">
+            <input id="galleryImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-admin-50 file:px-3 file:py-2 file:text-admin-700 file:font-semibold">
             <p class="text-xs text-slate-400 mt-2">Format: JPG, PNG, WEBP. Maksimal 4MB.</p>
           </div>
         </div>
@@ -62,7 +62,7 @@
 
       <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl shrink-0">
         <button type="button" id="cancelGalleryModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Tutup</button>
-        <button id="submitGalleryBtn" type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-emerald-600/30 transition-all">Simpan Dokumentasi</button>
+        <button id="submitGalleryBtn" type="submit" class="px-6 py-2.5 bg-admin-600 hover:bg-admin-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-admin-600/30 transition-all">Simpan Dokumentasi</button>
       </div>
     </form>
 </x-admin.modal>
@@ -149,11 +149,11 @@
         <div class="aspect-video relative overflow-hidden">
           <img src="${item.imageUrl || 'https://placehold.co/600x400?text=No+Image'}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
           <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-2 bg-rose-600 text-white rounded-xl shadow-lg hover:bg-rose-700 transition-colors" onclick="deleteGallery(${item.id}, this)"><i class="ph ph-trash text-base"></i></button></div>
-          <div class="absolute bottom-3 left-3 flex gap-2"><span class="text-[10px] bg-white/90 backdrop-blur-md text-emerald-700 font-bold px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm"><i class="ph ph-tag text-xs"></i>${item.category}</span></div>
+          <div class="absolute bottom-3 left-3 flex gap-2"><span class="text-[10px] bg-white/90 backdrop-blur-md text-admin-700 font-bold px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm"><i class="ph ph-tag text-xs"></i>${item.category}</span></div>
         </div>
         <div class="p-5">
-          <h3 class="font-bold text-slate-800 text-base mb-2 group-hover:text-emerald-600 transition-colors">${item.title}</h3>
-          <div class="flex items-center justify-between"><p class="text-xs text-slate-500 flex items-center gap-1.5 font-medium"><i class="ph ph-calendar-blank text-sm text-emerald-400"></i> ${item.date || '-'}</p><button class="text-[10px] font-bold text-emerald-600 hover:underline" onclick="openGalleryModal(${item.id})">Edit Detail</button></div>
+          <h3 class="font-bold text-slate-800 text-base mb-2 group-hover:text-admin-600 transition-colors">${item.title}</h3>
+          <div class="flex items-center justify-between"><p class="text-xs text-slate-500 flex items-center gap-1.5 font-medium"><i class="ph ph-calendar-blank text-sm text-admin-400"></i> ${item.date || '-'}</p><button class="text-[10px] font-bold text-admin-600 hover:underline" onclick="openGalleryModal(${item.id})">Edit Detail</button></div>
         </div>
       </div>
     `).join('');

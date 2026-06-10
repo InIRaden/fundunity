@@ -7,10 +7,10 @@
       <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">Daftar Campaign</h2>
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-          <input id="campaignSearch" type="text" placeholder="Cari campaign atau kategori..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-admin-500"></i>
+          <input id="campaignSearch" type="text" placeholder="Cari campaign atau kategori..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-admin-500 text-admin-900 rounded-xl text-sm focus:ring-4 focus:ring-admin-500/20 outline-none transition-all placeholder:text-admin-500/50 shadow-sm">
         </div>
-        <button id="openCampaignModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+        <button id="openCampaignModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-admin-600 text-white rounded-lg text-xs font-bold hover:bg-admin-700 transition-colors shadow-sm whitespace-nowrap">
           <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Campaign</span>
         </button>
       </div>
@@ -19,13 +19,13 @@
     <div class="overflow-x-auto">
       <table class="w-full border-collapse">
         <thead>
-          <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Campaign</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Kategori</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Progress Donasi</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Deadline</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Status</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Aksi</th>
+          <tr class="bg-admin-600">
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Campaign</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Kategori</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Progress Donasi</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Deadline</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Status</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Aksi</th>
           </tr>
         </thead>
         <tbody id="campaignRows" class="divide-y divide-slate-100"></tbody>
@@ -40,25 +40,25 @@
 
 <?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'campaignModal','title' => 'Buat Campaign Baru','subtitle' => 'Isi detail campaign yang akan dipublikasikan','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeCampaignModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'campaignModal','title' => 'Buat Campaign Baru','subtitle' => 'Isi detail campaign yang akan dipublikasikan','maxWidth' => 'max-w-lg','headerColor' => 'bg-admin-600','closeButtonId' => 'closeCampaignModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('admin.modal'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['id' => 'campaignModal','title' => 'Buat Campaign Baru','subtitle' => 'Isi detail campaign yang akan dipublikasikan','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeCampaignModal']); ?>
+<?php $component->withAttributes(['id' => 'campaignModal','title' => 'Buat Campaign Baru','subtitle' => 'Isi detail campaign yang akan dipublikasikan','maxWidth' => 'max-w-lg','headerColor' => 'bg-admin-600','closeButtonId' => 'closeCampaignModal']); ?>
     <form id="campaignForm" class="flex flex-col flex-1 overflow-hidden">
       <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Judul Campaign</label>
-          <input required id="fTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="Contoh: Bantuan Bencana NTT">
+          <input required id="fTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all" placeholder="Contoh: Bantuan Bencana NTT">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1.5">Kategori</label>
-            <select required id="fCategory" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all">
+            <select required id="fCategory" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all">
               <option value="Bencana Alam">Bencana Alam</option>
               <option value="Pendidikan">Pendidikan</option>
               <option value="Kesehatan">Kesehatan</option>
@@ -84,22 +84,22 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Nominal (Rp)</label>
-            <input required id="fTarget" type="number" min="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="50000000">
+            <input required id="fTarget" type="number" min="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all" placeholder="50000000">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1.5">Deadline</label>
-            <input required id="fDeadline" type="date" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all">
+            <input required id="fDeadline" type="date" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Deskripsi Campaign</label>
-          <textarea required id="fDescription" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all resize-none" placeholder="Jelaskan tujuan dan detail campaign ini..."></textarea>
+          <textarea required id="fDescription" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all resize-none" placeholder="Jelaskan tujuan dan detail campaign ini..."></textarea>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Upload Poster/Thumbnail (Opsional)</label>
-          <input id="fImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+          <input id="fImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-admin-50 file:text-admin-700 hover:file:bg-admin-100">
           <div id="imagePreviewWrap" class="hidden mt-3 relative">
             <p class="text-[10px] text-slate-400 font-bold mb-1.5 uppercase tracking-wider">Preview Gambar</p>
             <div class="relative rounded-2xl overflow-hidden border border-slate-200 aspect-video bg-slate-100">
@@ -111,7 +111,7 @@
 
       <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0 rounded-b-3xl">
         <button type="button" id="cancelCampaignModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-white transition-all">Batal</button>
-        <button type="submit" id="submitCampaignBtn" class="px-8 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+        <button type="submit" id="submitCampaignBtn" class="px-8 py-2.5 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 shadow-lg shadow-admin-600/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
           <i class="ph ph-plus text-base"></i> Buat Campaign
         </button>
       </div>
@@ -162,7 +162,7 @@
   };
 
   const statusMap = {
-    aktif: { badge: 'bg-emerald-600 text-white', label: 'Aktif' },
+    aktif: { badge: 'bg-admin-600 text-white', label: 'Aktif' },
     selesai: { badge: 'bg-slate-500 text-white', label: 'Selesai' },
     draft: { badge: 'bg-amber-500 text-white', label: 'Draft' }
   };
@@ -232,7 +232,7 @@
     const totalCollected = active.reduce((acc, c) => acc + Number(c.collected), 0);
     const totalActive = active.length;
     const cards = [
-      { label: 'Campaign Aktif', value: `${totalActive} Campaign`, icon: 'ph ph-target', iconClass: 'bg-emerald-50 border-emerald-100 text-emerald-600' },
+      { label: 'Campaign Aktif', value: `${totalActive} Campaign`, icon: 'ph ph-target', iconClass: 'bg-admin-50 border-admin-100 text-admin-600' },
       { label: 'Total Target (Aktif)', value: rp(totalTarget), icon: 'ph ph-arrow-up-right', iconClass: 'bg-indigo-50 border-indigo-100 text-indigo-600' },
       { label: 'Total Terkumpul (Aktif)', value: rp(totalCollected), icon: 'ph ph-users-three', iconClass: 'bg-amber-50 border-amber-100 text-amber-600' },
     ];
@@ -264,10 +264,10 @@
           <td class="py-5 px-6"><span class="px-2.5 py-1 bg-slate-800 text-white rounded-full text-[10px] font-semibold">${c.category}</span></td>
           <td class="py-5 px-6 min-w-[200px]">
             <div class="flex items-center justify-between mb-1.5">
-              <span class="text-xs font-bold text-emerald-600">${rp(c.collected)}</span>
+              <span class="text-xs font-bold text-admin-600">${rp(c.collected)}</span>
               <span class="text-[10px] font-bold text-slate-400">${p}%</span>
             </div>
-            <div class="w-full bg-slate-100 rounded-full h-2"><div class="h-2 rounded-full bg-emerald-400" style="width:${p}%"></div></div>
+            <div class="w-full bg-slate-100 rounded-full h-2"><div class="h-2 rounded-full bg-admin-400" style="width:${p}%"></div></div>
             <p class="text-[10px] text-slate-400 mt-1">Target: ${rp(c.target)}</p>
           </td>
           <td class="py-5 px-6">
@@ -278,7 +278,7 @@
           <td class="py-5 px-6"><span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${status.badge}">${status.label}</span></td>
           <td class="py-5 px-6">
             <div class="flex items-center justify-center gap-2">
-              <button class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editCampaign(${c.id})">Edit</button>
+              <button class="px-3 py-1.5 bg-admin-600 text-white font-bold rounded-lg text-[11px] hover:bg-admin-700 transition-colors" onclick="editCampaign(${c.id})">Edit</button>
               <button class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteCampaign(${c.id}, this)">Hapus</button>
             </div>
           </td>
@@ -294,7 +294,7 @@
       const s = btn.getAttribute('data-status');
       btn.className = 'status-choice flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all';
       if (campaignState.status === s) {
-        if (s === 'aktif') btn.className += ' bg-emerald-600 text-white shadow-sm';
+        if (s === 'aktif') btn.className += ' bg-admin-600 text-white shadow-sm';
         if (s === 'draft') btn.className += ' bg-amber-500 text-white shadow-sm';
         if (s === 'selesai') btn.className += ' bg-slate-500 text-white shadow-sm';
       } else {

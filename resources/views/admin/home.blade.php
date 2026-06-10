@@ -4,31 +4,31 @@
 <div class="space-y-8 max-w-[1600px] mx-auto w-full mb-10">
 
   <!-- Banner Section -->
-  <div class="relative bg-gradient-to-br from-emerald-800 to-emerald-900 rounded-[2rem] p-8 md:p-12 overflow-hidden shadow-2xl shadow-emerald-900/30 flex flex-col justify-center">
+  <div class="relative bg-gradient-to-br from-admin-800 to-admin-900 rounded-[2rem] p-8 md:p-12 overflow-hidden shadow-2xl shadow-admin-900/30 flex flex-col justify-center">
     <div class="relative z-10 max-w-2xl">
       <span class="text-orange-400 font-bold text-xs mb-3 block tracking-widest uppercase">Dashboard Supervisor</span>
       <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight leading-tight">
         Tinjauan Penggalangan <span class="text-orange-400">Dana & Penyaluran</span>
       </h2>
-      <p class="text-emerald-50/80 text-sm sm:text-base leading-relaxed max-w-xl mb-5">
+      <p class="text-admin-50/80 text-sm sm:text-base leading-relaxed max-w-xl mb-5">
         Selamat datang kembali. Pantau metrik donasi masuk, kelola program bantuan aktif, dan pastikan setiap rupiah tercatat secara transparan untuk publik.
       </p>
     </div>
 
     <!-- Decorative Elements -->
-    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-400 rounded-full blur-[120px] opacity-20 -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-admin-400 rounded-full blur-[120px] opacity-20 -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
     <div class="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-orange-500 rounded-full blur-[100px] opacity-30 translate-y-1/2 pointer-events-none"></div>
   </div>
 
   <!-- Fundamental KPI Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     @foreach($stats as $stat)
-      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 transition-all hover:border-emerald-200 group">
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 transition-all hover:border-admin-200 group">
         <div class="flex justify-between items-start mb-4">
-          <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+          <div class="p-3 bg-admin-50 rounded-xl border border-admin-100 text-admin-600 group-hover:bg-admin-500 group-hover:text-white transition-colors">
             <i class="{{ $stat['icon'] }} text-2xl leading-none"></i>
           </div>
-          <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full {{ $stat['trend'] === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-amber-700 bg-amber-50' }}">
+          <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full {{ $stat['trend'] === 'up' ? 'text-admin-700 bg-admin-50' : 'text-amber-700 bg-amber-50' }}">
             <i class="{{ $stat['trend'] === 'up' ? 'ph ph-arrow-up-right' : 'ph ph-arrow-down-right' }} text-sm leading-none"></i>
             <span class="ml-0.5">{{ $stat['change'] }}</span>
           </div>
@@ -71,7 +71,7 @@
     <div class="bg-white rounded-3xl border border-slate-100 p-8 shadow-xl shadow-slate-200/40 flex flex-col h-full">
       <div class="flex items-center justify-between mb-8">
         <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="ph ph-pulse text-emerald-500"></i>
+          <i class="ph ph-pulse text-admin-500"></i>
           Radar Aktivitas
         </h3>
       </div>
@@ -86,13 +86,13 @@
         @foreach($feedItems as $index => $item)
           <div class="flex gap-4 group">
             <div class="flex flex-col items-center">
-              <div class="w-3 h-3 rounded-full shrink-0 border-2 border-white ring-4 ring-slate-50 {{ $item['type'] === 'in' ? 'bg-emerald-500' : ($item['type'] === 'out' ? 'bg-amber-500' : 'bg-blue-500') }}"></div>
+              <div class="w-3 h-3 rounded-full shrink-0 border-2 border-white ring-4 ring-slate-50 {{ $item['type'] === 'in' ? 'bg-admin-500' : ($item['type'] === 'out' ? 'bg-amber-500' : 'bg-blue-500') }}"></div>
               @if($index !== count($feedItems) - 1)
                 <div class="w-0.5 h-full bg-slate-100 mt-2"></div>
               @endif
             </div>
             <div class="pb-4">
-              <p class="text-sm font-bold text-slate-800 leading-tight mb-1 group-hover:text-emerald-600 transition-colors">{{ $item['event'] }}</p>
+              <p class="text-sm font-bold text-slate-800 leading-tight mb-1 group-hover:text-admin-600 transition-colors">{{ $item['event'] }}</p>
               <p class="text-xs font-medium text-slate-500 mb-2">{{ $item['detail'] }}</p>
               <span class="text-[10px] font-bold text-slate-400">{{ $item['time'] }}</span>
             </div>
@@ -100,7 +100,7 @@
         @endforeach
       </div>
 
-      <a href="{{ route('admin.keuangantransparansi') }}" class="w-full mt-4 py-3.5 bg-slate-50 border border-slate-200 text-slate-600 text-sm font-bold rounded-xl hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors shadow-sm text-center">
+      <a href="{{ route('admin.keuangantransparansi') }}" class="w-full mt-4 py-3.5 bg-slate-50 border border-slate-200 text-slate-600 text-sm font-bold rounded-xl hover:bg-admin-50 hover:text-admin-700 hover:border-admin-200 transition-colors shadow-sm text-center">
         Lihat Laporan Lengkap
       </a>
     </div>
@@ -130,10 +130,10 @@
     // Highlight selected
     document.querySelectorAll('.filter-btn').forEach(btn => {
         if (btn.dataset.option === option) {
-            btn.classList.add('bg-emerald-50', 'text-emerald-700');
+            btn.classList.add('bg-admin-50', 'text-admin-700');
             btn.classList.remove('text-slate-600');
         } else {
-            btn.classList.remove('bg-emerald-50', 'text-emerald-700');
+            btn.classList.remove('bg-admin-50', 'text-admin-700');
             btn.classList.add('text-slate-600');
         }
     });
@@ -146,7 +146,7 @@
   document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.filter-btn').forEach(btn => {
         if (btn.dataset.option === selectedFilter) {
-            btn.classList.add('bg-emerald-50', 'text-emerald-700');
+            btn.classList.add('bg-admin-50', 'text-admin-700');
             btn.classList.remove('text-slate-600');
         }
       });

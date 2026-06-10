@@ -6,7 +6,7 @@
 @endphp
 
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
-  <div id="legalToast" class="hidden items-center gap-3 px-5 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold fixed top-24 right-8 z-[100] shadow-lg">
+  <div id="legalToast" class="hidden items-center gap-3 px-5 py-3 bg-admin-50 border border-admin-200 text-admin-700 rounded-xl text-sm font-bold fixed top-24 right-8 z-[100] shadow-lg">
     <i class="ph ph-check-circle text-base"></i><span id="legalToastText"></span>
   </div>
 
@@ -24,13 +24,13 @@
         <div class="space-y-4 pb-8 border-b border-slate-100">
           <div>
             <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-              <i class="ph ph-shield-check text-emerald-600 text-base"></i>
+              <i class="ph ph-shield-check text-admin-600 text-base"></i>
               Kebijakan Privasi
             </label>
-            <textarea id="privacyPolicy" name="privacyPolicy" rows="10" placeholder="Masukkan Kebijakan Privasi lengkap..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none transition-all">{{ $legal['privacyPolicy'] ?? '' }}</textarea>
+            <textarea id="privacyPolicy" name="privacyPolicy" rows="10" placeholder="Masukkan Kebijakan Privasi lengkap..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-admin-500/20 resize-none transition-all">{{ $legal['privacyPolicy'] ?? '' }}</textarea>
             <p class="mt-2 text-xs text-slate-400 flex items-center gap-2">
               <i class="ph ph-info text-base"></i>
-              <span>Ditampilkan di halaman <a href="{{ route('privacy') }}" target="_blank" class="text-emerald-600 hover:underline font-semibold">/privacy</a></span>
+              <span>Ditampilkan di halaman <a href="{{ route('privacy') }}" target="_blank" class="text-admin-600 hover:underline font-semibold">/privacy</a></span>
             </p>
           </div>
         </div>
@@ -42,10 +42,10 @@
               <i class="ph ph-gavel text-blue-600 text-base"></i>
               Syarat & Ketentuan
             </label>
-            <textarea id="termsConditions" name="termsConditions" rows="10" placeholder="Masukkan Syarat & Ketentuan lengkap..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none transition-all">{{ $legal['termsConditions'] ?? '' }}</textarea>
+            <textarea id="termsConditions" name="termsConditions" rows="10" placeholder="Masukkan Syarat & Ketentuan lengkap..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-admin-500/20 resize-none transition-all">{{ $legal['termsConditions'] ?? '' }}</textarea>
             <p class="mt-2 text-xs text-slate-400 flex items-center gap-2">
               <i class="ph ph-info text-base"></i>
-              <span>Ditampilkan di halaman <a href="{{ route('terms') }}" target="_blank" class="text-emerald-600 hover:underline font-semibold">/terms</a></span>
+              <span>Ditampilkan di halaman <a href="{{ route('terms') }}" target="_blank" class="text-admin-600 hover:underline font-semibold">/terms</a></span>
             </p>
           </div>
         </div>
@@ -56,7 +56,7 @@
             <i class="ph ph-arrow-clockwise text-base"></i>
             Reset
           </button>
-          <button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-all flex items-center gap-2">
+          <button type="submit" class="px-6 py-2.5 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 transition-all flex items-center gap-2">
             <i class="ph ph-floppy-disk text-base"></i>
             Simpan Dokumen Hukum
           </button>

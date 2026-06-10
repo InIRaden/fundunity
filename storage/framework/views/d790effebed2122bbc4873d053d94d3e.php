@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title>{{ $siteSettings['site_name'] ?? config('app.name', 'Fundunity') }} - @yield('title', 'Wujudkan Dampak Nyata')</title>
+    <title><?php echo e($siteSettings['site_name'] ?? config('app.name', 'Fundunity')); ?> - <?php echo $__env->yieldContent('title', 'Wujudkan Dampak Nyata'); ?></title>
 
-    @if(!empty($siteSettings['site_logo']))
-        <link rel="icon" href="{{ $siteSettings['site_logo'] }}" type="image/png">
-    @else
+    <?php if(!empty($siteSettings['site_logo'])): ?>
+        <link rel="icon" href="<?php echo e($siteSettings['site_logo']); ?>" type="image/png">
+    <?php else: ?>
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    @endif
+    <?php endif; ?>
 
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#022c22">
-    @if(!empty($siteSettings['site_logo']))
-        <link rel="apple-touch-icon" href="{{ $siteSettings['site_logo'] }}">
-    @else
+    <?php if(!empty($siteSettings['site_logo'])): ?>
+        <link rel="apple-touch-icon" href="<?php echo e($siteSettings['site_logo']); ?>">
+    <?php else: ?>
         <link rel="apple-touch-icon" href="/images/Logo.png">
-    @endif
+    <?php endif; ?>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     <style>
         html {
@@ -121,38 +121,77 @@
 
     </style>
 
-    @stack('head')
+    <?php echo $__env->yieldPushContent('head'); ?>
 </head>
-<body data-page="@yield('body-data','')">
+<body data-page="<?php echo $__env->yieldContent('body-data',''); ?>">
     <!-- Splash Screen Preloader -->
     <div id="splash-screen">
-        @if(!empty($siteSettings['site_logo']))
-            <img src="{{ $siteSettings['site_logo'] }}" alt="Logo" class="splash-logo object-contain">
-        @else
+        <?php if(!empty($siteSettings['site_logo'])): ?>
+            <img src="<?php echo e($siteSettings['site_logo']); ?>" alt="Logo" class="splash-logo object-contain">
+        <?php else: ?>
             <div class="splash-logo bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-                {{ substr(config('app.name', 'FundUnity'), 0, 1) }}
+                <?php echo e(substr(config('app.name', 'FundUnity'), 0, 1)); ?>
+
             </div>
-        @endif
-        <div class="splash-text">{{ $siteSettings['site_name'] ?? config('app.name', 'FundUnity') }}</div>
+        <?php endif; ?>
+        <div class="splash-text"><?php echo e($siteSettings['site_name'] ?? config('app.name', 'FundUnity')); ?></div>
     </div>
 
     <div class="bg-white text-slate-900 font-sans min-h-screen flex flex-col">
-        <x-landing.navbar />
+        <?php if (isset($component)) { $__componentOriginal07378711808f32dedec5e6e0492d9127 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal07378711808f32dedec5e6e0492d9127 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.landing.navbar','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('landing.navbar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal07378711808f32dedec5e6e0492d9127)): ?>
+<?php $attributes = $__attributesOriginal07378711808f32dedec5e6e0492d9127; ?>
+<?php unset($__attributesOriginal07378711808f32dedec5e6e0492d9127); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal07378711808f32dedec5e6e0492d9127)): ?>
+<?php $component = $__componentOriginal07378711808f32dedec5e6e0492d9127; ?>
+<?php unset($__componentOriginal07378711808f32dedec5e6e0492d9127); ?>
+<?php endif; ?>
 
         <main class="flex-1">
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </main>
 
-        <x-landing.footer />
+        <?php if (isset($component)) { $__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.landing.footer','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('landing.footer'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb)): ?>
+<?php $attributes = $__attributesOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb; ?>
+<?php unset($__attributesOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb)): ?>
+<?php $component = $__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb; ?>
+<?php unset($__componentOriginalf4bb5a8e7d7746ba09a8b9ffce22b5fb); ?>
+<?php endif; ?>
     </div>
     <!-- PWA Custom Install Banner -->
     <div id="pwa-install-banner" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] p-4 z-50 transform translate-y-full transition-transform duration-500 flex items-center justify-between gap-4 hidden">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shrink-0">
-                <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : '/images/Logo.png' }}" alt="Icon" class="w-6 h-6 object-contain filter brightness-0 invert">
+                <img src="<?php echo e(!empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : '/images/Logo.png'); ?>" alt="Icon" class="w-6 h-6 object-contain filter brightness-0 invert">
             </div>
             <div>
-                <h4 class="text-sm font-bold text-slate-900">Install {{ $siteSettings['site_short_name'] ?? ($siteSettings['site_name'] ?? 'FundUnity') }}</h4>
+                <h4 class="text-sm font-bold text-slate-900">Install <?php echo e($siteSettings['site_short_name'] ?? ($siteSettings['site_name'] ?? 'FundUnity')); ?></h4>
                 <p class="text-xs text-slate-500">Akses lebih cepat & hemat kuota</p>
             </div>
         </div>
@@ -166,7 +205,7 @@
         </div>
     </div>
 
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
     <script>
         // Remove splash screen on page load
         window.addEventListener('load', () => {
@@ -243,3 +282,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH D:\coding\fundunity\resources\views/layouts/landing.blade.php ENDPATH**/ ?>

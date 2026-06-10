@@ -40,6 +40,10 @@ class SettingsController extends Controller
             'instagramUrl' => $settings->get('instagram_url') ?: '',
             'address' => $settings->get('address') ?: '',
             'logoUrl' => $settings->get('site_logo') ?: '',
+            'heroTitle' => $settings->get('hero_title') ?: '',
+            'heroSubtitle' => $settings->get('hero_subtitle') ?: '',
+            'footerTagline' => $settings->get('footer_tagline') ?: '',
+            'footerCopyright' => $settings->get('footer_copyright') ?: '',
         ];
 
         $payment = [
@@ -49,8 +53,6 @@ class SettingsController extends Controller
 
         $seo = [
             'metaDescription' => $settings->get('seo_meta_description') ?: '',
-            'footerCopyright' => $settings->get('footer_copyright') ?: '',
-            'footerTagline' => $settings->get('footer_tagline') ?: '',
             'maintenanceMode' => $settings->get('maintenance_mode') === '1',
         ];
 
@@ -107,6 +109,10 @@ class SettingsController extends Controller
             'phone' => ['nullable', 'string', 'max:100'],
             'instagramUrl' => ['nullable', 'url', 'max:500'],
             'address' => ['nullable', 'string', 'max:255'],
+            'heroTitle' => ['nullable', 'string', 'max:255'],
+            'heroSubtitle' => ['nullable', 'string', 'max:1000'],
+            'footerTagline' => ['nullable', 'string', 'max:1000'],
+            'footerCopyright' => ['nullable', 'string', 'max:255'],
             'logoUrl' => ['nullable', 'url', 'max:500'],
             'logo_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
@@ -125,6 +131,12 @@ class SettingsController extends Controller
         $this->upsertSetting('phone', $this->nullableString($validated['phone'] ?? null), 'text', 'general', 'Phone');
         $this->upsertSetting('instagram_url', $this->nullableString($validated['instagramUrl'] ?? null), 'url', 'social', 'Instagram URL');
         $this->upsertSetting('address', $this->nullableString($validated['address'] ?? null), 'text', 'general', 'Address');
+        
+        $this->upsertSetting('hero_title', $this->nullableString($validated['heroTitle'] ?? null), 'text', 'general', 'Hero Title');
+        $this->upsertSetting('hero_subtitle', $this->nullableString($validated['heroSubtitle'] ?? null), 'text', 'general', 'Hero Subtitle');
+        $this->upsertSetting('footer_tagline', $this->nullableString($validated['footerTagline'] ?? null), 'text', 'general', 'Footer Tagline');
+        $this->upsertSetting('footer_copyright', $this->nullableString($validated['footerCopyright'] ?? null), 'text', 'general', 'Footer Copyright');
+
         $this->upsertSetting('site_logo', $this->nullableString($newLogo), 'image', 'general', 'Site Logo');
 
         return response()->json([
@@ -177,19 +189,15 @@ class SettingsController extends Controller
     public function updateSeo(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'metaDescription' => ['nullable', 'string', 'max:1000'],
-            'footerCopyright' => ['nullable', 'string', 'max:255'],
-            'footerTagline' => ['nullable', 'string', 'max:1000'],
-            'maintenanceMode' => ['nullable', 'boolean'],
+            'metaDescription' => ['nullable', 'string', 'max:500'],
+            'maintenanceMode' => ['required', 'boolean'],
         ]);
 
-        $this->upsertSetting('seo_meta_description', $this->nullableString($validated['metaDescription'] ?? null), 'textarea', 'seo', 'SEO Meta Description');
-        $this->upsertSetting('footer_copyright', $this->nullableString($validated['footerCopyright'] ?? null), 'text', 'general', 'Footer Copyright');
-        $this->upsertSetting('footer_tagline', $this->nullableString($validated['footerTagline'] ?? null), 'textarea', 'general', 'Footer Tagline');
-        $this->upsertSetting('maintenance_mode', $request->boolean('maintenanceMode') ? '1' : '0', 'text', 'general', 'Maintenance Mode');
+        $this->upsertSetting('seo_meta_description', $this->nullableString($validated['metaDescription'] ?? null), 'text', 'seo', 'Meta Description');
+        $this->upsertSetting('maintenance_mode', $validated['maintenanceMode'] ? '1' : '0', 'boolean', 'system', 'Maintenance Mode');
 
         return response()->json([
-            'message' => 'Pengaturan SEO dan global berhasil disimpan.',
+            'message' => 'Pengaturan SEO dan sistem berhasil disimpan.',
         ]);
     }
 

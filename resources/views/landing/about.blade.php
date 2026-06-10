@@ -65,11 +65,11 @@
             </div>
 
             <h2 class="text-2xl md:text-4xl font-black text-slate-900 leading-[1.3] mb-6">
-              Mewujudkan Dampak Yang Terukur & Nyata.
+              {{ $siteSettings['hero_title'] ?? 'Mewujudkan Dampak Yang Terukur & Nyata.' }}
             </h2>
 
             <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-10">
-              Kami bukan sekadar wadah, tapi sebuah gerakan transformatif yang mengedepankan akuntabilitas digital untuk memberdayakan setiap lapisan masyarakat.
+              {{ $siteSettings['hero_subtitle'] ?? 'Kami bukan sekadar wadah, tapi sebuah gerakan transformatif yang mengedepankan akuntabilitas digital untuk memberdayakan setiap lapisan masyarakat.' }}
             </p>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">

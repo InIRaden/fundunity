@@ -28,7 +28,7 @@
       @forelse($activities as $activity)
         <div class="p-6 hover:bg-slate-50 transition-colors">
           <div class="flex items-start gap-4">
-            <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+            <div class="w-10 h-10 bg-admin-100 rounded-full flex items-center justify-center text-admin-600">
               <i class="{{ $activity['icon'] }} text-lg"></i>
             </div>
             <div class="flex-1">
@@ -62,7 +62,7 @@
       <div class="text-sm text-slate-600">Total Aktivitas</div>
     </div>
     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl text-center">
-      <div class="text-2xl font-bold text-emerald-600">{{ $stats['today_activities'] }}</div>
+      <div class="text-2xl font-bold text-admin-600">{{ $stats['today_activities'] }}</div>
       <div class="text-sm text-slate-600">Aktivitas Hari Ini</div>
     </div>
     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl text-center">

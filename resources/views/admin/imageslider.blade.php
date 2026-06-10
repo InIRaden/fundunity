@@ -9,10 +9,10 @@
       </div>
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-          <input id="slider-search" type="text" placeholder="Cari judul banner..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-admin-500"></i>
+          <input id="slider-search" type="text" placeholder="Cari judul banner..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-admin-500 text-admin-900 rounded-xl text-sm focus:ring-4 focus:ring-admin-500/20 outline-none transition-all placeholder:text-admin-500/50 shadow-sm">
         </div>
-        <button onclick="openSliderModal()" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+        <button onclick="openSliderModal()" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-admin-600 text-white rounded-lg text-xs font-bold hover:bg-admin-700 transition-colors shadow-sm whitespace-nowrap">
           <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Banner</span>
         </button>
       </div>
@@ -21,11 +21,11 @@
     <div class="overflow-x-auto">
       <table class="w-full border-collapse">
         <thead>
-          <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Pratinjau Media</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Informasi Konten</th>
-            <th class="py-4 px-6 text-center text-[11px] font-bold text-white border-b border-emerald-100/50 w-24">Urutan</th>
-            <th class="py-4 px-6 text-center text-[11px] font-bold text-white border-b border-emerald-100/50">Aksi</th>
+          <tr class="bg-admin-600">
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Pratinjau Media</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Informasi Konten</th>
+            <th class="py-4 px-6 text-center text-[11px] font-bold text-white border-b border-admin-100/50 w-24">Urutan</th>
+            <th class="py-4 px-6 text-center text-[11px] font-bold text-white border-b border-admin-100/50">Aksi</th>
           </tr>
         </thead>
         <tbody id="slider-body" class="divide-y divide-slate-100"></tbody>
@@ -39,30 +39,30 @@
 <div id="slider-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[100] p-4 overflow-y-auto">
   <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto overflow-hidden">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-      <h3 id="sliderModalTitle" class="text-base font-bold text-emerald-700">Tambah Banner</h3>
+      <h3 id="sliderModalTitle" class="text-base font-bold text-admin-700">Tambah Banner</h3>
       <button id="closeSliderModal" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
     </div>
     <form id="sliderForm" class="flex flex-col flex-1 overflow-hidden">
     <div class="p-6 space-y-5 overflow-y-auto flex-1">
       <div>
         <label class="block text-xs text-slate-500 mb-2">Judul Banner</label>
-        <input id="sliderTitle" type="text" required placeholder="Masukkan judul utama..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" />
+        <input id="sliderTitle" type="text" required placeholder="Masukkan judul utama..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/20" />
       </div>
       <div>
         <label class="block text-xs text-slate-500 mb-2">Sub-judul / Deskripsi</label>
-        <textarea id="sliderDesc" rows="3" required placeholder="Masukkan penjelasan singkat..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+        <textarea id="sliderDesc" rows="3" required placeholder="Masukkan penjelasan singkat..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/20"></textarea>
       </div>
       <div>
         <label class="block text-xs text-slate-500 mb-2">Media Gambar (Upload)</label>
         <div class="border-2 border-dashed border-slate-200 rounded-2xl p-5 bg-slate-50">
-          <input id="sliderImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:text-emerald-700 file:font-semibold">
+          <input id="sliderImageFile" type="file" accept="image/png,image/jpeg,image/webp" class="w-full text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-admin-50 file:px-3 file:py-2 file:text-admin-700 file:font-semibold">
           <p class="text-xs font-semibold text-slate-400 mt-2">Format: JPG, PNG, WEBP. Maksimal 4MB.</p>
         </div>
       </div>
     </div>
     <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
       <button type="button" id="cancelSliderModal" class="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Batal</button>
-      <button id="sliderSubmitBtn" type="submit" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all">Simpan Banner</button>
+      <button id="sliderSubmitBtn" type="submit" class="px-6 py-2 bg-admin-600 text-white rounded-xl text-sm font-semibold hover:bg-admin-700 shadow-sm transition-all">Simpan Banner</button>
     </div>
     </form>
   </div>
@@ -172,7 +172,7 @@
         <td class="py-5 px-6"><div class="w-32 h-20 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shadow-sm"><img src="${item.imageUrl || ''}" class="w-full h-full object-cover" alt="${item.title || ''}" /></div></td>
         <td class="py-5 px-6"><div class="flex flex-col"><span class="text-sm font-semibold text-slate-900">${item.title}</span><span class="text-xs text-slate-500 mt-1 line-clamp-1">${item.description}</span></div></td>
         <td class="py-5 px-6 text-center"><span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full">${i + 1}</span></td>
-        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="openSliderModal(${item.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="openDeleteModal(${item.id})">Hapus</button></div></td>
+        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-admin-600 text-white rounded-lg text-[11px] hover:bg-admin-700 transition-colors" onclick="openSliderModal(${item.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="openDeleteModal(${item.id})">Hapus</button></div></td>
       </tr>
     `).join('') : emptyTableRow(4, 'Tidak ada banner ditemukan.');
     document.getElementById('slider-count').textContent = `Menampilkan ${data.length} banner`;

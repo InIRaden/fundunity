@@ -12,8 +12,8 @@
       <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
         <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2">Daftar Kotak Masuk <span id="messageCount" class="bg-slate-100 text-slate-500 text-xs px-2 py-0.5 rounded-full"></span></h2>
         <div class="relative w-full md:w-96">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><i class="ph ph-magnifying-glass text-[18px] text-emerald-500"></i></div>
-          <input id="messageSearch" type="text" placeholder="Cari pengirim atau pesan..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><i class="ph ph-magnifying-glass text-[18px] text-admin-500"></i></div>
+          <input id="messageSearch" type="text" placeholder="Cari pengirim atau pesan..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-admin-500 text-admin-900 rounded-xl text-sm focus:ring-4 focus:ring-admin-500/20 outline-none transition-all placeholder:text-admin-500/50 shadow-sm">
         </div>
       </div>
 
@@ -27,12 +27,12 @@
       <div id="messageTableWrap" class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-emerald-600">
-              <th class="w-10 px-6 py-4 border-b border-emerald-100/50"></th>
-              <th class="px-6 py-4 text-[11px] font-bold text-white border-b border-emerald-100/50 text-left">Pengirim</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-white border-b border-emerald-100/50 text-left">Cuplikan Pesan</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-white text-right border-b border-emerald-100/50">Tanggal Masuk</th>
-              <th class="px-6 py-4 text-[11px] font-bold text-white text-center border-b border-emerald-100/50">Aksi</th>
+            <tr class="bg-admin-600">
+              <th class="w-10 px-6 py-4 border-b border-admin-100/50"></th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white border-b border-admin-100/50 text-left">Pengirim</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white border-b border-admin-100/50 text-left">Cuplikan Pesan</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white text-right border-b border-admin-100/50">Tanggal Masuk</th>
+              <th class="px-6 py-4 text-[11px] font-bold text-white text-center border-b border-admin-100/50">Aksi</th>
             </tr>
           </thead>
           <tbody id="messageRows" class="divide-y divide-slate-100"></tbody>
@@ -48,17 +48,17 @@
   <div id="modalBackdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
   <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-fade-in flex flex-col max-h-[90vh]">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
-      <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2"><i class="ph ph-envelope-open text-emerald-600 text-lg"></i> Detail Pesan Masuk</h2>
+      <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2"><i class="ph ph-envelope-open text-admin-600 text-lg"></i> Detail Pesan Masuk</h2>
       <button id="closeMessageModal" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"><i class="ph ph-x text-lg"></i></button>
     </div>
 
     <div class="p-8 space-y-6 overflow-y-auto">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
         <div class="flex items-center gap-4">
-          <div id="modalInitial" class="w-12 h-12 bg-emerald-100 text-emerald-700 font-bold rounded-full flex items-center justify-center text-lg shrink-0"></div>
+          <div id="modalInitial" class="w-12 h-12 bg-admin-100 text-admin-700 font-bold rounded-full flex items-center justify-center text-lg shrink-0"></div>
           <div>
             <h3 id="modalName" class="text-lg font-bold text-slate-900 leading-tight"></h3>
-            <a id="modalEmail" href="#" class="text-sm text-emerald-600 hover:underline"></a>
+            <a id="modalEmail" href="#" class="text-sm text-admin-600 hover:underline"></a>
           </div>
         </div>
         <div id="modalDate" class="text-xs font-semibold text-slate-400 flex items-center gap-1.5 shrink-0 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100/60"></div>
@@ -68,7 +68,7 @@
 
     <div class="p-6 bg-slate-50/50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
       <button id="modalCloseBtn" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">Tutup</button>
-      <a id="modalReply" href="#" class="px-5 py-2.5 text-sm font-bold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20 flex items-center gap-2">Balas via Email <i class="ph ph-arrow-up-right text-base"></i></a>
+      <a id="modalReply" href="#" class="px-5 py-2.5 text-sm font-bold text-white bg-admin-600 rounded-xl hover:bg-admin-700 transition-colors shadow-lg shadow-admin-500/20 flex items-center gap-2">Balas via Email <i class="ph ph-arrow-up-right text-base"></i></a>
     </div>
   </div>
 </div>
@@ -142,15 +142,15 @@
   function renderTabs() {
     const all = document.getElementById('allTab');
     const unread = document.getElementById('unreadTab');
-    const on = 'bg-emerald-600 text-white border-slate-200 border-b-transparent z-30';
-    const off = 'bg-gray-50 border-transparent text-slate-400 hover:text-emerald-600 hover:bg-white z-10 border-b-slate-200';
+    const on = 'bg-admin-600 text-white border-slate-200 border-b-transparent z-30';
+    const off = 'bg-gray-50 border-transparent text-slate-400 hover:text-admin-600 hover:bg-white z-10 border-b-slate-200';
     all.className = 'px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border ' + (ms.filter === 'all' ? on : off);
     unread.className = 'flex items-center gap-2 px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-semibold transition-all border ' + (ms.filter === 'unread' ? on : off);
 
     const count = unreadCount();
     const badge = document.getElementById('unreadBadge');
     badge.textContent = String(count);
-    badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] ' + (ms.filter === 'unread' ? 'bg-white text-emerald-700' : 'bg-rose-500 text-white');
+    badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] ' + (ms.filter === 'unread' ? 'bg-white text-admin-700' : 'bg-rose-500 text-white');
     badge.style.display = count > 0 ? 'inline-flex' : 'none';
   }
 
@@ -270,16 +270,16 @@
     document.getElementById('messageCount').textContent = filtered.length + ' Pesan';
 
     tbody.innerHTML = filtered.map((msg) => `
-      <tr class="group cursor-pointer transition-colors ${!msg.isRead ? 'bg-emerald-50/30 hover:bg-emerald-50/70' : 'hover:bg-slate-50/70'}" onclick="openModal(${msg.id})">
+      <tr class="group cursor-pointer transition-colors ${!msg.isRead ? 'bg-admin-50/30 hover:bg-admin-50/70' : 'hover:bg-slate-50/70'}" onclick="openModal(${msg.id})">
         <td class="px-6 py-5 align-top">
-          <button onclick="event.stopPropagation(); toggleRead(${msg.id}, this)" class="p-1.5 rounded-md transition-colors ${!msg.isRead ? 'text-emerald-500 hover:bg-emerald-100' : 'text-slate-300 hover:text-slate-500 hover:bg-slate-100'}">
+          <button onclick="event.stopPropagation(); toggleRead(${msg.id}, this)" class="p-1.5 rounded-md transition-colors ${!msg.isRead ? 'text-admin-500 hover:bg-admin-100' : 'text-slate-300 hover:text-slate-500 hover:bg-slate-100'}">
             <i class="ph ${!msg.isRead ? 'ph-envelope' : 'ph-envelope-open'} text-[20px]"></i>
           </button>
         </td>
         <td class="px-6 py-5 align-top"><p class="text-sm ${!msg.isRead ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}">${msg.name}</p><p class="text-xs text-slate-500 mt-1">${msg.email}</p></td>
         <td class="px-6 py-5 align-top max-w-sm"><p class="text-sm line-clamp-2 leading-relaxed ${!msg.isRead ? 'font-bold text-slate-800' : 'text-slate-600'}">${msg.message}</p></td>
         <td class="px-6 py-5 align-top text-right whitespace-nowrap"><div class="flex items-center justify-end gap-1.5 text-xs text-slate-500"><i class="ph ph-calendar-blank"></i>${msg.date}</div></td>
-        <td class="px-6 py-5 align-top"><div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="event.stopPropagation(); openModal(${msg.id})" class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 transition-colors">Baca</button><button onclick="event.stopPropagation(); deleteMsg(${msg.id}, this)" class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
+        <td class="px-6 py-5 align-top"><div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="event.stopPropagation(); openModal(${msg.id})" class="px-3 py-1.5 bg-admin-600 text-white font-bold rounded-lg text-[11px] hover:bg-admin-700 transition-colors">Baca</button><button onclick="event.stopPropagation(); deleteMsg(${msg.id}, this)" class="px-3 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
       </tr>
     `).join('');
     document.getElementById('messageFooterText').textContent = 'Menampilkan ' + filtered.length + ' pesan';

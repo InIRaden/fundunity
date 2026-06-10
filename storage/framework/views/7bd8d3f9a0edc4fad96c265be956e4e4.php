@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- Header -->
@@ -27,7 +25,7 @@
     <!-- Tabel Admin -->
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-50 flex items-center justify-between">
-            <h3 class="text-sm font-bold text-slate-700">Daftar Akun Admin <span class="ml-2 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full">{{ $admins->count() }}</span></h3>
+            <h3 class="text-sm font-bold text-slate-700">Daftar Akun Admin <span class="ml-2 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full"><?php echo e($admins->count()); ?></span></h3>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -41,51 +39,53 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50" id="adminTableBody">
-                    @forelse ($admins as $admin)
-                    <tr class="hover:bg-slate-50/50 transition-colors" id="admin-row-{{ $admin->id }}">
+                    <?php $__empty_1 = true; $__currentLoopData = $admins; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $admin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr class="hover:bg-slate-50/50 transition-colors" id="admin-row-<?php echo e($admin->id); ?>">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl bg-admin-100 flex items-center justify-center text-admin-700 font-black text-sm">
-                                    {{ strtoupper(substr($admin->name, 0, 1)) }}
+                                    <?php echo e(strtoupper(substr($admin->name, 0, 1))); ?>
+
                                 </div>
-                                <span class="font-bold text-slate-800">{{ $admin->name }}</span>
+                                <span class="font-bold text-slate-800"><?php echo e($admin->name); ?></span>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-slate-500 font-medium">{{ $admin->email }}</td>
+                        <td class="px-6 py-4 text-slate-500 font-medium"><?php echo e($admin->email); ?></td>
                         <td class="px-6 py-4">
-                            @if ($admin->must_change_password)
+                            <?php if($admin->must_change_password): ?>
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold">
                                     <i class="ph ph-clock text-sm"></i> Belum Ganti Sandi
                                 </span>
-                            @else
+                            <?php else: ?>
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-admin-100 text-admin-700 text-xs font-bold">
                                     <i class="ph ph-shield-check text-sm"></i> Aktif
                                 </span>
-                            @endif
+                            <?php endif; ?>
                         </td>
                         <td class="px-6 py-4 text-slate-400 text-xs font-medium">
-                            {{ $admin->created_at->format('d M Y') }}
+                            <?php echo e($admin->created_at->format('d M Y')); ?>
+
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-end gap-2">
-                                @if ($admin->must_change_password)
+                                <?php if($admin->must_change_password): ?>
                                     <button
-                                        onclick="resetPassword({{ $admin->id }}, '{{ $admin->name }}')"
+                                        onclick="resetPassword(<?php echo e($admin->id); ?>, '<?php echo e($admin->name); ?>')"
                                         class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 transition-all">
                                         <i class="ph ph-arrow-clockwise text-sm"></i> Reset Sandi
                                     </button>
-                                @else
+                                <?php else: ?>
                                     <span class="text-xs text-slate-300 font-medium italic px-3 py-1.5">Sandi Terkunci</span>
-                                @endif
+                                <?php endif; ?>
                                 <button
-                                    onclick="deleteAdmin({{ $admin->id }}, '{{ $admin->name }}')"
+                                    onclick="deleteAdmin(<?php echo e($admin->id); ?>, '<?php echo e($admin->name); ?>')"
                                     class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg hover:bg-rose-100 transition-all">
                                     <i class="ph ph-trash text-sm"></i> Hapus
                                 </button>
                             </div>
                         </td>
                     </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="5" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center gap-3">
@@ -97,7 +97,7 @@
                             </div>
                         </td>
                     </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -112,7 +112,7 @@
             <button onclick="closeModal('modalTambahAdmin')" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
         </div>
         <form id="formTambahAdmin" class="space-y-4">
-            @csrf
+            <?php echo csrf_field(); ?>
             <div>
                 <label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Lengkap</label>
                 <input type="text" id="inputNama" placeholder="cth: Budi Santoso" required
@@ -189,9 +189,9 @@
 </style>
 
 <script>
-const csrfToken = @json(csrf_token());
+const csrfToken = <?php echo json_encode(csrf_token(), 15, 512) ?>;
 const endpoints = {
-    store: @json(route('admin.management.store')),
+    store: <?php echo json_encode(route('admin.management.store'), 15, 512) ?>,
     resetPrefix: '/admin/management/',
     deletePrefix: '/admin/management/',
 };
@@ -261,7 +261,7 @@ function showKredensial(name, email, password) {
 }
 
 function copyKredensial() {
-    const text = `Kredensial Admin FundUnity\nNama: ${currentCredentials.name}\nEmail: ${currentCredentials.email}\nKata Sandi: ${currentCredentials.password}\n\nSilakan login di: {{ url('/login') }}\nGanti kata sandi Anda setelah login pertama.`;
+    const text = `Kredensial Admin FundUnity\nNama: ${currentCredentials.name}\nEmail: ${currentCredentials.email}\nKata Sandi: ${currentCredentials.password}\n\nSilakan login di: <?php echo e(url('/login')); ?>\nGanti kata sandi Anda setelah login pertama.`;
     navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('btnCopyKredensial');
         btn.innerHTML = '<i class="ph ph-check-circle text-base"></i> Tersalin!';
@@ -306,4 +306,6 @@ async function deleteAdmin(adminId, adminName) {
     }
 }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/management.blade.php ENDPATH**/ ?>

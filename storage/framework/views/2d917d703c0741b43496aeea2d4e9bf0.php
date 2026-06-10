@@ -42,7 +42,7 @@
 
 
 <div id="aboutEditModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
-  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up">
+  <div class="bg-white rounded-3xl w-full max-w-lg flex flex-col max-h-[90vh] my-auto shadow-2xl animate-slide-up overflow-hidden">
     <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
       <h3 id="editModalTitle" class="text-base font-bold text-emerald-700">Edit Konten</h3>
       <button id="closeAboutEdit" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="ph ph-x text-xl"></i></button>

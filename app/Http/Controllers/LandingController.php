@@ -492,5 +492,95 @@ class LandingController extends Controller
 
         return back()->with('newsletter_success', 'Terima kasih telah berlangganan newsletter kami!');
     }
+    public function manifest()
+    {
+        $siteSettings = $this->loadSiteSettings();
+        $name = $siteSettings['site_name'] ?? 'FundUnity';
+        $shortName = $siteSettings['site_short_name'] ?? 'FundUnity';
+        $logo = !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : '/images/Logo.png';
 
+        $manifest = [
+            'name' => $name,
+            'short_name' => $shortName,
+            'start_url' => '/',
+            'display' => 'standalone',
+            'background_color' => '#ffffff',
+            'theme_color' => '#022c22',
+            'description' => 'Platform donasi transparan dan dapat dipantau.',
+            'icons' => [
+                [
+                    'src' => $logo,
+                    'sizes' => '192x192 512x512',
+                    'type' => 'image/png',
+                    'purpose' => 'any maskable'
+                ]
+            ]
+        ];
+
+        return response()->json($manifest);
+    }
+
+    public function serviceWorker()
+    {
+        $siteSettings = $this->loadSiteSettings();
+        $logo = !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : '/images/Logo.png';
+
+        $js = "const CACHE_NAME = 'fundunity-pwa-v1';
+const OFFLINE_URL = '/offline';
+
+const urlsToCache = [
+    OFFLINE_URL,
+    '{$logo}',
+    'https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap'
+];
+
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                return cache.addAll(urlsToCache);
+            })
+    );
+});
+
+self.addEventListener('fetch', event => {
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).catch(() => {
+                return caches.match(OFFLINE_URL);
+            })
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request)
+                .then(response => {
+                    return response || fetch(event.request);
+                })
+        );
+    }
+});
+
+self.addEventListener('activate', event => {
+    const cacheWhitelist = [CACHE_NAME];
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+});";
+
+        return response($js)->header('Content-Type', 'application/javascript');
+    }
+
+    public function offlineFallback()
+    {
+        $siteSettings = $this->loadSiteSettings();
+        return view('landing.offline', compact('siteSettings'));
+    }
 }

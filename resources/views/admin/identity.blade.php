@@ -15,7 +15,7 @@
               <i id="identityLogoIcon" class="ph ph-globe text-5xl text-slate-300"></i>
             @endif
           </div>
-          <div class="absolute -bottom-2 -right-2 bg-emerald-600 text-white p-2 rounded-xl shadow-lg">
+          <div class="absolute -bottom-2 -right-2 bg-admin-600 text-white p-2 rounded-xl shadow-lg">
             <i class="ph ph-camera text-base"></i>
           </div>
         </div>
@@ -25,16 +25,16 @@
 
         <div class="mt-8 pt-8 border-t border-slate-100 w-full">
           <p class="text-[11px] text-slate-400 font-bold mb-4">Preview Sidebar</p>
-          <div class="bg-emerald-600 rounded-xl p-4 flex items-center gap-3 text-left">
+          <div class="bg-admin-600 rounded-xl p-4 flex items-center gap-3 text-left">
             <div class="w-8 h-8 bg-white/20 rounded-md flex items-center justify-center"><i class="ph ph-globe text-sm"></i></div>
             <span id="identitySidebarShortName" class="text-xs font-bold text-white truncate">{{ $identity['shortName'] }}</span>
           </div>
         </div>
       </div>
 
-      <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-6">
-        <h4 class="text-sm font-bold text-emerald-800 mb-2">Tips Identitas</h4>
-        <p class="text-xs text-emerald-700/80 leading-relaxed">
+      <div class="bg-admin-50 border border-admin-100 rounded-2xl p-6">
+        <h4 class="text-sm font-bold text-admin-800 mb-2">Tips Identitas</h4>
+        <p class="text-xs text-admin-700/80 leading-relaxed">
           Gunakan nama resmi organisasi untuk Nama Lengkap. Nama Pendek dipakai pada area sempit seperti sidebar.
           Untuk hasil terbaik, gunakan logo PNG transparan.
         </p>
@@ -51,22 +51,22 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="block text-xs font-bold text-slate-500">Nama Lengkap Organisasi</label>
-              <input id="identityOrgName" type="text" value="{{ $identity['orgName'] }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
+              <input id="identityOrgName" type="text" value="{{ $identity['orgName'] }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" />
             </div>
             <div class="space-y-2">
               <label class="block text-xs font-bold text-slate-500">Nama Pendek</label>
-              <input id="identityShortName" type="text" value="{{ $identity['shortName'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
+              <input id="identityShortName" type="text" value="{{ $identity['shortName'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" />
             </div>
           </div>
 
           <div class="space-y-2">
             <label class="block text-xs font-bold text-slate-500">Tagline Utama</label>
-            <input id="identityTagline" type="text" value="{{ $identity['tagline'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
+            <input id="identityTagline" type="text" value="{{ $identity['tagline'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" />
           </div>
 
           <div class="space-y-2">
             <label class="block text-xs font-bold text-slate-500">Logo URL</label>
-            <input id="identityLogoUrl" type="url" value="{{ $identity['logoUrl'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" placeholder="https://example.com/logo.png" />
+            <input id="identityLogoUrl" type="url" value="{{ $identity['logoUrl'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" placeholder="https://example.com/logo.png" />
           </div>
         </div>
 
@@ -78,24 +78,24 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="block text-xs font-bold text-slate-500">Email Publik</label>
-              <input id="identityEmail" type="email" value="{{ $identity['email'] }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
+              <input id="identityEmail" type="email" value="{{ $identity['email'] }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" />
             </div>
             <div class="space-y-2">
               <label class="block text-xs font-bold text-slate-500">WhatsApp/Telepon</label>
-              <input id="identityPhone" type="text" value="{{ $identity['phone'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
+              <input id="identityPhone" type="text" value="{{ $identity['phone'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" />
             </div>
             <div class="space-y-2">
               <label class="block text-xs font-bold text-slate-500">Instagram URL</label>
-              <input id="identityInstagramUrl" type="url" value="{{ $identity['instagramUrl'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" placeholder="https://instagram.com/username" />
+              <input id="identityInstagramUrl" type="url" value="{{ $identity['instagramUrl'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" placeholder="https://instagram.com/username" />
             </div>
             <div class="space-y-2">
               <label class="block text-xs font-bold text-slate-500">Alamat / Sekretariat</label>
-              <input id="identityAddress" type="text" value="{{ $identity['address'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400" />
+              <input id="identityAddress" type="text" value="{{ $identity['address'] }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-4 focus:ring-admin-500/10 focus:border-admin-400" />
             </div>
           </div>
 
           <div class="flex justify-end pt-4">
-            <button id="identitySubmitBtn" type="submit" class="px-8 py-3 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-500/20">
+            <button id="identitySubmitBtn" type="submit" class="px-8 py-3 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 shadow-lg shadow-admin-500/20">
               <span id="identitySubmitLabel">Simpan Perubahan</span>
             </button>
           </div>
@@ -105,7 +105,7 @@
   </div>
 </div>
 
-<div id="identity-toast" class="hidden fixed top-24 right-8 z-[100] items-center gap-3 px-5 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold shadow-lg">
+<div id="identity-toast" class="hidden fixed top-24 right-8 z-[100] items-center gap-3 px-5 py-3 bg-admin-50 border border-admin-200 text-admin-700 rounded-xl text-sm font-bold shadow-lg">
   <i class="ph ph-check-circle text-base"></i>
   <span id="identity-toast-message">Identitas website berhasil diperbarui.</span>
 </div>

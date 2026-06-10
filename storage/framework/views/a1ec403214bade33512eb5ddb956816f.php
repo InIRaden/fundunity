@@ -20,17 +20,7 @@
 
 <div class="relative">
   <!-- Sidebar -->
-  <?php
-    $adminThemePreset = (string)($siteSettings['admin_theme_preset'] ?? 'emerald');
-    $sidebarBgClass = match($adminThemePreset) {
-      'indigo' => 'bg-indigo-600',
-      'slate' => 'bg-slate-700',
-      'rose' => 'bg-rose-600',
-      default => 'bg-emerald-600',
-    };
-  ?>
-
-  <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out <?php echo e($sidebarBgClass); ?> text-white rounded-r-3xl w-56 z-40">
+  <div id="adminSidebar" class="fixed top-0 left-0 bottom-0 flex flex-col transition-all duration-300 ease-in-out bg-admin-600 text-white rounded-r-3xl w-56 z-40">
 
     <!-- Logo Area -->
     <div id="sidebarLogo" class="flex items-center shrink-0 mt-4 mb-4 px-5 gap-3 transition-all duration-300 sidebar-logo-open">
@@ -65,12 +55,12 @@
         ?>
 
         <?php if($enabled): ?>
-          <a href="<?php echo e(route($item['route'])); ?>" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer <?php echo e($isActive ? 'bg-gray-50 text-emerald-600 shadow-sm active-sidebar-item' : 'text-slate-300 hover:bg-white/10 hover:text-white'); ?>">
+          <a href="<?php echo e(route($item['route'])); ?>" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer <?php echo e($isActive ? 'bg-gray-50 text-admin-600 shadow-sm active-sidebar-item' : 'text-slate-300 hover:bg-white/10 hover:text-white'); ?>">
             <?php
               $iconClass = $isActive ? str_replace('ph ph-', 'ph-fill ph-', $item['icon']) : $item['icon'];
             ?>
             <i class="<?php echo e($iconClass); ?> shrink-0 text-[19px] leading-none transition-all"></i>
-            <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show <?php echo e($isActive ? 'text-emerald-600 font-bold' : ''); ?>"><?php echo e($item['label']); ?></span>
+            <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show <?php echo e($isActive ? 'text-admin-600 font-bold' : ''); ?>"><?php echo e($item['label']); ?></span>
           </a>
         <?php endif; ?>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -81,12 +71,12 @@
         <?php
           $isManagementActive = request()->routeIs('admin.management');
         ?>
-        <a href="<?php echo e(route('admin.management')); ?>" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer <?php echo e($isManagementActive ? 'bg-gray-50 text-emerald-600 shadow-sm active-sidebar-item' : 'text-amber-200 hover:bg-white/10 hover:text-white'); ?>">
+        <a href="<?php echo e(route('admin.management')); ?>" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer <?php echo e($isManagementActive ? 'bg-gray-50 text-admin-600 shadow-sm active-sidebar-item' : 'text-amber-200 hover:bg-white/10 hover:text-white'); ?>">
           <?php
             $iconClass = $isManagementActive ? 'ph-fill ph-crown' : 'ph ph-crown';
           ?>
           <i class="<?php echo e($iconClass); ?> shrink-0 text-[19px] leading-none transition-all"></i>
-          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show <?php echo e($isManagementActive ? 'text-emerald-600 font-bold' : ''); ?>">Manajemen Admin</span>
+          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show <?php echo e($isManagementActive ? 'text-admin-600 font-bold' : ''); ?>">Manajemen Admin</span>
         </a>
       <?php endif; ?>
     </nav>
@@ -103,7 +93,7 @@
     </div>
 
     <!-- Toggle Button -->
-    <button id="sidebarToggle" onclick="toggleSidebar()" class="absolute -right-3 top-6 w-6 h-6 bg-white text-slate-600 hover:text-emerald-600 rounded-full flex items-center justify-center transition-all z-50 shadow-sm border border-slate-200">
+    <button id="sidebarToggle" onclick="toggleSidebar()" class="absolute -right-3 top-6 w-6 h-6 bg-white text-slate-600 hover:text-admin-600 rounded-full flex items-center justify-center transition-all z-50 shadow-sm border border-slate-200">
       <i id="toggleIcon" class="ph ph-caret-right text-[13px] leading-none"></i>
     </button>
   </div>

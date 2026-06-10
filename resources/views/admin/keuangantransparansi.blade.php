@@ -3,13 +3,13 @@
 @section('admin-content')
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-    <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl p-6 text-white shadow-xl shadow-emerald-600/20 relative overflow-hidden group">
+    <div class="bg-gradient-to-br from-admin-600 to-admin-800 rounded-2xl p-6 text-white shadow-xl shadow-admin-600/20 relative overflow-hidden group">
       <div class="relative z-10 flex flex-col h-full justify-between">
         <div>
-          <p class="text-emerald-100/80 text-xs font-bold mb-1">Total Saldo Terkumpul</p>
+          <p class="text-admin-100/80 text-xs font-bold mb-1">Total Saldo Terkumpul</p>
           <h3 id="kpiPemasukan" class="text-3xl font-bold"></h3>
         </div>
-        <div class="mt-4 flex items-center gap-2 text-sm {{ $incomeTrendStatus === 'up' ? 'text-emerald-50 bg-white/10' : 'text-amber-100 bg-amber-500/20' }} px-3 py-1.5 rounded-lg w-fit backdrop-blur-sm">
+        <div class="mt-4 flex items-center gap-2 text-sm {{ $incomeTrendStatus === 'up' ? 'text-admin-50 bg-white/10' : 'text-amber-100 bg-amber-500/20' }} px-3 py-1.5 rounded-lg w-fit backdrop-blur-sm">
           <i class="ph {{ $incomeTrendStatus === 'up' ? 'ph-trend-up' : 'ph-trend-down' }}"></i> {{ $incomeTrendText }} dari bulan lalu
         </div>
       </div>
@@ -63,16 +63,16 @@
           </div>
           <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
             <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
-              <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-              <input id="incomeSearch" type="text" placeholder="Cari nama donatur..." class="w-full sm:w-64 pl-9 pr-4 py-2 border border-emerald-500 text-emerald-900 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+              <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-admin-500"></i>
+              <input id="incomeSearch" type="text" placeholder="Cari nama donatur..." class="w-full sm:w-64 pl-9 pr-4 py-2 border border-admin-500 text-admin-900 rounded-lg text-sm bg-white focus:ring-2 focus:ring-admin-500/20 outline-none transition-all placeholder:text-admin-500/50 shadow-sm">
             </div>
-            <button id="openIncomeModal" class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition-colors whitespace-nowrap"><i class="ph ph-plus text-sm"></i> Input Manual</button>
+            <button id="openIncomeModal" class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-admin-600 text-white font-bold text-xs rounded-lg hover:bg-admin-700 transition-colors whitespace-nowrap"><i class="ph ph-plus text-sm"></i> Input Manual</button>
           </div>
         </div>
 
         <div class="overflow-x-auto flex-1 bg-slate-50/30">
           <table class="w-full">
-            <thead class="bg-emerald-600 border-b border-slate-100 sticky top-0">
+            <thead class="bg-admin-600 border-b border-slate-100 sticky top-0">
               <tr>
                 <th class="py-3 px-5 text-left text-[11px] font-bold text-white">Id</th>
                 <th class="py-3 px-5 text-left text-[11px] font-bold text-white">Donatur</th>
@@ -94,7 +94,7 @@
             <h3 class="font-bold text-slate-800">Laporan Program Berjalan & Selesai</h3>
             <p class="text-xs text-slate-500 mt-1">Data distribusi ini dapat diakses oleh donatur secara real-time via website publik.</p>
           </div>
-          <button id="downloadAudit" class="flex items-center gap-2 px-4 py-2 mt-3 md:mt-0 bg-white border border-slate-200 shadow-sm text-slate-700 font-bold text-xs rounded-lg hover:bg-emerald-50 hover:text-emerald-700 transition-colors"><i class="ph ph-download-simple text-sm"></i> Unduh Laporan Audit (.csv)</button>
+          <button id="downloadAudit" class="flex items-center gap-2 px-4 py-2 mt-3 md:mt-0 bg-white border border-slate-200 shadow-sm text-slate-700 font-bold text-xs rounded-lg hover:bg-admin-50 hover:text-admin-700 transition-colors"><i class="ph ph-download-simple text-sm"></i> Unduh Laporan Audit (.csv)</button>
         </div>
         <div id="laporanCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
       </div>
@@ -106,18 +106,18 @@
     id="incomeModal" 
     title="Input Manual Donasi" 
     maxWidth="max-w-lg" 
-    headerColor="bg-emerald-600"
+    headerColor="bg-admin-600"
     closeButtonId="closeIncomeModal">
     <div class="p-6 space-y-4">
-      <div class="bg-emerald-50 text-emerald-700 text-xs p-3 rounded-xl border border-emerald-100 mb-4 font-medium">Gunakan form ini hanya untuk mencatat donasi yang masuk di luar sistem (misal: Transfer langsung ke rekening yayasan atau setoran tunai).</div>
+      <div class="bg-admin-50 text-admin-700 text-xs p-3 rounded-xl border border-admin-100 mb-4 font-medium">Gunakan form ini hanya untuk mencatat donasi yang masuk di luar sistem (misal: Transfer langsung ke rekening yayasan atau setoran tunai).</div>
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Donatur</label>
-          <input id="manualDonorName" type="text" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="Hamba Allah...">
+          <input id="manualDonorName" type="text" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-admin-500 transition-colors" placeholder="Hamba Allah...">
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Campaign</label>
-          <select id="manualCampaign" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors">
+          <select id="manualCampaign" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-admin-500 transition-colors">
             <option value="">Donasi Umum (Kas)</option>
             @foreach($campaigns as $campaign)
                 <option value="{{ $campaign->id }}">{{ $campaign->title }}</option>
@@ -127,11 +127,11 @@
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-500 mb-1.5">Nominal (Rp)</label>
-        <input id="manualAmount" type="number" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+        <input id="manualAmount" type="number" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-admin-500 transition-colors" placeholder="0">
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-500 mb-1.5">Pesan Bukti/Catatan (Opsional)</label>
-        <textarea id="manualNotes" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors" placeholder="Bukti transfer via BCA an..."></textarea>
+        <textarea id="manualNotes" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-admin-500 transition-colors" placeholder="Bukti transfer via BCA an..."></textarea>
       </div>
     </div>
     <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
@@ -145,7 +145,7 @@
     id="detailModal" 
     title="Detail Program" 
     maxWidth="max-w-2xl" 
-    headerColor="bg-emerald-600"
+    headerColor="bg-admin-600"
     closeButtonId="closeDetailModal">
     <x-slot name="headerSlot">
         <div class="flex items-center gap-2 mt-2 flex-wrap">
@@ -157,8 +157,8 @@
 
     <!-- Inner Tabs -->
     <div class="flex border-b border-slate-100 bg-slate-50/50">
-      <button id="tabDetailPenerima" class="flex-1 py-3 text-sm font-bold border-b-2 transition-colors border-emerald-500 text-emerald-600">Alokasi & Penerima</button>
-      <button id="tabDetailDokumentasi" class="flex-1 py-3 text-sm font-bold border-b-2 transition-colors border-transparent text-slate-500 hover:text-emerald-600">Dokumentasi Publik</button>
+      <button id="tabDetailPenerima" class="flex-1 py-3 text-sm font-bold border-b-2 transition-colors border-admin-500 text-admin-600">Alokasi & Penerima</button>
+      <button id="tabDetailDokumentasi" class="flex-1 py-3 text-sm font-bold border-b-2 transition-colors border-transparent text-slate-500 hover:text-admin-600">Dokumentasi Publik</button>
     </div>
 
     <div class="p-6 space-y-5 overflow-y-auto flex-1 bg-slate-50">
@@ -166,9 +166,9 @@
       <div id="contentDetailPenerima" class="space-y-5 block">
         {{-- KPI Summary --}}
         <div class="grid grid-cols-3 gap-4">
-          <div class="bg-emerald-50 rounded-2xl p-4 text-center border border-emerald-100/50">
-            <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-1">Terkumpul</p>
-            <p id="detailModalPemasukan" class="text-lg font-black text-emerald-800"></p>
+          <div class="bg-admin-50 rounded-2xl p-4 text-center border border-admin-100/50">
+            <p class="text-[10px] font-bold text-admin-700 uppercase tracking-wider mb-1">Terkumpul</p>
+            <p id="detailModalPemasukan" class="text-lg font-black text-admin-800"></p>
           </div>
           <div class="bg-blue-50 rounded-2xl p-4 text-center border border-blue-100/50">
             <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-1">Tersalurkan</p>
@@ -184,17 +184,17 @@
         <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
           <div class="flex justify-between text-xs font-bold text-slate-600 mb-2">
             <span>Tingkat Penyaluran</span>
-            <span id="detailModalPct" class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md"></span>
+            <span id="detailModalPct" class="text-admin-600 bg-admin-50 px-2 py-0.5 rounded-md"></span>
           </div>
           <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-            <div id="detailModalBar" class="bg-emerald-500 h-full rounded-full transition-all duration-700" style="width:0%"></div>
+            <div id="detailModalBar" class="bg-admin-500 h-full rounded-full transition-all duration-700" style="width:0%"></div>
           </div>
         </div>
 
         {{-- Penerima manfaat table --}}
         <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
           <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-            <i class="ph ph-users-three text-emerald-600"></i> Daftar Penerima Manfaat
+            <i class="ph ph-users-three text-admin-600"></i> Daftar Penerima Manfaat
           </h4>
           <div class="border border-slate-100 rounded-xl overflow-hidden">
             <table class="w-full text-left">
@@ -214,17 +214,17 @@
 
       <!-- Content: Dokumentasi Publik -->
       <div id="contentDetailDokumentasi" class="space-y-6 hidden">
-        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-start gap-3">
-            <i class="ph ph-info text-emerald-600 text-lg mt-0.5"></i>
+        <div class="bg-admin-50 border border-admin-100 p-4 rounded-xl flex items-start gap-3">
+            <i class="ph ph-info text-admin-600 text-lg mt-0.5"></i>
             <div>
-                <p class="text-xs font-bold text-emerald-800 mb-1">Laporan Penyaluran Publik</p>
-                <p class="text-xs text-emerald-700">Setiap pembaruan/kabar yang Anda posting di sini akan langsung tampil secara real-time di halaman web publik sebagai bukti transparansi ke donatur.</p>
+                <p class="text-xs font-bold text-admin-800 mb-1">Laporan Penyaluran Publik</p>
+                <p class="text-xs text-admin-700">Setiap pembaruan/kabar yang Anda posting di sini akan langsung tampil secara real-time di halaman web publik sebagai bukti transparansi ke donatur.</p>
             </div>
         </div>
 
         <!-- List Updates -->
         <div>
-          <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i class="ph ph-clock-counter-clockwise text-emerald-500"></i> Riwayat Publikasi</h4>
+          <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i class="ph ph-clock-counter-clockwise text-admin-500"></i> Riwayat Publikasi</h4>
           <div id="updatesList" class="space-y-3">
             <!-- Item diisi via JS -->
           </div>
@@ -232,36 +232,36 @@
 
         <!-- Form Tambah Update -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
-          <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="ph ph-plus-circle text-emerald-500"></i> Posting Laporan Baru</h4>
+          <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="ph ph-plus-circle text-admin-500"></i> Posting Laporan Baru</h4>
           <form id="updatesForm" class="space-y-4">
             <input type="hidden" id="uCampaignId">
             <div>
               <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Judul Laporan</label>
-              <input required id="uTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="Contoh: Penyaluran Sembako Tahap 1">
+              <input required id="uTitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all" placeholder="Contoh: Penyaluran Sembako Tahap 1">
             </div>
             <div>
               <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Keterangan / Deskripsi</label>
-              <textarea required id="uContent" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all resize-none" placeholder="Ceritakan detail penyaluran dana..."></textarea>
+              <textarea required id="uContent" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all resize-none" placeholder="Ceritakan detail penyaluran dana..."></textarea>
             </div>
 
             <div id="uAmountContainer">
               <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Nominal Dana Disalurkan (Opsional)</label>
               <div class="relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">Rp</span>
-                <input type="number" id="uAmount" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all" placeholder="0">
+                <input type="number" id="uAmount" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all" placeholder="0">
               </div>
             </div>
 
             <div>
               <label class="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Foto Bukti (Opsional)</label>
-              <input id="uImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors">
+              <input id="uImageFile" type="file" accept="image/*" class="w-full text-xs file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-admin-50 file:text-admin-700 hover:file:bg-admin-100 transition-colors">
             </div>
 
-            <div class="flex items-center gap-2 mt-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-              <input type="checkbox" id="uDistributeAll" onchange="document.getElementById('uAmountContainer').style.opacity = this.checked ? '0.5' : '1'; document.getElementById('uAmount').disabled = this.checked;" class="w-4 h-4 text-emerald-600 rounded border-emerald-300 focus:ring-emerald-500">
-              <label for="uDistributeAll" class="text-[11px] font-bold text-emerald-800 cursor-pointer">Salurkan 100% sisa dana donasi sekaligus & tandai program selesai</label>
+            <div class="flex items-center gap-2 mt-2 p-3 bg-admin-50 rounded-xl border border-admin-100">
+              <input type="checkbox" id="uDistributeAll" onchange="document.getElementById('uAmountContainer').style.opacity = this.checked ? '0.5' : '1'; document.getElementById('uAmount').disabled = this.checked;" class="w-4 h-4 text-admin-600 rounded border-admin-300 focus:ring-admin-500">
+              <label for="uDistributeAll" class="text-[11px] font-bold text-admin-800 cursor-pointer">Salurkan 100% sisa dana donasi sekaligus & tandai program selesai</label>
             </div>
-            <button type="submit" id="submitUpdateBtn" class="w-full py-3 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-2">
+            <button type="submit" id="submitUpdateBtn" class="w-full py-3 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 shadow-lg shadow-admin-600/20 transition-all flex items-center justify-center gap-2">
               <i class="ph ph-paper-plane-tilt"></i> Publikasikan Laporan
             </button>
           </form>
@@ -308,8 +308,8 @@
   function syncMasterTabs() {
     const p = document.getElementById('tabPemasukan');
     const s = document.getElementById('tabPenyaluran');
-    const on = 'bg-emerald-600 text-white border-slate-200 border-b-transparent z-30';
-    const off = 'bg-gray-50 border-transparent text-slate-400 hover:text-emerald-600 hover:bg-white z-10 border-b-slate-200';
+    const on = 'bg-admin-600 text-white border-slate-200 border-b-transparent z-30';
+    const off = 'bg-gray-50 border-transparent text-slate-400 hover:text-admin-600 hover:bg-white z-10 border-b-slate-200';
     p.className = 'px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-extrabold transition-all border ' + (state.activeTab === 'pemasukan' ? on : off);
     s.className = 'px-8 pt-3.5 pb-3 rounded-t-2xl text-sm font-extrabold transition-all border ' + (state.activeTab === 'penyaluran' ? on : off);
     document.getElementById('pemasukanPane').classList.toggle('hidden', state.activeTab !== 'pemasukan');
@@ -323,7 +323,7 @@
       const f = btn.getAttribute('data-filter');
       btn.className = 'income-filter px-4 py-1.5 text-xs font-bold rounded-lg transition-all ';
       if (state.incomeFilter === f) {
-        btn.className += 'bg-white shadow-sm ' + (f === 'berhasil' ? 'text-emerald-700' : (f === 'pending' ? 'text-amber-600' : 'text-slate-800'));
+        btn.className += 'bg-white shadow-sm ' + (f === 'berhasil' ? 'text-admin-700' : (f === 'pending' ? 'text-amber-600' : 'text-slate-800'));
       } else {
         btn.className += 'text-slate-500 hover:text-slate-700';
       }
@@ -337,16 +337,16 @@
       const ms = t.nama.toLowerCase().includes(q) || t.category.toLowerCase().includes(q);
       return mt && ms;
     }).map((t) => {
-      const statusClass = t.status === 'berhasil' ? 'bg-emerald-600 text-white' : (t.status === 'pending' ? 'bg-amber-500 text-white' : 'bg-rose-600 text-white');
+      const statusClass = t.status === 'berhasil' ? 'bg-admin-600 text-white' : (t.status === 'pending' ? 'bg-amber-500 text-white' : 'bg-rose-600 text-white');
       return `
         <tr class="hover:bg-slate-50 transition-colors bg-white">
           <td class="p-5 text-sm font-bold text-slate-600">#${t.id}</td>
           <td class="p-5"><div class="font-bold text-sm text-slate-900">${t.nama}</div><div class="text-xs text-slate-400 mt-0.5">${t.date}</div></td>
           <td class="p-5"><span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded-md">${t.category}</span></td>
           <td class="p-5 text-xs text-slate-500 max-w-[150px] truncate italic">${t.notes || '-'}</td>
-          <td class="p-5 text-sm font-bold text-emerald-600">${rp(t.amount)}</td>
+          <td class="p-5 text-sm font-bold text-admin-600">${rp(t.amount)}</td>
           <td class="p-5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusClass}">${t.status.toUpperCase()}</span></td>
-          <td class="p-5"><div class="flex items-center gap-2"><button onclick="editIncome(${t.id})" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-md text-[11px] hover:bg-emerald-700 transition-colors">Edit</button><button onclick="deleteIncome(${t.id})" class="px-3 py-1 bg-rose-600 text-white font-bold rounded-md text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
+          <td class="p-5"><div class="flex items-center gap-2"><button onclick="editIncome(${t.id})" class="px-3 py-1 bg-admin-600 text-white font-bold rounded-md text-[11px] hover:bg-admin-700 transition-colors">Edit</button><button onclick="deleteIncome(${t.id})" class="px-3 py-1 bg-rose-600 text-white font-bold rounded-md text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
         </tr>
       `;
     }).join('');
@@ -407,17 +407,17 @@
         <div class="border border-slate-200 rounded-xl p-5 hover:shadow-lg transition-shadow bg-white flex flex-col">
           <div class="flex justify-between items-start mb-4">
             <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-md">${l.kategori}</span>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${l.status === 'selesai' ? 'bg-slate-500 text-white' : 'bg-emerald-600 text-white'}">${l.status === 'selesai' ? 'SELESAI' : 'AKTIF'}</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${l.status === 'selesai' ? 'bg-slate-500 text-white' : 'bg-admin-600 text-white'}">${l.status === 'selesai' ? 'SELESAI' : 'AKTIF'}</span>
           </div>
           <h4 class="font-bold text-slate-900 leading-tight mb-1">${l.program}</h4>
           <p class="text-xs text-slate-400 mb-5">${l.periode} &bull; ${l.penerima} Penerima Manfaat</p>
           <div class="mt-auto space-y-3">
-            <div class="flex justify-between text-xs"><span class="text-slate-500">Terkumpul: <span class="font-bold text-slate-800">${rp(l.pemasukan)}</span></span><span class="font-bold ${hasDisalurkan ? 'text-emerald-600' : 'text-slate-400'}">${hasDisalurkan ? progress + '% Tersalur' : 'Belum Tersalur'}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-slate-500">Terkumpul: <span class="font-bold text-slate-800">${rp(l.pemasukan)}</span></span><span class="font-bold ${hasDisalurkan ? 'text-admin-600' : 'text-slate-400'}">${hasDisalurkan ? progress + '% Tersalur' : 'Belum Tersalur'}</span></div>
             ${hasDisalurkan
-              ? `<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width:${progress}%"></div></div>`
+              ? `<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-admin-500 h-full rounded-full" style="width:${progress}%"></div></div>`
               : `<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden relative"><div class="absolute inset-0 flex items-center justify-center"></div></div><p class="text-[10px] text-slate-400 italic">Belum ada data penyaluran tercatat. Tambahkan penerima bantuan di menu Relasi &amp; Bantuan.</p>`
             }
-            <div class="flex justify-between text-xs pt-2 border-t border-slate-100"><span class="text-slate-500 font-medium">Sisa Dana: <span class="font-bold text-amber-600">${rp(l.sisa)}</span></span><button onclick="openDetailModal(${idx})" class="text-emerald-700 hover:text-emerald-900 cursor-pointer font-bold hover:underline transition-colors">Detail &rarr;</button></div>
+            <div class="flex justify-between text-xs pt-2 border-t border-slate-100"><span class="text-slate-500 font-medium">Sisa Dana: <span class="font-bold text-amber-600">${rp(l.sisa)}</span></span><button onclick="openDetailModal(${idx})" class="text-admin-700 hover:text-admin-900 cursor-pointer font-bold hover:underline transition-colors">Detail &rarr;</button></div>
           </div>
         </div>
       `;
@@ -557,7 +557,7 @@
     document.getElementById('detailModalTitle').textContent = l.program;
     document.getElementById('detailModalKategori').textContent = l.kategori;
     document.getElementById('detailModalStatus').textContent = l.status === 'selesai' ? 'SELESAI' : 'AKTIF';
-    document.getElementById('detailModalStatus').className = 'px-3 py-1 rounded-full text-[11px] font-bold ' + (l.status === 'selesai' ? 'bg-slate-200 text-slate-700' : 'bg-emerald-100 text-emerald-700');
+    document.getElementById('detailModalStatus').className = 'px-3 py-1 rounded-full text-[11px] font-bold ' + (l.status === 'selesai' ? 'bg-slate-200 text-slate-700' : 'bg-admin-100 text-admin-700');
     document.getElementById('detailModalPeriode').textContent = l.periode;
     document.getElementById('detailModalPemasukan').textContent = rp(l.pemasukan);
     document.getElementById('detailModalDisalurkan').textContent = rp(l.disalurkan);
@@ -574,7 +574,7 @@
         <tr class="border-t border-slate-100 hover:bg-slate-50">
           <td class="py-2 px-4 text-xs font-bold text-slate-700">${i + 1}. ${p.nama}</td>
           <td class="py-2 px-4 text-xs text-slate-500">${p.lokasi || '-'}</td>
-          <td class="py-2 px-4 text-xs font-bold text-emerald-700">${rp(p.nilai)}</td>
+          <td class="py-2 px-4 text-xs font-bold text-admin-700">${rp(p.nilai)}</td>
         </tr>
       `).join('');
     }
@@ -586,10 +586,10 @@
 
   // Detail Modal Tabs Logic
   document.getElementById('tabDetailPenerima').addEventListener('click', function() {
-    this.classList.add('border-emerald-500', 'text-emerald-600');
+    this.classList.add('border-admin-500', 'text-admin-600');
     this.classList.remove('border-transparent', 'text-slate-500');
     const tabDok = document.getElementById('tabDetailDokumentasi');
-    tabDok.classList.remove('border-emerald-500', 'text-emerald-600');
+    tabDok.classList.remove('border-admin-500', 'text-admin-600');
     tabDok.classList.add('border-transparent', 'text-slate-500');
     document.getElementById('contentDetailPenerima').classList.remove('hidden');
     document.getElementById('contentDetailPenerima').classList.add('block');
@@ -598,10 +598,10 @@
   });
 
   document.getElementById('tabDetailDokumentasi').addEventListener('click', function() {
-    this.classList.add('border-emerald-500', 'text-emerald-600');
+    this.classList.add('border-admin-500', 'text-admin-600');
     this.classList.remove('border-transparent', 'text-slate-500');
     const tabPen = document.getElementById('tabDetailPenerima');
-    tabPen.classList.remove('border-emerald-500', 'text-emerald-600');
+    tabPen.classList.remove('border-admin-500', 'text-admin-600');
     tabPen.classList.add('border-transparent', 'text-slate-500');
     document.getElementById('contentDetailDokumentasi').classList.remove('hidden');
     document.getElementById('contentDetailDokumentasi').classList.add('block');

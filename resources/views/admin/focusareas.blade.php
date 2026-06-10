@@ -4,13 +4,13 @@
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
-      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i class="ph ph-target text-emerald-600 text-[20px]"></i> Fokus Pilar Area</h2>
+      <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i class="ph ph-target text-admin-600 text-[20px]"></i> Fokus Pilar Area</h2>
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         <div class="relative w-full sm:w-auto flex-1 sm:flex-none">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"></i>
-          <input id="areaSearch" type="text" placeholder="Cari pilar area pengabdian..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-emerald-500 text-emerald-900 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-emerald-500/50 shadow-sm">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-admin-500"></i>
+          <input id="areaSearch" type="text" placeholder="Cari pilar area pengabdian..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-white border border-admin-500 text-admin-900 rounded-xl text-sm focus:ring-4 focus:ring-admin-500/20 outline-none transition-all placeholder:text-admin-500/50 shadow-sm">
         </div>
-        <button id="openAreaModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap">
+        <button id="openAreaModal" class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-admin-600 text-white rounded-lg text-xs font-bold hover:bg-admin-700 transition-colors shadow-sm whitespace-nowrap">
           <i class="ph ph-plus text-sm"></i><span class="hidden sm:inline">Tambah Area</span>
         </button>
       </div>
@@ -19,10 +19,10 @@
     <div class="overflow-x-auto">
       <table class="w-full border-collapse">
         <thead>
-          <tr class="bg-emerald-600">
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Fokus Pilar Pengabdian</th>
-            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-emerald-100/50">Deskripsi Utama</th>
-            <th class="py-4 px-6 text-center text-[11px] font-bold text-white border-b border-emerald-100/50">Aksi</th>
+          <tr class="bg-admin-600">
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Fokus Pilar Pengabdian</th>
+            <th class="py-4 px-6 text-left text-[11px] font-bold text-white border-b border-admin-100/50">Deskripsi Utama</th>
+            <th class="py-4 px-6 text-center text-[11px] font-bold text-white border-b border-admin-100/50">Aksi</th>
           </tr>
         </thead>
         <tbody id="areaRows" class="divide-y divide-slate-100"></tbody>
@@ -38,18 +38,18 @@
 <div id="areaModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[100] p-4">
   <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden animate-scale-in max-h-[90vh] flex flex-col">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-      <h3 id="areaModalTitle" class="text-base font-bold text-emerald-700">Tambah Fokus Area Baru</h3>
+      <h3 id="areaModalTitle" class="text-base font-bold text-admin-700">Tambah Fokus Area Baru</h3>
       <button id="closeAreaModal" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
     </div>
     <form id="areaForm" class="flex flex-col flex-1 overflow-hidden">
       <div class="p-6 space-y-5 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs text-slate-500 mb-2">Judul Area</label>
-          <input id="areaTitle" required class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" placeholder="Contoh: Pendidikan Desa">
+          <input id="areaTitle" required class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/20" placeholder="Contoh: Pendidikan Desa">
         </div>
         <div>
           <label class="block text-xs text-slate-500 mb-2">Deskripsi Kegiatan</label>
-          <textarea id="areaDesc" required rows="3" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none leading-relaxed" placeholder="Jelaskan fokus pengabdian..."></textarea>
+          <textarea id="areaDesc" required rows="3" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/20 resize-none leading-relaxed" placeholder="Jelaskan fokus pengabdian..."></textarea>
         </div>
 
         {{-- Icon Picker --}}
@@ -58,20 +58,20 @@
           <input type="hidden" id="areaIcon" value="ph ph-target">
 
           {{-- Selected preview --}}
-          <div class="flex items-center gap-3 mb-3 p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
-            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shrink-0">
+          <div class="flex items-center gap-3 mb-3 p-3 bg-admin-50 border border-admin-100 rounded-xl">
+            <div class="w-10 h-10 bg-admin-600 rounded-xl flex items-center justify-center shrink-0">
               <i id="iconPreview" class="ph ph-target text-[22px] text-white"></i>
             </div>
             <div>
-              <p class="text-xs font-bold text-emerald-800">Ikon Terpilih</p>
-              <p id="iconPreviewLabel" class="text-[11px] text-emerald-600 font-mono">ph ph-target</p>
+              <p class="text-xs font-bold text-admin-800">Ikon Terpilih</p>
+              <p id="iconPreviewLabel" class="text-[11px] text-admin-600 font-mono">ph ph-target</p>
             </div>
           </div>
 
           {{-- Search --}}
           <div class="relative mb-3">
             <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-            <input id="iconSearch" type="text" placeholder="Cari ikon... (contoh: heart, school, water)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
+            <input id="iconSearch" type="text" placeholder="Cari ikon... (contoh: heart, school, water)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-admin-500/20">
           </div>
 
           {{-- Icon Grid --}}
@@ -81,7 +81,7 @@
       </div>
       <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
         <button type="button" id="cancelAreaModal" class="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Batal</button>
-        <button type="submit" id="submitAreaModal" class="px-6 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 shadow-sm transition-all">Tambahkan</button>
+        <button type="submit" id="submitAreaModal" class="px-6 py-2 bg-admin-600 text-white rounded-xl text-sm font-semibold hover:bg-admin-700 shadow-sm transition-all">Tambahkan</button>
       </div>
     </form>
   </div>
@@ -212,8 +212,8 @@
       const isSelected = cls === selectedIcon;
       return `<button type="button" title="${ic.label}" onclick="selectIcon('${cls}')"
         class="w-full aspect-square flex items-center justify-center rounded-lg text-[20px] transition-all ${isSelected
-          ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 ring-offset-1'
-          : 'bg-white border border-slate-200 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300'}">
+          ? 'bg-admin-600 text-white ring-2 ring-admin-400 ring-offset-1'
+          : 'bg-white border border-slate-200 text-slate-500 hover:bg-admin-50 hover:text-admin-600 hover:border-admin-300'}">
         <i class="${cls}"></i>
       </button>`;
     }).join('');
@@ -294,9 +294,9 @@
     const data = filteredAreas();
     document.getElementById('areaRows').innerHTML = data.length ? data.map((a) => `
       <tr class="hover:bg-slate-50/50 transition-colors group">
-        <td class="py-5 px-6"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i class="${iconFor(a.icon)} text-[24px]"></i></div><div class="flex flex-col"><span class="text-sm font-semibold text-slate-900">${a.title}</span><span class="text-[10px] text-emerald-500 font-semibold mt-1 font-mono">${iconFor(a.icon)}</span></div></div></td>
+        <td class="py-5 px-6"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-admin-50 border border-admin-100 text-admin-600 flex items-center justify-center shrink-0"><i class="${iconFor(a.icon)} text-[24px]"></i></div><div class="flex flex-col"><span class="text-sm font-semibold text-slate-900">${a.title}</span><span class="text-[10px] text-admin-500 font-semibold mt-1 font-mono">${iconFor(a.icon)}</span></div></div></td>
         <td class="py-5 px-6"><p class="text-sm text-slate-500 line-clamp-2 max-w-lg">${a.description}</p></td>
-        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] hover:bg-emerald-700 transition-colors" onclick="editArea(${a.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteArea(${a.id}, this)">Hapus</button></div></td>
+        <td class="py-5 px-6"><div class="flex items-center justify-center gap-2"><button class="px-3 py-1.5 bg-admin-600 text-white rounded-lg text-[11px] hover:bg-admin-700 transition-colors" onclick="editArea(${a.id})">Edit</button><button class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[11px] hover:bg-rose-700 transition-colors" onclick="deleteArea(${a.id}, this)">Hapus</button></div></td>
       </tr>
     `).join('') : emptyTableRow(3);
     document.getElementById('areaCount').textContent = 'Menampilkan ' + data.length + ' area';

@@ -26,9 +26,9 @@
 
             <!-- Success Message -->
             @if (session('status'))
-                <div class="mb-6 flex items-start gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3">
-                    <i class="ph ph-check-circle text-emerald-600 text-lg mt-0.5 flex-shrink-0"></i>
-                    <p class="text-xs font-bold text-emerald-700">{{ session('status') }}</p>
+                <div class="mb-6 flex items-start gap-2 rounded-xl border border-admin-100 bg-admin-50 px-4 py-3">
+                    <i class="ph ph-check-circle text-admin-600 text-lg mt-0.5 flex-shrink-0"></i>
+                    <p class="text-xs font-bold text-admin-700">{{ session('status') }}</p>
                 </div>
             @endif
 
@@ -47,7 +47,7 @@
                             minlength="8"
                             autocomplete="new-password"
                             placeholder="Minimal 8 karakter"
-                            class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 pr-12 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
+                            class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 pr-12 text-sm font-medium outline-none transition-all focus:border-admin-500 focus:ring-4 focus:ring-admin-500/10 placeholder:text-slate-400"
                         >
                         <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                             <i class="ph ph-eye text-lg"></i>
@@ -71,7 +71,7 @@
                             required
                             autocomplete="new-password"
                             placeholder="Ulangi kata sandi baru"
-                            class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 pr-12 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
+                            class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 pr-12 text-sm font-medium outline-none transition-all focus:border-admin-500 focus:ring-4 focus:ring-admin-500/10 placeholder:text-slate-400"
                         >
                     </div>
                     <p id="matchText" class="mt-1 text-[11px] font-bold hidden"></p>
@@ -80,7 +80,7 @@
                 <button
                     type="submit"
                     id="submitBtn"
-                    class="w-full rounded-xl bg-emerald-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] hover:bg-emerald-700 mt-4"
+                    class="w-full rounded-xl bg-admin-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-admin-200 transition-all active:scale-[0.98] hover:bg-admin-700 mt-4"
                 >
                     <i class="ph ph-lock-key mr-2"></i>SIMPAN & MASUK KE DASHBOARD
                 </button>
@@ -120,7 +120,7 @@
             { w: '25%', color: 'bg-rose-400', label: 'Lemah' },
             { w: '50%', color: 'bg-amber-400', label: 'Cukup' },
             { w: '75%', color: 'bg-blue-400', label: 'Kuat' },
-            { w: '100%', color: 'bg-emerald-500', label: 'Sangat Kuat' },
+            { w: '100%', color: 'bg-admin-500', label: 'Sangat Kuat' },
         ];
 
         if (val.length === 0) {
@@ -141,7 +141,7 @@
         const match = this.value === passInput.value;
         matchText.classList.remove('hidden');
         matchText.textContent = match ? '✓ Kata sandi cocok' : '✗ Kata sandi tidak cocok';
-        matchText.className = 'mt-1 text-[11px] font-bold ' + (match ? 'text-emerald-600' : 'text-rose-500');
+        matchText.className = 'mt-1 text-[11px] font-bold ' + (match ? 'text-admin-600' : 'text-rose-500');
     });
 </script>
 @endsection
