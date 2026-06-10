@@ -39,7 +39,7 @@
                 <div class="bg-white rounded-[40px] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden" id="campaignTabs">
                     <div class="flex border-b border-slate-100 overflow-x-auto scrollbar-hide">
                         <button data-tab="description" class="tab-btn flex-1 min-w-[120px] py-6 text-sm font-black text-emerald-600 border-b-2 border-emerald-600 transition-all">Deskripsi</button>
-                        <button data-tab="updates" class="tab-btn flex-1 min-w-[120px] py-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-all">Update (0)</button>
+                        <button data-tab="updates" class="tab-btn flex-1 min-w-[120px] py-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-all">Update ({{ $campaign->updates->count() }})</button>
                         <button data-tab="donors" class="tab-btn flex-1 min-w-[120px] py-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-all">Donatur ({{ $recentDonations->count() }})</button>
                     </div>
                     

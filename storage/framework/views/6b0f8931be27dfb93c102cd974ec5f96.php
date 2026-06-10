@@ -40,4 +40,4 @@ unset($__defined_vars, $__key, $__value); ?>
         <i class="ph ph-image <?php echo e($iconClass); ?>"></i>
     </div>
 <?php endif; ?>
-<?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/components/logo.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\coding\fundunity\resources\views/components/logo.blade.php ENDPATH**/ ?>

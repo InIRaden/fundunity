@@ -24,7 +24,21 @@ class LandingController extends Controller
 {
     private function loadSiteSettings(): array
     {
-        return \App\Models\SiteSetting::query()->pluck('value', 'key')->all();
+        return \Illuminate\Support\Facades\Cache::remember('site_settings', 3600, function () {
+            return \App\Models\SiteSetting::query()->pluck('value', 'key')->all();
+        });
+    }
+
+    private function getImpactStats(): array
+    {
+        return \Illuminate\Support\Facades\Cache::remember('impact_stats', 3600, function () {
+            return [
+                'donor_count' => Donor::where('is_active', true)->count(),
+                'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
+                'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
+                'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
+            ];
+        });
     }
 
     public function index()
@@ -64,12 +78,7 @@ class LandingController extends Controller
             ->limit(12)
             ->get();
 
-        $impactStats = [
-            'donor_count' => Donor::where('is_active', true)->count(),
-            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
-            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
-            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
-        ];
+        $impactStats = $this->getImpactStats();
 
         return view('landing.home', compact(
             'siteSettings',
@@ -106,12 +115,7 @@ class LandingController extends Controller
             ->limit(12)
             ->get();
 
-        $impactStats = [
-            'donor_count' => Donor::where('is_active', true)->count(),
-            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
-            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
-            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
-        ];
+        $impactStats = $this->getImpactStats();
 
         return view('landing.about', compact('siteSettings', 'page', 'generalProfile', 'homePartners', 'impactStats'));
     }
@@ -201,12 +205,7 @@ class LandingController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $impactStats = [
-            'donor_count' => Donor::where('is_active', true)->count(),
-            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
-            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
-            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
-        ];
+        $impactStats = $this->getImpactStats();
 
         $activeCampaignCount = Campaign::where('is_active', true)->where('status', 'aktif')->count();
 
@@ -247,12 +246,7 @@ class LandingController extends Controller
             'other' => $partners->where('type', 'other')->values(),
         ];
 
-        $impactStats = [
-            'donor_count' => Donor::where('is_active', true)->count(),
-            'distributed_amount' => (int) Campaign::where('is_active', true)->sum('collected'),
-            'completed_programs' => Campaign::where('is_active', true)->where('status', 'selesai')->count(),
-            'volunteer_count' => Volunteer::where('status', 'aktif')->count() ?: Volunteer::count(),
-        ];
+        $impactStats = $this->getImpactStats();
 
         return view('landing.partners', compact('siteSettings', 'partnerGroups', 'impactStats'));
     }
@@ -266,8 +260,15 @@ class LandingController extends Controller
         return view('landing.contact', compact('siteSettings'));
     }
 
-    public function donationForm(?Campaign $campaign = null)
+    public function donationForm($campaign = null)
     {
+        $campaignId = $campaign ?? request()->query('campaign');
+        if ($campaignId && !($campaignId instanceof Campaign)) {
+            $campaign = Campaign::find($campaignId);
+        } else if ($campaignId instanceof Campaign) {
+            $campaign = $campaignId;
+        }
+
         $siteSettings = $this->loadSiteSettings();
         if (($siteSettings['landing_menu_donate_enabled'] ?? '1') !== '1') {
             return response()->view('feature-off', [
@@ -391,21 +392,19 @@ class LandingController extends Controller
 
         $involvementTypes = collect();
 
-
-        if (Schema::hasTable('involvement_types')) {
-            $involvementTypes = DB::table('involvement_types')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderByDesc('created_at')
-                ->get();
-            } else {
-                // Provide default categories if table doesn't exist
-                $involvementTypes = collect([
-                    (object) ['title' => 'Acara Sosial', 'id' => 1],
-                    (object) ['title' => 'Relawan Lapangan', 'id' => 2],
-                    (object) ['title' => 'Digital Media', 'id' => 3],
-                    (object) ['title' => 'Kemitraan', 'id' => 4],
-                ]);
+        // Menggunakan FocusArea sebagai Bidang Kolaborasi agar terpusat di admin
+        $involvementTypes = \App\Models\FocusArea::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get();
+            
+        if ($involvementTypes->isEmpty()) {
+            $involvementTypes = collect([
+                (object) ['title' => 'Pendidikan', 'id' => 1],
+                (object) ['title' => 'Kesehatan', 'id' => 2],
+                (object) ['title' => 'Lingkungan', 'id' => 3],
+                (object) ['title' => 'Sosial Kemanusiaan', 'id' => 4],
+            ]);
         }
 
             $involvementBenefits = collect();
@@ -426,23 +425,24 @@ class LandingController extends Controller
             'name' => ['required', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:190'],
             'phone' => ['required', 'string', 'max:30'],
-            'category' => ['required', 'string', 'max:120'],
-            'message' => ['nullable', 'string', 'max:2000'],
+            'category' => ['required', 'string', 'max:100'],
+            'message' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        Volunteer::create([
+        \App\Models\Volunteer::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'category' => $validated['category'],
             'is_verified' => false,
-            'registered_at' => now()->toDateString(),
+            'registered_at' => now(),
             'is_active' => true,
         ]);
 
         Message::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'subject' => 'Pendaftaran Relawan Baru',
             'message' => 'PENDAFTARAN RELAWAN - Kategori: '.$validated['category'].'. '
                 .($validated['message'] ? 'Pesan: '.$validated['message'] : 'Tanpa pesan tambahan.')
                 .' No HP: '.$validated['phone'],

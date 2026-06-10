@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-gradient-to-br from-emerald-800 to-emerald-900 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row md:items-end justify-between gap-6 relative overflow-hidden shadow-emerald-900/20">
     <div class="relative z-10 max-w-xl">
@@ -72,18 +70,31 @@
   </div>
 </div>
 
-<x-admin.modal 
-    id="stakeModal" 
-    title="Tambah Donatur" 
-    maxWidth="max-w-lg" 
-    headerColor="bg-emerald-600"
-    closeButtonId="closeStakeModal">
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'stakeModal','title' => 'Tambah Donatur','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeStakeModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'stakeModal','title' => 'Tambah Donatur','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeStakeModal']); ?>
     <div class="p-6 space-y-4 overflow-y-auto flex-1" id="stakeModalBody"></div>
     <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0 rounded-b-3xl">
       <button id="cancelStakeModal" class="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">Batal</button>
       <button id="saveStakeModal" class="px-8 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all">Simpan Data</button>
     </div>
-</x-admin.modal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
 <style>
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -94,7 +105,7 @@
 
 <script>
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-  const stakeholderBaseUrl = @json(url('/admin/database-stakeholder'));
+  const stakeholderBaseUrl = <?php echo json_encode(url('/admin/database-stakeholder'), 15, 512) ?>;
 
   function normalizeDonatur(item = {}) {
     return {
@@ -131,9 +142,9 @@
   const ds = {
     activeTab: 'donatur',
     search: '',
-    donatur: (@json($donatur ?? []) || []).map((item) => normalizeDonatur(item)),
-    penerima: (@json($penerima ?? []) || []).map((item) => normalizePenerima(item)),
-    relawan: (@json($relawan ?? []) || []).map((item) => normalizeRelawan(item)),
+    donatur: (<?php echo json_encode($donatur ?? [], 15, 512) ?> || []).map((item) => normalizeDonatur(item)),
+    penerima: (<?php echo json_encode($penerima ?? [], 15, 512) ?> || []).map((item) => normalizePenerima(item)),
+    relawan: (<?php echo json_encode($relawan ?? [], 15, 512) ?> || []).map((item) => normalizeRelawan(item)),
     editingId: null,
     isSubmitting: false,
     isDeleting: false,
@@ -525,4 +536,6 @@
 
   syncPanes();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/databasestakeholder.blade.php ENDPATH**/ ?>

@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
     <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl p-6 text-white shadow-xl shadow-emerald-600/20 relative overflow-hidden group">
@@ -9,8 +7,8 @@
           <p class="text-emerald-100/80 text-xs font-bold mb-1">Total Saldo Terkumpul</p>
           <h3 id="kpiPemasukan" class="text-3xl font-bold"></h3>
         </div>
-        <div class="mt-4 flex items-center gap-2 text-sm {{ $incomeTrendStatus === 'up' ? 'text-emerald-50 bg-white/10' : 'text-amber-100 bg-amber-500/20' }} px-3 py-1.5 rounded-lg w-fit backdrop-blur-sm">
-          <i class="ph {{ $incomeTrendStatus === 'up' ? 'ph-trend-up' : 'ph-trend-down' }}"></i> {{ $incomeTrendText }} dari bulan lalu
+        <div class="mt-4 flex items-center gap-2 text-sm <?php echo e($incomeTrendStatus === 'up' ? 'text-emerald-50 bg-white/10' : 'text-amber-100 bg-amber-500/20'); ?> px-3 py-1.5 rounded-lg w-fit backdrop-blur-sm">
+          <i class="ph <?php echo e($incomeTrendStatus === 'up' ? 'ph-trend-up' : 'ph-trend-down'); ?>"></i> <?php echo e($incomeTrendText); ?> dari bulan lalu
         </div>
       </div>
       <i class="ph ph-chart-bar text-white opacity-5 text-[120px] absolute -right-6 -bottom-6"></i>
@@ -102,12 +100,16 @@
   </div>
 </div>
 
-<x-admin.modal 
-    id="incomeModal" 
-    title="Input Manual Donasi" 
-    maxWidth="max-w-lg" 
-    headerColor="bg-emerald-600"
-    closeButtonId="closeIncomeModal">
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'incomeModal','title' => 'Input Manual Donasi','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeIncomeModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'incomeModal','title' => 'Input Manual Donasi','maxWidth' => 'max-w-lg','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeIncomeModal']); ?>
     <div class="p-6 space-y-4">
       <div class="bg-emerald-50 text-emerald-700 text-xs p-3 rounded-xl border border-emerald-100 mb-4 font-medium">Gunakan form ini hanya untuk mencatat donasi yang masuk di luar sistem (misal: Transfer langsung ke rekening yayasan atau setoran tunai).</div>
       <div class="grid grid-cols-2 gap-4">
@@ -119,9 +121,9 @@
           <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Campaign</label>
           <select id="manualCampaign" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:bg-white outline-none focus:border-emerald-500 transition-colors">
             <option value="">Donasi Umum (Kas)</option>
-            @foreach($campaigns as $campaign)
-                <option value="{{ $campaign->id }}">{{ $campaign->title }}</option>
-            @endforeach
+            <?php $__currentLoopData = $campaigns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campaign): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($campaign->id); ?>"><?php echo e($campaign->title); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
       </div>
@@ -138,22 +140,35 @@
       <button id="cancelIncomeModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors">Batal</button>
       <button id="saveIncomeModal" class="px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg">Simpan Transaksi</button>
     </div>
-</x-admin.modal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
-{{-- Detail Modal --}}
-<x-admin.modal 
-    id="detailModal" 
-    title="Detail Program" 
-    maxWidth="max-w-2xl" 
-    headerColor="bg-emerald-600"
-    closeButtonId="closeDetailModal">
-    <x-slot name="headerSlot">
+
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'detailModal','title' => 'Detail Program','maxWidth' => 'max-w-2xl','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeDetailModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'detailModal','title' => 'Detail Program','maxWidth' => 'max-w-2xl','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeDetailModal']); ?>
+     <?php $__env->slot('headerSlot', null, []); ?> 
         <div class="flex items-center gap-2 mt-2 flex-wrap">
           <span id="detailModalKategori" class="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-md"></span>
           <span id="detailModalStatus" class="px-3 py-1 rounded-full text-[11px] font-bold bg-white/20 text-white"></span>
         </div>
         <p id="detailModalPeriode" class="text-xs text-white/80 mt-1"></p>
-    </x-slot>
+     <?php $__env->endSlot(); ?>
 
     <!-- Inner Tabs -->
     <div class="flex border-b border-slate-100 bg-slate-50/50">
@@ -164,7 +179,7 @@
     <div class="p-6 space-y-5 overflow-y-auto flex-1 bg-slate-50">
       <!-- Content: Alokasi & Penerima -->
       <div id="contentDetailPenerima" class="space-y-5 block">
-        {{-- KPI Summary --}}
+        
         <div class="grid grid-cols-3 gap-4">
           <div class="bg-emerald-50 rounded-2xl p-4 text-center border border-emerald-100/50">
             <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-1">Terkumpul</p>
@@ -180,7 +195,7 @@
           </div>
         </div>
 
-        {{-- Progress bar --}}
+        
         <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
           <div class="flex justify-between text-xs font-bold text-slate-600 mb-2">
             <span>Tingkat Penyaluran</span>
@@ -191,7 +206,7 @@
           </div>
         </div>
 
-        {{-- Penerima manfaat table --}}
+        
         <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
           <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
             <i class="ph ph-users-three text-emerald-600"></i> Daftar Penerima Manfaat
@@ -269,7 +284,16 @@
       </div>
 
     </div>
-</x-admin.modal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
 <style>
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -279,15 +303,15 @@
 </style>
 
 <script>
-  const manualIncomeStoreUrl = @json(route('admin.databasestakeholder.store', ['type' => 'donatur']));
+  const manualIncomeStoreUrl = <?php echo json_encode(route('admin.databasestakeholder.store', ['type' => 'donatur']), 512) ?>;
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
   const state = {
     activeTab: 'pemasukan',
     incomeFilter: 'semua',
     incomeSearch: '',
-    incomes: @json($filteredIncomes),
-    laporan: @json($laporanItems),
+    incomes: <?php echo json_encode($filteredIncomes, 15, 512) ?>,
+    laporan: <?php echo json_encode($laporanItems, 15, 512) ?>,
   };
 
   function rp(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
@@ -739,4 +763,6 @@
   renderIncomeRows();
   renderLaporanCards();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/keuangantransparansi.blade.php ENDPATH**/ ?>

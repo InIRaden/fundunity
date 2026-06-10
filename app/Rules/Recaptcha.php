@@ -22,18 +22,27 @@ class Recaptcha implements ValidationRule
         $secret = env('NOCAPTCHA_SECRET');
 
         try {
-            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            $http = Http::asForm();
+            
+            // Hanya matikan verifikasi SSL saat di local development (untuk mengatasi error cURL 60 di Windows)
+            if (app()->isLocal()) {
+                $http->withoutVerifying();
+            }
+
+            $response = $http->post('https://www.google.com/recaptcha/api/siteverify', [
                 'secret'   => $secret,
                 'response' => $value,
                 'remoteip' => request()->ip(),
             ]);
 
             $data = $response->json();
+            \Illuminate\Support\Facades\Log::info('reCAPTCHA verification response', ['data' => $data]);
 
             if (! ($data['success'] ?? false)) {
                 $fail('Verifikasi reCAPTCHA gagal. Silakan coba lagi.');
             }
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('reCAPTCHA verification error', ['error' => $e->getMessage()]);
             // Jika koneksi ke Google gagal (misalnya lokal tanpa internet), tetap lewatkan
             // saat menggunakan dummy key Google (6LeIxAcT...) yang selalu berhasil secara lokal.
             $fail('Verifikasi reCAPTCHA tidak dapat dilakukan. Coba lagi.');

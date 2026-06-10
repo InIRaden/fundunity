@@ -38,22 +38,20 @@
       <span class="text-sm font-bold text-white tracking-tight opacity-90 whitespace-nowrap sidebar-text-show">{{ $siteSettings['site_short_name'] ?? 'FundUnity' }}</span>
     </div>
 
-    <nav class="flex-1 space-y-0.5 px-3 mt-1 overflow-y-auto overflow-x-hidden relative hide-scrollbar">
+    <nav class="flex-1 space-y-0.5 px-0 pt-2 pb-2 overflow-y-auto overflow-x-hidden relative hide-scrollbar">
       @foreach($menuItems as $item)
         @php
           $enabled = (string)($siteSettings[$item['key']] ?? '1') === '1';
+          $isActive = request()->routeIs($item['route']);
         @endphp
 
         @if($enabled)
-          <a href="{{ route($item['route']) }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ request()->routeIs($item['route']) ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-slate-300 hover:bg-emerald-700 hover:text-white rounded-2xl px-4' }}">
-            @if(request()->routeIs($item['route']))
-              <!-- Top Inverted Curve -->
-              <div class="absolute right-0 -top-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at top left, transparent 20px, #f8fafc 0);"></div>
-              <!-- Bottom Inverted Curve -->
-              <div class="absolute right-0 -bottom-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at bottom left, transparent 20px, #f8fafc 0);"></div>
-            @endif
-            <i class="{{ $item['icon'] }} shrink-0 text-[19px] leading-none"></i>
-            <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ request()->routeIs($item['route']) ? 'text-emerald-600' : '' }}">{{ $item['label'] }}</span>
+          <a href="{{ route($item['route']) }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ $isActive ? 'bg-gray-50 text-emerald-600 shadow-sm active-sidebar-item' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+            @php
+              $iconClass = $isActive ? str_replace('ph ph-', 'ph-fill ph-', $item['icon']) : $item['icon'];
+            @endphp
+            <i class="{{ $iconClass }} shrink-0 text-[19px] leading-none transition-all"></i>
+            <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ $isActive ? 'text-emerald-600 font-bold' : '' }}">{{ $item['label'] }}</span>
           </a>
         @endif
       @endforeach
@@ -61,30 +59,32 @@
 
       {{-- Menu Manajemen Admin - hanya tampil untuk Super Admin --}}
       @if(Auth::user()?->isSuperAdmin() && (string)($siteSettings['admin_menu_management_enabled'] ?? '1') === '1')
-        <a href="{{ route('admin.management') }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ request()->routeIs('admin.management') ? 'bg-slate-50 text-emerald-600 rounded-l-full rounded-r-none -mr-3 px-4' : 'text-amber-200 hover:bg-emerald-700 hover:text-white rounded-2xl px-4' }}">
-          @if(request()->routeIs('admin.management'))
-            <div class="absolute right-0 -top-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at top left, transparent 20px, #f8fafc 0);"></div>
-            <div class="absolute right-0 -bottom-5 w-5 h-5 bg-transparent pointer-events-none" style="background: radial-gradient(circle at bottom left, transparent 20px, #f8fafc 0);"></div>
-          @endif
-          <i class="ph ph-crown shrink-0 text-[19px] leading-none"></i>
-          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ request()->routeIs('admin.management') ? 'text-emerald-600' : '' }}">Manajemen Admin</span>
+        @php
+          $isManagementActive = request()->routeIs('admin.management');
+        @endphp
+        <a href="{{ route('admin.management') }}" class="sidebar-item relative group flex items-center gap-3 py-2 transition-all duration-150 cursor-pointer {{ $isManagementActive ? 'bg-gray-50 text-emerald-600 shadow-sm active-sidebar-item' : 'text-amber-200 hover:bg-white/10 hover:text-white' }}">
+          @php
+            $iconClass = $isManagementActive ? 'ph-fill ph-crown' : 'ph ph-crown';
+          @endphp
+          <i class="{{ $iconClass }} shrink-0 text-[19px] leading-none transition-all"></i>
+          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show {{ $isManagementActive ? 'text-emerald-600 font-bold' : '' }}">Manajemen Admin</span>
         </a>
       @endif
     </nav>
 
     <!-- Logout -->
-    <div class="px-3 pb-4 pt-2 mt-auto">
+    <div class="px-0 pb-4 pt-2 mt-auto border-t border-white/10 relative z-20">
       <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="sidebar-item relative group w-full flex items-center gap-3 py-2.5 rounded-xl text-slate-200 hover:bg-rose-600/10 hover:text-rose-400 transition-all px-4">
-          <i class="ph ph-door-open shrink-0 text-[19px] leading-none"></i>
-          <span class="text-[13px] font-semibold tracking-wide sidebar-text-show">Keluar</span>
+        <button type="submit" class="sidebar-item logout-button relative group w-full flex items-center gap-3 py-2 text-slate-300 hover:bg-rose-500 hover:text-white transition-all">
+          <i class="ph ph-door-open shrink-0 text-[19px] leading-none transition-all"></i>
+          <span class="text-[13px] font-semibold tracking-wide whitespace-nowrap sidebar-text-show">Keluar</span>
         </button>
       </form>
     </div>
 
     <!-- Toggle Button -->
-    <button id="sidebarToggle" onclick="toggleSidebar()" class="absolute -right-3 top-8 w-6 h-6 bg-white text-slate-600 hover:text-emerald-600 rounded-full flex items-center justify-center transition-all z-50 shadow-sm border border-slate-200">
+    <button id="sidebarToggle" onclick="toggleSidebar()" class="absolute -right-3 top-6 w-6 h-6 bg-white text-slate-600 hover:text-emerald-600 rounded-full flex items-center justify-center transition-all z-50 shadow-sm border border-slate-200">
       <i id="toggleIcon" class="ph ph-caret-right text-[13px] leading-none"></i>
     </button>
   </div>
@@ -92,6 +92,23 @@
   <style>
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Base styles for navigation sidebar items to ensure layout consistency */
+    nav .sidebar-item {
+      margin-left: 20px !important;
+      margin-right: -20px !important;
+      padding-left: 16px !important;
+      border-top-left-radius: 9999px !important;
+      border-bottom-left-radius: 9999px !important;
+    }
+
+    /* Style for logout button to align icon vertically with other items */
+    .logout-button {
+      padding-left: 36px !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      width: 100% !important;
+    }
 
     /* Sidebar collapsed state (Desktop) */
     #adminSidebar.sidebar-collapsed {
@@ -105,6 +122,7 @@
       justify-content: center !important;
       padding-left: 0 !important;
       padding-right: 0 !important;
+      margin-left: 0 !important;
       margin-right: 0 !important;
       border-radius: 12px !important;
     }
@@ -116,3 +134,28 @@
     }
   </style>
 </div>
+
+<style>
+  .active-sidebar-item::before {
+    content: '';
+    position: absolute;
+    top: -32px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    background-image: radial-gradient(circle at 0 0, transparent 32px, #f9fafb 32.5px);
+    pointer-events: none;
+  }
+  .active-sidebar-item::after {
+    content: '';
+    position: absolute;
+    bottom: -32px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    background-image: radial-gradient(circle at 0 100%, transparent 32px, #f9fafb 32.5px);
+    pointer-events: none;
+  }
+</style>

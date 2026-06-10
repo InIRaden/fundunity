@@ -45,14 +45,24 @@
     $formatCurrency = static fn ($value) => 'Rp '.number_format((int) $value, 0, ',', '.');
 
     $formatCompactRupiah = static function (int $value): string {
+        if ($value >= 1_000_000_000_000) {
+            $amount = rtrim(rtrim(number_format($value / 1_000_000_000_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' T';
+        }
+
         if ($value >= 1_000_000_000) {
-            $amount = rtrim(rtrim(number_format($value / 1_000_000_000, 1, ',', '.'), '0'), ',');
-            return 'Rp '.$amount.'M';
+            $amount = rtrim(rtrim(number_format($value / 1_000_000_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' M';
         }
 
         if ($value >= 1_000_000) {
-            $amount = rtrim(rtrim(number_format($value / 1_000_000, 1, ',', '.'), '0'), ',');
-            return 'Rp '.$amount.'Jt';
+            $amount = rtrim(rtrim(number_format($value / 1_000_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' Jt';
+        }
+
+        if ($value >= 1_000) {
+            $amount = rtrim(rtrim(number_format($value / 1_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' Ribu';
         }
 
         return 'Rp '.number_format($value, 0, ',', '.');
@@ -85,7 +95,9 @@
         </div>
     @else
         <div class="absolute inset-0">
-            <img src="{{ $heroImage }}" alt="Hero" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-30 object-top">
+            @if($heroImage)
+                <img src="{{ $heroImage }}" alt="Hero" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-30 object-top">
+            @endif
             <div class="absolute inset-0 bg-gradient-to-t from-[#022c22] via-[#022c22]/60 to-transparent"></div>
         </div>
     @endif

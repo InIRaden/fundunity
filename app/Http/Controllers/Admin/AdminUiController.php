@@ -36,6 +36,11 @@ class AdminUiController extends Controller
 
         $donorCount = Donor::where('is_active', true)->count();
         $newDonorThisWeek = Donor::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+        
+        $volunteerCount = Volunteer::count();
+        $beneficiaryCount = Beneficiary::count();
+        $unreadMessagesCount = Message::where('is_read', false)->count();
+        $successfulDonationsCount = Donation::where('status', 'success')->count();
 
         $completionRate = $this->ratioPercent($totalCollected, $totalTarget);
         $distributionRate = $this->ratioPercent($totalDistributed, $totalCollected);
@@ -58,24 +63,24 @@ class AdminUiController extends Controller
             [
                 'icon' => 'ph ph-chart-line-up',
                 'title' => 'Campaign Berjalan',
-                'value' => $activeCampaignCount.' Aktif',
-                'change' => $nearDeadlineCount.' hampir timeout',
+                'value' => $activeCampaignCount,
+                'change' => $nearDeadlineCount > 0 ? $nearDeadlineCount.' sgr berakhir' : 'Terjadwal',
                 'trend' => $nearDeadlineCount > 0 ? 'down' : 'up',
             ],
             [
-                'icon' => 'ph ph-users',
-                'title' => 'Basis Donatur',
-                'value' => number_format($donorCount, 0, ',', '.'),
-                'change' => ($newDonorThisWeek > 0 ? '+' : '').$newDonorThisWeek.' minggu ini',
+                'icon' => 'ph ph-users-three',
+                'title' => 'Total Donatur Aktif',
+                'value' => $donorCount,
+                'change' => '+'.$newDonorThisWeek.' mgg ini',
                 'trend' => $newDonorThisWeek > 0 ? 'up' : 'down',
-            ],
+            ]
         ];
 
         $feedItems = $this->buildDashboardFeedItems();
 
         $selectedFilter = '6 Bulan Terakhir';
         $filterOpen = false;
-        $filterOptions = ['6 Bulan Terakhir', 'Tahun Ini', 'Tahun Lalu'];
+        $filterOptions = ['3 Bulan Terakhir', '6 Bulan Terakhir', 'Tahun Ini', 'Tahun Lalu'];
 
         $pageMeta = [
             'title' => 'Dashboard Admin',
@@ -423,11 +428,12 @@ class AdminUiController extends Controller
 
     public function keuanganTransparansi(): View
     {
-        $activeMasterTab = 'pemasukan';
-        $incomeSearch = '';
-        $incomeFilterTab = 'semua';
+        try {
+            $activeMasterTab = 'pemasukan';
+            $incomeSearch = '';
+            $incomeFilterTab = 'semua';
 
-        // Calculate dynamic trend for Pemasukan
+            // Calculate dynamic trend for Pemasukan
         $currentMonthIncomes = Donation::where('status', 'success')
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
@@ -533,20 +539,25 @@ class AdminUiController extends Controller
             'subtitle' => 'Pantau pemasukan, penyaluran, dan laporan dana',
         ];
 
-        return view('admin.keuangantransparansi', compact(
-            'activeMasterTab',
-            'incomeSearch',
-            'incomeFilterTab',
-            'campaigns',
-            'filteredIncomes',
-            'laporanItems',
-            'totalPemasukanGlobal',
-            'totalDisalurkanGlobal',
-            'totalSisaGlobal',
-            'incomeTrendStatus',
-            'incomeTrendText',
-            'pageMeta'
-        ));
+            return view('admin.keuangantransparansi', compact(
+                'activeMasterTab',
+                'incomeSearch',
+                'incomeFilterTab',
+                'campaigns',
+                'filteredIncomes',
+                'laporanItems',
+                'totalPemasukanGlobal',
+                'totalDisalurkanGlobal',
+                'totalSisaGlobal',
+                'incomeTrendStatus',
+                'incomeTrendText',
+                'pageMeta'
+            ));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Crash in keuanganTransparansi: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            // Return back or to dashboard with error message to prevent standard whoops screen in production
+            return redirect()->route('admin.dashboard')->withErrors(['Telah terjadi kesalahan saat memuat data keuangan. Tim teknis sedang memeriksanya.']);
+        }
     }
 
     public function gallery(): View
@@ -613,6 +624,15 @@ class AdminUiController extends Controller
             'address',
             'site_logo',
         ];
+
+        return view('admin.home', compact(
+            'stats',
+            'donationTrends',
+            'selectedFilter',
+            'filterOptions',
+            'feedItems',
+            'stakeholderStats'
+        ));
 
         $settings = SiteSetting::query()
             ->whereIn('key', $settingKeys)
@@ -765,12 +785,20 @@ class AdminUiController extends Controller
 
     private function formatCurrencyShort(int $value): string
     {
+        if ($value >= 1000000000000) {
+            return 'Rp '.number_format($value / 1000000000000, 1, ',', '.').' T';
+        }
+
         if ($value >= 1000000000) {
-            return 'Rp '.number_format($value / 1000000000, 1, ',', '.').' Miliar';
+            return 'Rp '.number_format($value / 1000000000, 1, ',', '.').' M';
         }
 
         if ($value >= 1000000) {
-            return 'Rp '.number_format($value / 1000000, 1, ',', '.').' Juta';
+            return 'Rp '.number_format($value / 1000000, 1, ',', '.').' Jt';
+        }
+
+        if ($value >= 1000) {
+            return 'Rp '.number_format($value / 1000, 1, ',', '.').' Rb';
         }
 
         return $this->formatCurrency($value);

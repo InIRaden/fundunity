@@ -69,7 +69,7 @@
             width: 100%;
             padding: 12px 16px;
             border-radius: 14px;
-            background: #059669;
+            background: #065f46;
             color: #ffffff;
             font-weight: 900;
             border: 0;
@@ -77,7 +77,7 @@
             text-decoration: none;
         }
 
-        .btn:hover { background: #047857; }
+        .btn:hover { background: #064e3b; }
 
         .pill {
             display: inline-flex;
@@ -85,9 +85,9 @@
             gap: 8px;
             padding: 8px 12px;
             border-radius: 999px;
-            background: rgba(5, 150, 105, 0.10);
-            border: 1px solid rgba(5, 150, 105, 0.18);
-            color: #047857;
+            background: rgba(6, 95, 70, 0.10);
+            border: 1px solid rgba(6, 95, 70, 0.20);
+            color: #065f46;
             font-weight: 900;
             font-size: 12px;
         }
@@ -99,7 +99,7 @@
     <div class="wrap">
         <div class="card">
             <div class="pill"><i class="ph ph-wrench"></i> Offline Feature</div>
-            <h1 class="title">Oops! Fitur sedang istirahat 🛠️</h1>
+            <h1 class="title">Oops! Fitur sedang istirahat</h1>
             <div class="subtitle">{{ $message ?? 'Maaf ya, menu ini sedang tidak aktif sementara waktu. Yuk, kembali ke Beranda dan jelajahi program kebaikan kami yang lain!' }}</div>
 
             <a class="btn" href="{{ route('landing.home') }}">

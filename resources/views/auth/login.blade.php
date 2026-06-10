@@ -73,8 +73,11 @@
                                 placeholder="••••••••"
                                 required
                                 autocomplete="current-password"
-                                class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
+                                class="w-full rounded-xl border border-slate-300 bg-white py-3.5 px-4 pr-12 text-sm font-medium outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                             >
+                            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                                <i class="ph ph-eye text-lg"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -131,9 +134,19 @@
             const form = document.getElementById('loginForm');
             const submitButton = document.getElementById('loginSubmitButton');
             const errorBox = document.getElementById('loginErrorBox');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const passInput = document.getElementById('password');
 
             if (errorBox) {
                 errorBox.classList.add('login-shake');
+            }
+
+            if (togglePasswordBtn && passInput) {
+                togglePasswordBtn.addEventListener('click', function () {
+                    const isHidden = passInput.type === 'password';
+                    passInput.type = isHidden ? 'text' : 'password';
+                    this.querySelector('i').className = 'ph ' + (isHidden ? 'ph-eye-slash' : 'ph-eye') + ' text-lg';
+                });
             }
 
             form?.addEventListener('submit', function () {
@@ -142,9 +155,9 @@
                 }
 
                 submitButton.disabled = true;
-                submitButton.textContent = 'MENGOTENTIKASI...';
+                submitButton.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> MENGOTENTIKASI...';
                 submitButton.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
-                submitButton.classList.add('cursor-not-allowed', 'bg-emerald-300');
+                submitButton.classList.add('cursor-not-allowed', 'bg-emerald-400', 'flex', 'items-center', 'justify-center', 'gap-2');
             });
         });
     </script>

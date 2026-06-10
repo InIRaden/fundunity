@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-8 max-w-[1600px] mx-auto w-full mb-10">
 
   <!-- Banner Section -->
@@ -22,23 +20,23 @@
 
   <!-- Fundamental KPI Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    @foreach($stats as $stat)
+    <?php $__currentLoopData = $stats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $stat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 transition-all hover:border-emerald-200 group">
         <div class="flex justify-between items-start mb-4">
           <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-            <i class="{{ $stat['icon'] }} text-2xl leading-none"></i>
+            <i class="<?php echo e($stat['icon']); ?> text-2xl leading-none"></i>
           </div>
-          <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full {{ $stat['trend'] === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-amber-700 bg-amber-50' }}">
-            <i class="{{ $stat['trend'] === 'up' ? 'ph ph-arrow-up-right' : 'ph ph-arrow-down-right' }} text-sm leading-none"></i>
-            <span class="ml-0.5">{{ $stat['change'] }}</span>
+          <div class="flex items-center text-xs font-bold px-2 py-1 rounded-full <?php echo e($stat['trend'] === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-amber-700 bg-amber-50'); ?>">
+            <i class="<?php echo e($stat['trend'] === 'up' ? 'ph ph-arrow-up-right' : 'ph ph-arrow-down-right'); ?> text-sm leading-none"></i>
+            <span class="ml-0.5"><?php echo e($stat['change']); ?></span>
           </div>
         </div>
         <div>
-          <h3 class="text-slate-400 text-[11px] font-bold">{{ $stat['title'] }}</h3>
-          <p class="text-2xl font-black text-slate-900 mt-1">{{ $stat['value'] }}</p>
+          <h3 class="text-slate-400 text-[11px] font-bold"><?php echo e($stat['title']); ?></h3>
+          <p class="text-2xl font-black text-slate-900 mt-1"><?php echo e($stat['value']); ?></p>
         </div>
       </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </div>
 
   <!-- Charts & Feed Section -->
@@ -51,15 +49,16 @@
         </div>
         <div class="relative">
           <button onclick="toggleFilter()" class="flex items-center gap-2 text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-600 outline-none hover:bg-slate-100 transition-colors">
-            <span id="selectedFilterText">{{ $selectedFilter }}</span>
+            <span id="selectedFilterText"><?php echo e($selectedFilter); ?></span>
             <i class="ph ph-caret-down text-sm"></i>
           </button>
           <div id="filterDropdown" class="hidden absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden z-20 py-1">
-              @foreach($filterOptions as $option)
-                <button onclick="selectFilter('{{ $option }}')" class="w-full text-left px-5 py-3 text-xs font-bold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 filter-btn" data-option="{{ $option }}">
-                  {{ $option }}
+              <?php $__currentLoopData = $filterOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $option): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <button onclick="selectFilter('<?php echo e($option); ?>')" class="w-full text-left px-5 py-3 text-xs font-bold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 filter-btn" data-option="<?php echo e($option); ?>">
+                  <?php echo e($option); ?>
+
                 </button>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </div>
         </div>
       </div>
@@ -76,31 +75,31 @@
         </h3>
       </div>
 
-      @php
+      <?php
         $feedItems = collect($feedItems ?? [
           ['event' => 'Belum ada aktivitas terbaru', 'detail' => 'Data akan tampil otomatis setelah ada transaksi.', 'time' => 'Baru saja', 'type' => 'sys'],
         ]);
-      @endphp
+      ?>
 
       <div class="space-y-6 flex-1">
-        @foreach($feedItems as $index => $item)
+        <?php $__currentLoopData = $feedItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <div class="flex gap-4 group">
             <div class="flex flex-col items-center">
-              <div class="w-3 h-3 rounded-full shrink-0 border-2 border-white ring-4 ring-slate-50 {{ $item['type'] === 'in' ? 'bg-emerald-500' : ($item['type'] === 'out' ? 'bg-amber-500' : 'bg-blue-500') }}"></div>
-              @if($index !== count($feedItems) - 1)
+              <div class="w-3 h-3 rounded-full shrink-0 border-2 border-white ring-4 ring-slate-50 <?php echo e($item['type'] === 'in' ? 'bg-emerald-500' : ($item['type'] === 'out' ? 'bg-amber-500' : 'bg-blue-500')); ?>"></div>
+              <?php if($index !== count($feedItems) - 1): ?>
                 <div class="w-0.5 h-full bg-slate-100 mt-2"></div>
-              @endif
+              <?php endif; ?>
             </div>
             <div class="pb-4">
-              <p class="text-sm font-bold text-slate-800 leading-tight mb-1 group-hover:text-emerald-600 transition-colors">{{ $item['event'] }}</p>
-              <p class="text-xs font-medium text-slate-500 mb-2">{{ $item['detail'] }}</p>
-              <span class="text-[10px] font-bold text-slate-400">{{ $item['time'] }}</span>
+              <p class="text-sm font-bold text-slate-800 leading-tight mb-1 group-hover:text-emerald-600 transition-colors"><?php echo e($item['event']); ?></p>
+              <p class="text-xs font-medium text-slate-500 mb-2"><?php echo e($item['detail']); ?></p>
+              <span class="text-[10px] font-bold text-slate-400"><?php echo e($item['time']); ?></span>
             </div>
           </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
 
-      <a href="{{ route('admin.keuangantransparansi') }}" class="w-full mt-4 py-3.5 bg-slate-50 border border-slate-200 text-slate-600 text-sm font-bold rounded-xl hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors shadow-sm text-center">
+      <a href="<?php echo e(route('admin.keuangantransparansi')); ?>" class="w-full mt-4 py-3.5 bg-slate-50 border border-slate-200 text-slate-600 text-sm font-bold rounded-xl hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors shadow-sm text-center">
         Lihat Laporan Lengkap
       </a>
     </div>
@@ -110,7 +109,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   let filterOpen = false;
-  let selectedFilter = '{{ $selectedFilter }}';
+  let selectedFilter = '<?php echo e($selectedFilter); ?>';
   let donationChart = null;
 
   function toggleFilter() {
@@ -155,7 +154,7 @@
   async function loadDonationChart() {
     try {
       // Show loading state if needed
-      const response = await fetch(`{{ route("admin.api.donation-trend") }}?filter=${encodeURIComponent(selectedFilter)}`);
+      const response = await fetch(`<?php echo e(route("admin.api.donation-trend")); ?>?filter=${encodeURIComponent(selectedFilter)}`);
       const result = await response.json();
 
       if (!result.success) {
@@ -255,4 +254,6 @@
   // Load chart on page ready
   document.addEventListener('DOMContentLoaded', loadDonationChart);
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/home.blade.php ENDPATH**/ ?>

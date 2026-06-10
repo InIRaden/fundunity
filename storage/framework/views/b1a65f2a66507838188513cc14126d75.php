@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
@@ -52,12 +50,12 @@
           <textarea id="areaDesc" required rows="3" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none leading-relaxed" placeholder="Jelaskan fokus pengabdian..."></textarea>
         </div>
 
-        {{-- Icon Picker --}}
+        
         <div>
           <label class="block text-xs text-slate-500 mb-2">Pilih Ikon</label>
           <input type="hidden" id="areaIcon" value="ph ph-target">
 
-          {{-- Selected preview --}}
+          
           <div class="flex items-center gap-3 mb-3 p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
             <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shrink-0">
               <i id="iconPreview" class="ph ph-target text-[22px] text-white"></i>
@@ -68,13 +66,13 @@
             </div>
           </div>
 
-          {{-- Search --}}
+          
           <div class="relative mb-3">
             <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
             <input id="iconSearch" type="text" placeholder="Cari ikon... (contoh: heart, school, water)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20">
           </div>
 
-          {{-- Icon Grid --}}
+          
           <div id="iconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-52 overflow-y-auto p-1 border border-slate-100 rounded-xl bg-slate-50/50"></div>
           <p class="text-[10px] text-slate-400 mt-1.5">Klik ikon untuk memilih. Menggunakan Phosphor Icons.</p>
         </div>
@@ -94,8 +92,8 @@
 </style>
 
 <script>
-  const focusAreaStoreUrl = @json(route('admin.focusareas.store'));
-  const focusAreaBaseUrl = @json(url('/admin/focusareas'));
+  const focusAreaStoreUrl = <?php echo json_encode(route('admin.focusareas.store'), 15, 512) ?>;
+  const focusAreaBaseUrl = <?php echo json_encode(url('/admin/focusareas'), 15, 512) ?>;
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
   // ── Icon Library (Phosphor Icons) ───────────────────────────────────────────
@@ -245,7 +243,7 @@
   }
 
   const fsState = {
-    areas: (@json($focusAreas) || []).map(normalizeArea),
+    areas: (<?php echo json_encode($focusAreas, 15, 512) ?> || []).map(normalizeArea),
     search: '',
     editingId: null,
     isSubmitting: false,
@@ -395,6 +393,8 @@
   renderAreas();
   renderIconGrid('ph ph-target');
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/focusareas.blade.php ENDPATH**/ ?>

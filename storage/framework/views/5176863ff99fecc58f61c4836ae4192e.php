@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title><?php echo e(config('app.name', 'Laravel')); ?> - Admin Panel</title>
+    <title><?php echo e(!empty($siteSettings['site_name']) ? $siteSettings['site_name'] : 'FundUnity'); ?> - Admin Panel</title>
 
     <?php if(!empty($siteSettings['site_logo'])): ?>
         <link rel="icon" href="<?php echo e($siteSettings['site_logo']); ?>" type="image/png">
@@ -19,11 +19,25 @@
 
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css','resources/js/app.js']); ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
 
     <!-- Custom Styles -->
     <style>
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Top Progress Bar for Navigation */
+        #nprogress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: #10b981; /* emerald-500 */
+            z-index: 999999;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            width: 0%;
+            opacity: 0;
+        }
     </style>
 
     <script>
@@ -47,6 +61,8 @@
 ?>
 
 <body data-page="<?php echo $__env->yieldContent('body-data',''); ?>" class="font-sans antialiased bg-gray-50">
+    <!-- Top Progress Bar -->
+    <div id="nprogress-bar"></div>
 
 <script>
   // pass theme to CSS vars
@@ -152,7 +168,25 @@
                 localStorage.setItem('sidebarState', 'collapsed');
             }
         }
+        // Top progress bar on link navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            const pbar = document.getElementById('nprogress-bar');
+            if (pbar) {
+                document.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+                        const target = link.getAttribute('target');
+                        // Only trigger if it's a real internal navigation link
+                        if (href && !href.startsWith('#') && !href.startsWith('javascript') && target !== '_blank' && href !== window.location.href) {
+                            pbar.style.opacity = '1';
+                            pbar.style.width = '30%';
+                            setTimeout(() => { pbar.style.width = '70%'; }, 150);
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>
-<?php /**PATH F:\Magang\PT. YMP\fundunity\resources\views/layouts/admin/app.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\coding\fundunity\resources\views/layouts/admin/app.blade.php ENDPATH**/ ?>

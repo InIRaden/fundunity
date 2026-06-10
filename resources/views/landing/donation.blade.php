@@ -25,14 +25,14 @@
                 </div>
             </div>
         @else
-            <div class="mb-6 p-4 bg-indigo-50 rounded-xl border border-indigo-100 flex items-center gap-4">
-                <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+            <div class="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center gap-4">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center shrink-0">
                     <i class="ph ph-hand-heart text-2xl"></i>
                 </div>
                 <div>
                     <p class="text-sm font-bold text-slate-500">Anda sedang melakukan:</p>
                     <p class="text-lg font-extrabold text-slate-900 leading-tight">Donasi Umum</p>
-                    <p class="text-xs text-slate-500 mt-0.5">Dana akan disalurkan ke program yang paling membutuhkan.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Dana akan dikelola oleh organisasi dan disalurkan kepada mereka yang paling membutuhkan (baik melalui program maupun penyaluran langsung).</p>
                 </div>
             </div>
         @endif

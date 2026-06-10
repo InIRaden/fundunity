@@ -76,11 +76,58 @@
                 transform: translateY(0);
             }
         }
+
+        /* Splash Screen Preloader */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease-in-out, visibility 0.6s;
+        }
+        #splash-screen.hidden-splash {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .splash-logo {
+            width: 80px;
+            height: 80px;
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .splash-text {
+            margin-top: 1rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: #059669; /* emerald-600 */
+            letter-spacing: 0.05em;
+            animation: fadePulse 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes fadePulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
     </style>
 
     @stack('head')
 </head>
 <body data-page="@yield('body-data','')">
+    <!-- Splash Screen Preloader -->
+    <div id="splash-screen">
+        @if(!empty($siteSettings['site_logo']))
+            <img src="{{ $siteSettings['site_logo'] }}" alt="Logo" class="splash-logo object-contain">
+        @else
+            <div class="splash-logo bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
+                {{ substr(config('app.name', 'FundUnity'), 0, 1) }}
+            </div>
+        @endif
+        <div class="splash-text">{{ $siteSettings['site_name'] ?? config('app.name', 'FundUnity') }}</div>
+    </div>
+
     <div class="bg-white text-slate-900 font-sans min-h-screen flex flex-col">
         <x-landing.navbar />
 
@@ -92,5 +139,15 @@
     </div>
 
     @stack('scripts')
+    <script>
+        // Remove splash screen on page load
+        window.addEventListener('load', () => {
+            const splash = document.getElementById('splash-screen');
+            if(splash) {
+                splash.classList.add('hidden-splash');
+                setTimeout(() => splash.remove(), 600);
+            }
+        });
+    </script>
 </body>
 </html>

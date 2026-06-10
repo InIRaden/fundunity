@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             ProgramSeeder::class,
             FocusAreaSeeder::class,
             GalleryItemSeeder::class,
+            DummyDataSeeder::class,
         ]);
     }
 }

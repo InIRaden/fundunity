@@ -17,7 +17,7 @@
     <div class="lg:col-span-1 space-y-1 bg-white rounded-2xl p-3 border border-slate-100 shadow-sm">
       <button data-tab="profil" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-user text-[18px]"></i>Informasi Profil</span><i class="ph ph-caret-right text-[15px]"></i></button>
       <button data-tab="identitas" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-browser text-[18px]"></i>Identitas Website</span><i class="ph ph-caret-right text-[15px]"></i></button>
-      <button data-tab="pembayaran" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-buildings text-[18px]"></i>Rekening Donasi</span><i class="ph ph-caret-right text-[15px]"></i></button>
+      <button data-tab="pembayaran" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-qr-code text-[18px]"></i>QRIS Donasi</span><i class="ph ph-caret-right text-[15px]"></i></button>
       <button data-tab="seo" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-flag text-[18px]"></i>SEO & Pemeliharaan</span><i class="ph ph-caret-right text-[15px]"></i></button>
       <button data-tab="keamanan" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-shield-check text-[18px]"></i>Keamanan Akun</span><i class="ph ph-caret-right text-[15px]"></i></button>
       <button data-tab="menu" class="setting-tab w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-sm font-bold border"><span class="flex items-center gap-3"><i class="ph ph-list-checks text-[18px]"></i>Manajemen Menu</span><i class="ph ph-caret-right text-[15px]"></i></button>
@@ -104,35 +104,26 @@
 
         <form id="pembayaranPane" class="hidden setting-pane space-y-8 animate-fade-in">
           <div>
-            <h3 class="text-base font-bold text-slate-900 mb-1">Rekening Donasi Utama</h3>
-            <p class="text-xs text-slate-400">Konfigurasi rekening bank dan upload QRIS global yayasan.</p>
+            <h3 class="text-base font-bold text-slate-900 mb-1">QRIS Donasi</h3>
+            <p class="text-xs text-slate-400">Upload gambar QRIS untuk donatur.</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Bank</label><input id="bankName" type="text" value="{{ $payment['bankName'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
-            <div><label class="block text-xs font-bold text-slate-500 mb-1.5">Atas Nama (Pemilik Rekening)</label><input id="bankHolder" type="text" value="{{ $payment['bankHolder'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
-            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-500 mb-1.5">Nomor Rekening</label><input id="bankAccount" type="text" value="{{ $payment['bankAccount'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500/20" required></div>
-          </div>
           <div class="flex justify-center pt-2">
-            <div class="space-y-4 w-full md:w-auto">
-              <label class="block text-xs font-bold text-slate-500 mb-1.5">Master QRIS Foundation</label>
+            <div class="space-y-4 w-full max-w-xs">
+              <label class="block text-xs font-bold text-slate-500 mb-1.5">Gambar QRIS</label>
               <div class="relative group cursor-pointer" id="qrisTrigger">
                 <input id="qrisInput" type="file" accept="image/*" class="hidden">
-                <div class="w-full aspect-square md:w-56 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[32px] flex flex-col items-center justify-center p-6 overflow-hidden shadow-inner">
+                <div class="w-full aspect-square md:w-56 mx-auto bg-slate-50 border-2 border-dashed border-slate-200 rounded-[32px] flex flex-col items-center justify-center p-6 overflow-hidden shadow-inner hover:border-emerald-300 transition-colors">
                   <img id="qrisPreview" class="{{ !empty($payment['qrisUrl']) ? '' : 'hidden' }} w-full h-full object-contain" alt="QRIS" @if(!empty($payment['qrisUrl'])) src="{{ $payment['qrisUrl'] }}" @endif>
                   <div id="qrisPlaceholder" class="{{ !empty($payment['qrisUrl']) ? 'hidden' : 'contents' }}">
-                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-50 mb-3"><i class="ph ph-image text-2xl"></i></div>
+                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-50 mb-3"><i class="ph ph-qr-code text-2xl"></i></div>
                     <p class="text-[10px] font-bold text-slate-400 text-center">Tap untuk Upload QRIS</p>
                   </div>
                 </div>
               </div>
-              <div class="flex items-center gap-3 p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl">
-                <input id="qrisReady" type="checkbox" {{ !empty($payment['qrisEnabled']) ? 'checked' : '' }} class="w-5 h-5 rounded-lg text-emerald-600 focus:ring-emerald-500 border-emerald-300">
-                <div><p class="text-[11px] font-bold text-emerald-800">Aktifkan Metode QRIS</p><p class="text-[10px] text-emerald-600">Scan QRIS akan muncul di setiap modal donasi.</p></div>
-              </div>
             </div>
           </div>
-          <div class="flex justify-end pt-4 border-t border-slate-50"><button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 flex items-center gap-1.5"><i class="ph ph-floppy-disk text-base"></i> Simpan Pembayaran</button></div>
+          <div class="flex justify-end pt-4 border-t border-slate-50"><button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 flex items-center gap-1.5"><i class="ph ph-floppy-disk text-base"></i> Simpan QRIS</button></div>
         </form>
 
         <form id="seoPane" class="hidden setting-pane space-y-8 animate-fade-in">
@@ -352,6 +343,9 @@
 
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
+      if (response.status === 419) {
+        throw new Error('Sesi Anda telah habis (CSRF token kadaluwarsa). Silakan muat ulang (refresh) halaman.');
+      }
       const firstValidation = result.errors ? Object.values(result.errors)[0]?.[0] : null;
       throw new Error(firstValidation || result.message || 'Request gagal diproses.');
     }
@@ -371,6 +365,9 @@
 
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
+      if (response.status === 419) {
+        throw new Error('Sesi Anda telah habis (CSRF token kadaluwarsa). Silakan muat ulang (refresh) halaman.');
+      }
       const firstValidation = result.errors ? Object.values(result.errors)[0]?.[0] : null;
       throw new Error(firstValidation || result.message || 'Request gagal diproses.');
     }
@@ -406,7 +403,7 @@
       toast(result.message || 'Profil admin berhasil diperbarui.');
       setTimeout(() => window.location.reload(), 800);
     } catch (error) {
-      window.alert(error.message);
+      if (typeof customAlert === 'function') customAlert('Kesalahan', error.message, 'error'); else alert(error.message);
     } finally {
       setButtonState(button, true, 'Simpan Profil');
     }
@@ -436,7 +433,7 @@
       toast(result.message || 'Identitas website berhasil disimpan.');
       setTimeout(() => window.location.reload(), 800);
     } catch (error) {
-      window.alert(error.message);
+      if (typeof customAlert === 'function') customAlert('Kesalahan', error.message, 'error'); else alert(error.message);
     } finally {
       setButtonState(button, true, 'Simpan Identitas');
     }
@@ -449,11 +446,7 @@
 
     try {
       const formData = new FormData();
-      formData.append('bankName', document.getElementById('bankName').value);
-      formData.append('bankAccount', document.getElementById('bankAccount').value);
-      formData.append('bankHolder', document.getElementById('bankHolder').value);
-      formData.append('qrisEnabled', document.getElementById('qrisReady').checked ? '1' : '0');
-
+      
       const qrisFile = document.getElementById('qrisInput').files[0];
       if (qrisFile) {
         formData.append('qris_file', qrisFile);
@@ -463,7 +456,7 @@
       toast(result.message || 'Konfigurasi pembayaran disimpan.');
       setTimeout(() => window.location.reload(), 800);
     } catch (error) {
-      window.alert(error.message);
+      if (typeof customAlert === 'function') customAlert('Kesalahan', error.message, 'error'); else alert(error.message);
     } finally {
       setButtonState(button, true, 'Simpan Pembayaran');
     }
@@ -485,7 +478,7 @@
       toast(result.message || 'Pengaturan SEO dan global disimpan.');
       setTimeout(() => window.location.reload(), 800);
     } catch (error) {
-      window.alert(error.message);
+      if (typeof customAlert === 'function') customAlert('Kesalahan', error.message, 'error'); else alert(error.message);
     } finally {
       setButtonState(button, true, 'Simpan Pengaturan');
     }
@@ -558,7 +551,7 @@
       toast(result.message || 'Pengaturan menu berhasil disimpan.');
       setTimeout(() => window.location.reload(), 800);
     } catch (error) {
-      window.alert(error.message);
+      if (typeof customAlert === 'function') customAlert('Kesalahan', error.message, 'error'); else alert(error.message);
     } finally {
       setButtonState(button, true, 'Simpan Pengaturan Menu');
     }

@@ -22,40 +22,41 @@ use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page Routes
-Route::get('/', [LandingController::class, 'index'])->name('home');
-Route::get('/about', [LandingController::class, 'about'])->name('about');
-Route::get('/team', [LandingController::class, 'team'])->name('team');
-Route::get('/allprograms', [LandingController::class, 'programs'])->name('programs');
-Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus-areas');
-Route::get('/moregallery', [LandingController::class, 'gallery'])->name('gallery');
-Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
-Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
-Route::post('/contact', [LandingController::class, 'submitContact'])->name('contact.store');
-Route::get('/program/{campaign}', [LandingController::class, 'campaignDetail'])->name('campaign.detail');
-Route::get('/donasi/{campaign?}', [LandingController::class, 'donationForm'])->name('donation.form');
-Route::post('/donasi', [LandingController::class, 'submitDonation'])->name('donation.store');
-Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
-Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
-Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
-Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
-Route::get('/terms', [LegalController::class, 'terms'])->name('terms');
-
 Route::prefix('landing')->name('landing.')->group(function () {
     Route::get('/', [LandingController::class, 'index'])->name('home');
     Route::get('/about', [LandingController::class, 'about'])->name('about');
-    Route::get('/team', [LandingController::class, 'team'])->name('team');          // Fix: route hilang
-    Route::get('/allprograms', [LandingController::class, 'programs'])->name('programs');
-    Route::get('/focusareas', [LandingController::class, 'focusAreas'])->name('focus-areas');
+    Route::get('/team', [LandingController::class, 'team'])->name('team');
+    Route::get('/all-programs', [LandingController::class, 'programs'])->name('programs');
+    Route::get('/focus-areas', [LandingController::class, 'focusAreas'])->name('focus-areas');
     Route::get('/gallery', [LandingController::class, 'gallery'])->name('gallery');
-    Route::get('/partners', [LandingController::class, 'partners'])->name('partners'); // Fix: route hilang
+    Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
     Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
     Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
-    Route::get('/getinvolved', [LandingController::class, 'getInvolved'])->name('get-involved');
-    Route::post('/getinvolved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store');
-    Route::get('/donate/{campaign?}', [LandingController::class, 'donationForm'])->name('donate');
+    Route::get('/get-involved', [LandingController::class, 'getInvolved'])->name('get-involved');
+    Route::get('/donate', [LandingController::class, 'donationForm'])->name('donate');
+    Route::get('/program/{campaign}', [LandingController::class, 'campaignDetail'])->name('program.detail');
     Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
     Route::get('/terms', [LegalController::class, 'terms'])->name('terms');
 });
+
+// Legacy top-level routes (keep for backward compat)
+Route::get('/', [LandingController::class, 'index'])->name('home');
+Route::get('/about', [LandingController::class, 'about'])->name('about');
+Route::get('/team', [LandingController::class, 'team'])->name('team');
+Route::get('/all-programs', [LandingController::class, 'programs'])->name('programs');
+Route::get('/focus-areas', [LandingController::class, 'focusAreas'])->name('focus-areas');
+Route::get('/more-gallery', [LandingController::class, 'gallery'])->name('gallery');
+Route::get('/partners', [LandingController::class, 'partners'])->name('partners');
+Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
+Route::post('/contact', [LandingController::class, 'submitContact'])->name('contact.store')->middleware('throttle:5,1');
+Route::get('/program/{campaign}', [LandingController::class, 'campaignDetail'])->name('campaign.detail');
+Route::get('/donasi/{campaign?}', [LandingController::class, 'donationForm'])->name('donation.form');
+Route::post('/donasi', [LandingController::class, 'submitDonation'])->name('donation.store')->middleware('throttle:5,1');
+Route::get('/faqs', [LandingController::class, 'faq'])->name('faq');
+Route::get('/get-involved', [LandingController::class, 'getInvolved'])->name('get-involved');
+Route::post('/get-involved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store')->middleware('throttle:5,1');
+Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [LegalController::class, 'terms'])->name('terms');
 
 // Super Simple Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-password'])->group(function () {
@@ -97,11 +98,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-passwo
 
     Route::get('/identity', [AdminUiController::class, 'websiteIdentity'])->name('identity'); // Fix: route hilang
 
-    Route::get('/keuangantransparansi', [AdminUiController::class, 'keuanganTransparansi'])->name('keuangantransparansi');
-    Route::get('/databasestakeholder', [AdminUiController::class, 'databaseStakeholder'])->name('databasestakeholder');
-    Route::post('/databasestakeholder/{type}', [AdminStakeholderController::class, 'store'])->name('databasestakeholder.store');
-    Route::put('/databasestakeholder/{type}/{id}', [AdminStakeholderController::class, 'update'])->name('databasestakeholder.update');
-    Route::delete('/databasestakeholder/{type}/{id}', [AdminStakeholderController::class, 'destroy'])->name('databasestakeholder.destroy');
+    Route::get('/keuangan-transparansi', [AdminUiController::class, 'keuanganTransparansi'])->name('keuangantransparansi');
+    Route::get('/database-stakeholder', [AdminUiController::class, 'databaseStakeholder'])->name('databasestakeholder');
+    Route::post('/database-stakeholder/{type}', [AdminStakeholderController::class, 'store'])->name('databasestakeholder.store');
+    Route::put('/database-stakeholder/{type}/{id}', [AdminStakeholderController::class, 'update'])->name('databasestakeholder.update');
+    Route::delete('/database-stakeholder/{type}/{id}', [AdminStakeholderController::class, 'destroy'])->name('databasestakeholder.destroy');
 
     Route::get('/messages', [AdminUiController::class, 'messages'])->name('messages');
     Route::post('/messages', [AdminMessageController::class, 'store'])->name('messages.store');
@@ -109,20 +110,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-passwo
     Route::delete('/messages/{message}', [AdminMessageController::class, 'destroy'])->name('messages.destroy');
 
 
-    Route::get('/aboutus', [AdminUiController::class, 'aboutUs'])->name('aboutus');
-    Route::post('/aboutus', [AdminAboutUsController::class, 'store'])->name('aboutus.store');
-    Route::put('/aboutus/{aboutUsItem}', [AdminAboutUsController::class, 'update'])->name('aboutus.update');
-    Route::delete('/aboutus/{aboutUsItem}', [AdminAboutUsController::class, 'destroy'])->name('aboutus.destroy');
+    Route::get('/about-us', [AdminUiController::class, 'aboutUs'])->name('aboutus');
+    Route::post('/about-us', [AdminAboutUsController::class, 'store'])->name('aboutus.store');
+    Route::put('/about-us/{aboutUsItem}', [AdminAboutUsController::class, 'update'])->name('aboutus.update');
+    Route::delete('/about-us/{aboutUsItem}', [AdminAboutUsController::class, 'destroy'])->name('aboutus.destroy');
 
     Route::get('/members', [AdminUiController::class, 'members'])->name('members');
     Route::post('/members', [AdminTeamMemberController::class, 'store'])->name('members.store');
     Route::put('/members/{teamMember}', [AdminTeamMemberController::class, 'update'])->name('members.update');
     Route::delete('/members/{teamMember}', [AdminTeamMemberController::class, 'destroy'])->name('members.destroy');
 
-    Route::get('/focusareas', [AdminUiController::class, 'focusAreas'])->name('focusareas');
-    Route::post('/focusareas', [AdminFocusAreaController::class, 'store'])->name('focusareas.store');
-    Route::put('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'update'])->name('focusareas.update');
-    Route::delete('/focusareas/{focusArea}', [AdminFocusAreaController::class, 'destroy'])->name('focusareas.destroy');
+    Route::get('/focus-areas', [AdminUiController::class, 'focusAreas'])->name('focusareas');
+    Route::post('/focus-areas', [AdminFocusAreaController::class, 'store'])->name('focusareas.store');
+    Route::put('/focus-areas/{focusArea}', [AdminFocusAreaController::class, 'update'])->name('focusareas.update');
+    Route::delete('/focus-areas/{focusArea}', [AdminFocusAreaController::class, 'destroy'])->name('focusareas.destroy');
 
     Route::get('/faqs', [AdminUiController::class, 'faqs'])->name('faqs');
     Route::post('/faqs', [AdminFaqController::class, 'store'])->name('faqs.store');
@@ -137,10 +138,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-passwo
     Route::put('/gallery/{galleryItem}', [AdminGalleryController::class, 'update'])->name('gallery.update');
     Route::delete('/gallery/{galleryItem}', [AdminGalleryController::class, 'destroy'])->name('gallery.destroy');
 
-    Route::get('/imageslider', [AdminUiController::class, 'imageSlider'])->name('imageslider');
-    Route::post('/imageslider', [AdminImageSliderController::class, 'store'])->name('imageslider.store');
-    Route::put('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'update'])->name('imageslider.update');
-    Route::delete('/imageslider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
+    Route::get('/image-slider', [AdminUiController::class, 'imageSlider'])->name('imageslider');
+    Route::post('/image-slider', [AdminImageSliderController::class, 'store'])->name('imageslider.store');
+    Route::put('/image-slider/{imageSlider}', [AdminImageSliderController::class, 'update'])->name('imageslider.update');
+    Route::delete('/image-slider/{imageSlider}', [AdminImageSliderController::class, 'destroy'])->name('imageslider.destroy');
 });
 
 // Newsletter Route

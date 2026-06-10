@@ -16,32 +16,69 @@ class StakeholderController extends Controller
 {
     public function store(Request $request, string $type): JsonResponse
     {
-        return match ($type) {
-            'donatur' => $this->storeDonor($request),
-            'penerima' => $this->storeBeneficiary($request),
-            'relawan' => $this->storeVolunteer($request),
-            default => response()->json(['message' => 'Tipe stakeholder tidak dikenali.'], 404),
-        };
+        switch ($type) {
+            case 'donatur':
+                return $this->storeDonor($request);
+            case 'penerima':
+                return $this->storeBeneficiary($request);
+            case 'relawan':
+                return $this->storeVolunteer($request);
+            default:
+                return response()->json(['message' => 'Tipe stakeholder tidak dikenali.'], 404);
+        }
     }
 
     public function update(Request $request, string $type, int $id): JsonResponse
     {
-        return match ($type) {
-            'donatur' => $this->updateDonor($request, $id),
-            'penerima' => $this->updateBeneficiary($request, $id),
-            'relawan' => $this->updateVolunteer($request, $id),
-            default => response()->json(['message' => 'Tipe stakeholder tidak dikenali.'], 404),
-        };
+        switch ($type) {
+            case 'donatur':
+                return $this->updateDonor($request, $id);
+            case 'penerima':
+                return $this->updateBeneficiary($request, $id);
+            case 'relawan':
+                return $this->updateVolunteer($request, $id);
+            case 'donations':
+                return $this->updateDonation($request, $id);
+            default:
+                return response()->json(['message' => 'Tipe stakeholder tidak dikenali.'], 404);
+        }
     }
 
     public function destroy(string $type, int $id): JsonResponse
     {
-        return match ($type) {
-            'donatur' => $this->destroyDonor($id),
-            'penerima' => $this->destroyBeneficiary($id),
-            'relawan' => $this->destroyVolunteer($id),
-            default => response()->json(['message' => 'Tipe stakeholder tidak dikenali.'], 404),
-        };
+        switch ($type) {
+            case 'donatur':
+                return $this->destroyDonor($id);
+            case 'penerima':
+                return $this->destroyBeneficiary($id);
+            case 'relawan':
+                return $this->destroyVolunteer($id);
+            case 'donations':
+                return $this->destroyDonation($id);
+            default:
+                return response()->json(['message' => 'Tipe stakeholder tidak dikenali.'], 404);
+        }
+    }
+
+    private function updateDonation(Request $request, int $id): JsonResponse
+    {
+        $donation = Donation::findOrFail($id);
+        $donation->update([
+            'status' => $request->input('status', 'success'),
+        ]);
+
+        return response()->json([
+            'message' => 'Status donasi berhasil diperbarui.',
+            'status' => $donation->status,
+        ]);
+    }
+
+    private function destroyDonation(int $id): JsonResponse
+    {
+        Donation::findOrFail($id)->delete();
+        return response()->json([
+            'message' => 'Data donasi berhasil dihapus.',
+        ]);
     }
 
     private function storeDonor(Request $request): JsonResponse

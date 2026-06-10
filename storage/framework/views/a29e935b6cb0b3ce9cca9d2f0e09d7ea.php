@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
@@ -34,9 +32,9 @@
 </div>
 
 <div id="faqModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] items-center justify-center z-[100] p-4 overflow-y-auto">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto animate-scale-in overflow-hidden">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full flex flex-col max-h-[90vh] my-auto animate-scale-in">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-      <h3 id="faqModalTitle" class="text-base font-bold text-emerald-700">Tambah FAQ Baru</h3>
+      <h3 id="faqModalTitle" class="text-base font-medium text-slate-900">Tambah FAQ Baru</h3>
       <button id="closeFaqModal" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
     </div>
     <form id="faqForm" class="flex flex-col flex-1 overflow-hidden">
@@ -65,8 +63,8 @@
 
 <script>
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-  const faqStoreUrl = @json(route('admin.faqs.store'));
-  const faqBaseUrl = @json(url('/admin/faqs'));
+  const faqStoreUrl = <?php echo json_encode(route('admin.faqs.store'), 15, 512) ?>;
+  const faqBaseUrl = <?php echo json_encode(url('/admin/faqs'), 15, 512) ?>;
 
   function normalizeFaq(raw = {}) {
     return {
@@ -77,7 +75,7 @@
   }
 
   const faqState = {
-    faqs: (@json($faqs) || []).map((item) => normalizeFaq(item)),
+    faqs: (<?php echo json_encode($faqs, 15, 512) ?> || []).map((item) => normalizeFaq(item)),
     search: '',
     editingId: null,
     isSubmitting: false,
@@ -270,4 +268,6 @@
 
   renderFaqRows();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/faqs.blade.php ENDPATH**/ ?>

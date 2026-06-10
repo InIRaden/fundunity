@@ -21,6 +21,8 @@ class LandingContentSeeder extends Seeder
         $this->seedSiteSettings();
         $this->seedPages();
         $this->seedSlider();
+        $this->seedAboutUs();
+        $this->seedTeamMembers();
         $this->seedFocusAreas();
         $this->seedCampaigns();
         $this->seedDonations();
@@ -101,13 +103,109 @@ class LandingContentSeeder extends Seeder
             return;
         }
 
-        ImageSlider::create([
-            'title' => 'Hero Landing',
-            'description' => 'Hero utama landing page',
-            'image_url' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2670&auto=format&fit=crop',
-            'sort_order' => 1,
-            'is_active' => true,
-        ]);
+        $items = [
+            [
+                'title' => 'Wujudkan Dampak Nyata',
+                'description' => 'Bersama kita menggalang solidaritas, transparansi, dan gerakan nyata untuk perubahan sosial yang berkelanjutan.',
+                'image_url' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2670&auto=format&fit=crop',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Pendidikan untuk Semua',
+                'description' => 'Membangun masa depan generasi penerus dengan fasilitas pendidikan yang layak dan setara.',
+                'image_url' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2622&auto=format&fit=crop',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Bantuan Kesehatan Cepat Tanggap',
+                'description' => 'Berikan harapan bagi mereka yang berjuang melawan penyakit di pelosok daerah.',
+                'image_url' => 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2670&auto=format&fit=crop',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($items as $item) {
+            ImageSlider::create($item);
+        }
+    }
+
+    private function seedAboutUs(): void
+    {
+        if (\App\Models\AboutUsItem::query()->exists()) {
+            return;
+        }
+
+        $items = [
+            [
+                'section' => 'general',
+                'title' => 'Visi Kami',
+                'description' => 'Menjadi jembatan kebaikan digital nomor satu yang transparan dan dapat diandalkan oleh masyarakat luas.',
+                'image_url' => 'https://images.unsplash.com/photo-1529156069898-49953eb1b5e4?q=80&w=2574&auto=format&fit=crop',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'section' => 'general',
+                'title' => 'Misi Utama',
+                'description' => "1. Memberikan akses donasi yang mudah dan aman.\n2. Mengedepankan transparansi laporan penyaluran dana.\n3. Memberdayakan komunitas lokal melalui program berkelanjutan.",
+                'image_url' => null,
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($items as $item) {
+            \App\Models\AboutUsItem::create($item);
+        }
+    }
+
+    private function seedTeamMembers(): void
+    {
+        if (\App\Models\TeamMember::query()->exists()) {
+            return;
+        }
+
+        $items = [
+            [
+                'name' => 'Ahmad Fadhil',
+                'position' => 'Ketua Umum',
+                'bio' => 'Memimpin dengan visi inovatif untuk kesejahteraan bersama.',
+                'photo' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2670&auto=format&fit=crop',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Siti Nurhaliza',
+                'position' => 'Sekretaris',
+                'bio' => 'Mengelola administrasi dan komunikasi organisasi dengan presisi.',
+                'photo' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2670&auto=format&fit=crop',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Reza Rahardian',
+                'position' => 'Bendahara',
+                'bio' => 'Memastikan setiap dana donasi tersalurkan secara transparan dan akuntabel.',
+                'photo' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2574&auto=format&fit=crop',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Dian Sastro',
+                'position' => 'Koordinator Program',
+                'bio' => 'Menghubungkan inisiatif kebaikan dengan penerima manfaat secara tepat sasaran.',
+                'photo' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2670&auto=format&fit=crop',
+                'sort_order' => 4,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($items as $item) {
+            \App\Models\TeamMember::create($item);
+        }
     }
 
     private function seedFocusAreas(): void

@@ -43,9 +43,6 @@ class SettingsController extends Controller
         ];
 
         $payment = [
-            'bankName' => $settings->get('payment_bank_name') ?: '',
-            'bankAccount' => $settings->get('payment_bank_account') ?: '',
-            'bankHolder' => $settings->get('payment_bank_holder') ?: '',
             'qrisUrl' => $settings->get('payment_qris_url') ?: '',
             'qrisEnabled' => $settings->get('payment_qris_enabled') === '1',
         ];
@@ -150,10 +147,6 @@ class SettingsController extends Controller
         $hasExistingQris = SiteSetting::where('key', 'payment_qris_url')->value('value');
 
         $validated = $request->validate([
-            'bankName' => ['required', 'string', 'max:100'],
-            'bankAccount' => ['required', 'string', 'max:100'],
-            'bankHolder' => ['required', 'string', 'max:200'],
-            'qrisEnabled' => ['nullable', 'boolean'],
             'qrisUrl' => ['nullable', 'url', 'max:500'],
             'qris_file' => [
                 $hasExistingQris ? 'nullable' : 'required',
@@ -170,20 +163,13 @@ class SettingsController extends Controller
             $this->deleteStoredImageIfNeeded($currentQris);
         }
 
-        $this->upsertSetting('payment_bank_name', $validated['bankName'], 'text', 'payment', 'Payment Bank Name');
-        $this->upsertSetting('payment_bank_account', $validated['bankAccount'], 'text', 'payment', 'Payment Bank Account');
-        $this->upsertSetting('payment_bank_holder', $validated['bankHolder'], 'text', 'payment', 'Payment Bank Holder');
         $this->upsertSetting('payment_qris_url', $this->nullableString($newQris), 'image', 'payment', 'Payment QRIS URL');
-        $this->upsertSetting('payment_qris_enabled', $request->boolean('qrisEnabled') ? '1' : '0', 'text', 'payment', 'Payment QRIS Enabled');
+        $this->upsertSetting('payment_qris_enabled', '1', 'text', 'payment', 'Payment QRIS Enabled'); // Always active now
 
         return response()->json([
             'message' => 'Konfigurasi pembayaran berhasil disimpan.',
             'data' => [
-                'bankName' => $validated['bankName'],
-                'bankAccount' => $validated['bankAccount'],
-                'bankHolder' => $validated['bankHolder'],
                 'qrisUrl' => $newQris,
-                'qrisEnabled' => $request->boolean('qrisEnabled'),
             ],
         ]);
     }

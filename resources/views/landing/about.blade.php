@@ -9,7 +9,27 @@
     $visionItem = $generalProfile->filter(fn($v) => str_contains(strtolower($v->title), 'visi'))->first() ?: $generalProfile->get(0);
     $missionItem = $generalProfile->filter(fn($v) => str_contains(strtolower($v->title), 'misi'))->first() ?: $generalProfile->get(1) ?: $generalProfile->get(0);
 
-    $primaryImage = $visionItem?->image_url ?: '';
+    $primaryImage = $visionItem?->image_url ?: 'https://images.unsplash.com/photo-1529156069898-49953eb1b5e4?q=80&w=2574&auto=format&fit=crop';
+
+    $formatCompactRupiah = static function (int $value): string {
+        if ($value >= 1_000_000_000_000) {
+            $amount = rtrim(rtrim(number_format($value / 1_000_000_000_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' T';
+        }
+        if ($value >= 1_000_000_000) {
+            $amount = rtrim(rtrim(number_format($value / 1_000_000_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' M';
+        }
+        if ($value >= 1_000_000) {
+            $amount = rtrim(rtrim(number_format($value / 1_000_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' Jt';
+        }
+        if ($value >= 1_000) {
+            $amount = rtrim(rtrim(number_format($value / 1_000, 2, ',', '.'), '0'), ',');
+            return 'Rp '.$amount.' Rb';
+        }
+        return 'Rp '.number_format($value, 0, ',', '.');
+    };
 @endphp
 
 <div class="relative pt-24">
@@ -60,9 +80,7 @@
                     </h3>
                     @if($visionItem && $visionItem->description)
                     <div class="flex items-start gap-3">
-                        <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="14" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
-                        </div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 mt-2 shadow-sm"></div>
                         <p class="text-slate-700 text-sm font-semibold leading-relaxed">{{ $visionItem->description }}</p>
                     </div>
                     @endif
@@ -81,10 +99,8 @@
                         @endphp
                         @foreach($missions as $misi)
                         <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="14" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
-                            </div>
-                            <p class="text-slate-700 text-sm font-semibold leading-relaxed">{{ $misi }}</p>
+                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 mt-2 shadow-sm"></div>
+                            <p class="text-slate-700 text-sm font-semibold leading-relaxed">{{ preg_replace('/^\d+[\.\)]\s*/', '', $misi) }}</p>
                         </div>
                         @endforeach
                     </div>
@@ -98,19 +114,19 @@
         <div class="bg-slate-50 rounded-[40px] p-8 md:p-12 mb-24 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-200/60 border border-slate-100 shadow-xl shadow-slate-200/40 relative overflow-hidden">
            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-100 rounded-full blur-[50px] opacity-50 -z-0"></div>
            <div class="text-center px-4 relative z-10">
-               <p class="text-4xl md:text-5xl font-black text-emerald-600 mb-2">{{ number_format($impactStats['donor_count'] ?? 0, 0, ',', '.') }}+</p>
+               <p class="text-3xl md:text-4xl font-black text-emerald-600 mb-2">{{ number_format($impactStats['donor_count'] ?? 0, 0, ',', '.') }}+</p>
                <p class="text-slate-600 font-medium text-sm">Donatur Aktif</p>
            </div>
            <div class="text-center px-4 relative z-10">
-               <p class="text-4xl md:text-5xl font-black text-emerald-600 mb-2">{{ number_format($impactStats['completed_programs'] ?? 0, 0, ',', '.') }}+</p>
+               <p class="text-3xl md:text-4xl font-black text-emerald-600 mb-2">{{ number_format($impactStats['completed_programs'] ?? 0, 0, ',', '.') }}+</p>
                <p class="text-slate-600 font-medium text-sm">Program Selesai</p>
            </div>
            <div class="text-center px-4 relative z-10">
-               <p class="text-4xl md:text-5xl font-black text-emerald-600 mb-2">Rp {{ number_format(floor(($impactStats['distributed_amount'] ?? 0) / 1000000), 0, ',', '.') }}Jt+</p>
+               <p class="text-3xl md:text-4xl font-black text-emerald-600 mb-2">{{ $formatCompactRupiah($impactStats['distributed_amount'] ?? 0) }}+</p>
                <p class="text-slate-600 font-medium text-sm">Dana Tersalurkan</p>
            </div>
            <div class="text-center px-4 relative z-10 border-none md:border-l">
-               <p class="text-4xl md:text-5xl font-black text-emerald-600 mb-2">{{ number_format($impactStats['volunteer_count'] ?? 0, 0, ',', '.') }}+</p>
+               <p class="text-3xl md:text-4xl font-black text-emerald-600 mb-2">{{ number_format($impactStats['volunteer_count'] ?? 0, 0, ',', '.') }}+</p>
                <p class="text-slate-600 font-medium text-sm">Relawan Aktif</p>
            </div>
         </div>

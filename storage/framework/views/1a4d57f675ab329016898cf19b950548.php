@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden relative z-10 flex flex-col">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
@@ -20,13 +18,16 @@
     </div>
 </div>
 
-<x-admin.modal 
-    id="galleryModal" 
-    title="Dokumentasi Baru" 
-    subtitle="Unggah bukti kegiatan lapangan untuk transparansi publik."
-    maxWidth="max-w-xl" 
-    headerColor="bg-emerald-600"
-    closeButtonId="closeGalleryModal">
+<?php if (isset($component)) { $__componentOriginal883972b03e56cea0994a1aaccc5761f0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal883972b03e56cea0994a1aaccc5761f0 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.modal','data' => ['id' => 'galleryModal','title' => 'Dokumentasi Baru','subtitle' => 'Unggah bukti kegiatan lapangan untuk transparansi publik.','maxWidth' => 'max-w-xl','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeGalleryModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['id' => 'galleryModal','title' => 'Dokumentasi Baru','subtitle' => 'Unggah bukti kegiatan lapangan untuk transparansi publik.','maxWidth' => 'max-w-xl','headerColor' => 'bg-emerald-600','closeButtonId' => 'closeGalleryModal']); ?>
     <form id="galleryForm" class="flex flex-col flex-1 overflow-hidden">
       <input id="galleryEditingId" type="hidden">
       <div class="p-6 space-y-5 overflow-y-auto flex-1">
@@ -65,7 +66,16 @@
         <button id="submitGalleryBtn" type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-emerald-600/30 transition-all">Simpan Dokumentasi</button>
       </div>
     </form>
-</x-admin.modal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $attributes = $__attributesOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__attributesOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal883972b03e56cea0994a1aaccc5761f0)): ?>
+<?php $component = $__componentOriginal883972b03e56cea0994a1aaccc5761f0; ?>
+<?php unset($__componentOriginal883972b03e56cea0994a1aaccc5761f0); ?>
+<?php endif; ?>
 
 <style>
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -75,8 +85,8 @@
 </style>
 
 <script>
-  const galleryStoreUrl = @json(route('admin.gallery.store'));
-  const galleryBaseUrl = @json(url('/admin/gallery'));
+  const galleryStoreUrl = <?php echo json_encode(route('admin.gallery.store'), 15, 512) ?>;
+  const galleryBaseUrl = <?php echo json_encode(url('/admin/gallery'), 15, 512) ?>;
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
   function normalizeGalleryItem(raw) {
@@ -90,7 +100,7 @@
   }
 
   const galleryState = {
-    items: (@json($galleryImages) || []).map(normalizeGalleryItem),
+    items: (<?php echo json_encode($galleryImages, 15, 512) ?> || []).map(normalizeGalleryItem),
     search: '',
     editingId: null,
     isSubmitting: false,
@@ -280,4 +290,6 @@
 
   renderGallery();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/gallery.blade.php ENDPATH**/ ?>

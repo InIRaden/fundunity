@@ -1,6 +1,4 @@
-@extends('layouts.admin.app')
-
-@section('admin-content')
+<?php $__env->startSection('admin-content'); ?>
 <div class="space-y-6 max-w-[1600px] mx-auto w-full">
   <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 overflow-hidden">
     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
@@ -81,8 +79,8 @@
 </div>
 
 <script>
-  const sliderStoreUrl = @json(route('admin.imageslider.store'));
-  const sliderBaseUrl = @json(url('/admin/imageslider'));
+  const sliderStoreUrl = <?php echo json_encode(route('admin.imageslider.store'), 15, 512) ?>;
+  const sliderBaseUrl = <?php echo json_encode(url('/admin/imageslider'), 15, 512) ?>;
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
   function normalizeSliderItem(raw) {
@@ -96,7 +94,7 @@
   }
 
   const sliderState = {
-    items: (@json($sliderItems) || []).map(normalizeSliderItem),
+    items: (<?php echo json_encode($sliderItems, 15, 512) ?> || []).map(normalizeSliderItem),
     search: '',
     editingId: null,
     deletingId: null,
@@ -295,4 +293,6 @@
 
   renderSliderRows();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\coding\fundunity\resources\views/admin/imageslider.blade.php ENDPATH**/ ?>
