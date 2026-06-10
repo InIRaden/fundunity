@@ -21,10 +21,48 @@ class DummyDataSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Donors & Donations
         $campaigns = Campaign::all();
         if ($campaigns->isEmpty()) {
-            return;
+            $campaignData = [
+                [
+                    'title' => 'Bantuan Pangan untuk Keluarga Prasejahtera',
+                    'description' => 'Program pengumpulan dana untuk memberikan bantuan sembako dan kebutuhan pokok bulanan bagi keluarga rentan di daerah pinggiran kota.',
+                    'collected' => 5000000,
+                    'target' => 50000000,
+                    'deadline' => Carbon::now()->addDays(30),
+                    'category' => 'Pangan',
+                    'image' => 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80',
+                    'status' => 'aktif',
+                    'is_active' => true,
+                ],
+                [
+                    'title' => 'Renovasi Sekolah Pelosok',
+                    'description' => 'Mari wujudkan lingkungan belajar yang nyaman dan layak untuk adik-adik kita yang saat ini belajar di gedung sekolah yang hampir rubuh.',
+                    'collected' => 75000000,
+                    'target' => 100000000,
+                    'deadline' => Carbon::now()->addDays(15),
+                    'category' => 'Pendidikan',
+                    'image' => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80',
+                    'status' => 'aktif',
+                    'is_active' => true,
+                ],
+                [
+                    'title' => 'Bantuan Medis Balita Kurang Gizi',
+                    'description' => 'Penyaluran susu khusus, vitamin, dan biaya pengobatan untuk puluhan balita yang mengalami gizi buruk di desa terpencil.',
+                    'collected' => 12000000,
+                    'target' => 20000000,
+                    'deadline' => Carbon::now()->addDays(5),
+                    'category' => 'Kesehatan',
+                    'image' => 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=900&q=80',
+                    'status' => 'aktif',
+                    'is_active' => true,
+                ]
+            ];
+
+            foreach ($campaignData as $data) {
+                Campaign::create($data);
+            }
+            $campaigns = Campaign::all();
         }
 
         $donors = [
