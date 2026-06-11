@@ -13,14 +13,6 @@
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
     @endif
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#022c22">
-    @if(!empty($siteSettings['site_logo']))
-        <link rel="apple-touch-icon" href="{{ $siteSettings['site_logo'] }}">
-    @else
-        <link rel="apple-touch-icon" href="/images/Logo.png">
-    @endif
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -233,19 +225,6 @@
                 });
             }
         });
-
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
     </script>
 </body>
 </html>

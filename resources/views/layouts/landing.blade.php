@@ -13,14 +13,6 @@
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
     @endif
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#022c22">
-    @if(!empty($siteSettings['site_logo']))
-        <link rel="apple-touch-icon" href="{{ $siteSettings['site_logo'] }}">
-    @else
-        <link rel="apple-touch-icon" href="/images/Logo.png">
-    @endif
-
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
@@ -145,27 +137,6 @@
 
         <x-landing.footer />
     </div>
-    <!-- PWA Custom Install Banner -->
-    <div id="pwa-install-banner" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] p-4 z-50 transform translate-y-full transition-transform duration-500 flex items-center justify-between gap-4 hidden">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shrink-0">
-                <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : '/images/Logo.png' }}" alt="Icon" class="w-6 h-6 object-contain filter brightness-0 invert">
-            </div>
-            <div>
-                <h4 class="text-sm font-bold text-slate-900">Install {{ $siteSettings['site_short_name'] ?? ($siteSettings['site_name'] ?? 'FundUnity') }}</h4>
-                <p class="text-xs text-slate-500">Akses lebih cepat & hemat kuota</p>
-            </div>
-        </div>
-        <div class="flex items-center gap-2">
-            <button id="pwa-install-close" class="p-2 text-slate-400 hover:text-slate-600">
-                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-            <button id="pwa-install-btn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg shadow-md transition-colors">
-                Install
-            </button>
-        </div>
-    </div>
-
     @stack('scripts')
     <script>
         // Remove splash screen on page load
@@ -175,70 +146,6 @@
                 splash.classList.add('hidden-splash');
                 setTimeout(() => splash.remove(), 600);
             }
-        });
-
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
-
-        // PWA Custom Install Logic
-        let deferredPrompt;
-        const installBanner = document.getElementById('pwa-install-banner');
-        const installBtn = document.getElementById('pwa-install-btn');
-        const closeBtn = document.getElementById('pwa-install-close');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            // Stash the event so it can be triggered later.
-            deferredPrompt = e;
-            
-            // Show the custom banner
-            installBanner.classList.remove('hidden');
-            // Give it a tiny delay to allow display:block to apply before animating transform
-            setTimeout(() => {
-                installBanner.classList.remove('translate-y-full');
-            }, 50);
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                // We've used the prompt, and can't use it again, throw it away
-                deferredPrompt = null;
-                // Hide the banner
-                installBanner.classList.add('translate-y-full');
-                setTimeout(() => installBanner.classList.add('hidden'), 500);
-            }
-        });
-
-        closeBtn.addEventListener('click', () => {
-            // Hide the banner
-            installBanner.classList.add('translate-y-full');
-            setTimeout(() => installBanner.classList.add('hidden'), 500);
-        });
-
-        // If app is successfully installed, hide the banner
-        window.addEventListener('appinstalled', (evt) => {
-            installBanner.classList.add('translate-y-full');
-            setTimeout(() => installBanner.classList.add('hidden'), 500);
         });
     </script>
 </body>

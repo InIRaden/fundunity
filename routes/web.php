@@ -57,9 +57,7 @@ Route::get('/get-involved', [LandingController::class, 'getInvolved'])->name('ge
 Route::post('/get-involved', [LandingController::class, 'submitGetInvolved'])->name('get-involved.store')->middleware('throttle:5,1');
 Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [LegalController::class, 'terms'])->name('terms');
-Route::get('/manifest.json', [LandingController::class, 'manifest'])->name('manifest');
-Route::get('/sw.js', [LandingController::class, 'serviceWorker'])->name('serviceWorker');
-Route::get('/offline', [LandingController::class, 'offlineFallback'])->name('offlineFallback');
+
 
 // Super Simple Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-password'])->group(function () {
