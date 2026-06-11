@@ -13,6 +13,14 @@
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
     @endif
 
+    {{-- PWA Meta Tags (Admin) --}}
+    <meta name="theme-color" content="#059669">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="{{ !empty($siteSettings['site_name']) ? $siteSettings['site_name'] : 'FundUnity' }} Admin">
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
+
+
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

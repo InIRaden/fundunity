@@ -6,12 +6,25 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $siteSettings['site_name'] ?? config('app.name', 'Fundunity') }} - @yield('title', 'Wujudkan Dampak Nyata')</title>
+    <meta name="description" content="{{ $siteSettings['meta_description'] ?? 'Platform donasi transparan dan dapat dipantau untuk komunitas yang lebih baik.' }}">
 
+    {{-- Favicon --}}
     @if(!empty($siteSettings['site_logo']))
         <link rel="icon" href="{{ $siteSettings['site_logo'] }}" type="image/png">
     @else
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
     @endif
+
+    {{-- PWA Meta Tags --}}
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#059669">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="{{ $siteSettings['site_name'] ?? config('app.name', 'Fundunity') }}">
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
+    <meta name="msapplication-TileImage" content="/images/icon-192.png">
+    <meta name="msapplication-TileColor" content="#059669">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=open-sans:300,400,500,600,700,800|montserrat:400,500,600,700,800,900&display=swap" rel="stylesheet" />
@@ -109,6 +122,16 @@
         @keyframes fadePulse {
             0% { opacity: 0.5; }
             100% { opacity: 1; }
+        }
+
+        /* PWA Banner Animations */
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
     </style>

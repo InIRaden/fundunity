@@ -56,9 +56,10 @@
             <i class="ph ph-arrow-clockwise text-base"></i>
             Reset
           </button>
-          <button type="submit" class="px-6 py-2.5 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 transition-all flex items-center gap-2">
+          <button type="submit" id="legalSubmitBtn" class="px-6 py-2.5 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 transition-all flex items-center gap-2">
             <i class="ph ph-floppy-disk text-base"></i>
-            Simpan Dokumen Hukum
+            <span id="legalSubmitLabel">Simpan Dokumen Hukum</span>
+            <svg id="legalSubmitSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
           </button>
         </div>
       </form>
@@ -103,6 +104,13 @@
 
   document.getElementById('legalForm').addEventListener('submit', async function (e) {
     e.preventDefault();
+    const btn = document.getElementById('legalSubmitBtn');
+    const label = document.getElementById('legalSubmitLabel');
+    const spinner = document.getElementById('legalSubmitSpinner');
+
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Menyimpan...';
+    if (spinner) spinner.classList.remove('hidden');
 
     try {
       const result = await requestJson(endpoint, {
@@ -113,6 +121,10 @@
       toast(result.message || 'Kebijakan Privasi dan Syarat & Ketentuan berhasil disimpan.');
     } catch (error) {
       window.alert(error.message);
+    } finally {
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = 'Simpan Dokumen Hukum';
+      if (spinner) spinner.classList.add('hidden');
     }
   });
 </script>

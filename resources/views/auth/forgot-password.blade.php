@@ -81,9 +81,11 @@
 
                     <button
                         type="submit"
-                        class="w-full rounded-xl bg-emerald-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] hover:bg-emerald-700 mt-6"
+                        id="forgotPasswordSubmitBtn"
+                        class="w-full rounded-xl bg-emerald-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] hover:bg-emerald-700 mt-6 flex items-center justify-center gap-2"
                     >
-                        KIRIM LINK RESET
+                        <span id="forgotPasswordSubmitLabel">KIRIM LINK RESET</span>
+                        <svg id="forgotPasswordSubmitIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M232,128a104,104,0,1,1-104-104A104,104,0,0,1,232,128Zm-48-16H144V64a16,16,0,0,0-32,0v48H64a16,16,0,0,0,0,32h48v48a16,16,0,0,0,32,0V144h40a16,16,0,0,0,0-32Z"/></svg>
                     </button>
 
                     <div class="flex flex-col gap-3 pt-6 border-t border-slate-100">
@@ -102,5 +104,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form[action="{{ route('password.email') }}"]');
+            const btn = document.getElementById('forgotPasswordSubmitBtn');
+            const label = document.getElementById('forgotPasswordSubmitLabel');
+            const icon = document.getElementById('forgotPasswordSubmitIcon');
+
+            form?.addEventListener('submit', function () {
+                if (!btn) return;
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed', 'opacity-80');
+                btn.classList.remove('hover:bg-emerald-700', 'active:scale-[0.98]');
+                if (label) label.textContent = 'Mengirim...';
+                if (icon) icon.outerHTML = '<svg class="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>';
+            });
+        });
+    </script>
 </body>
 </html>
+

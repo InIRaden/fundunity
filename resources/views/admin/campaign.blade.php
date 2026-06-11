@@ -80,10 +80,14 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1.5">Target Nominal (Rp)</label>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Target (Rp)</label>
             <input required id="fTarget" type="number" min="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all" placeholder="50000000">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Terkumpul (Rp)</label>
+            <input required id="fCollected" type="number" min="0" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-admin-500/30 focus:border-admin-400 transition-all" placeholder="0">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1.5">Deadline</label>
@@ -305,6 +309,7 @@
       document.getElementById('fTitle').value = editing.title;
       document.getElementById('fCategory').value = editing.category;
       document.getElementById('fTarget').value = editing.target;
+      document.getElementById('fCollected').value = editing.collected;
       document.getElementById('fDeadline').value = editing.deadline;
       document.getElementById('fDescription').value = editing.description;
 
@@ -400,6 +405,7 @@
     formData.append('title', document.getElementById('fTitle').value);
     formData.append('category', document.getElementById('fCategory').value);
     formData.append('target', document.getElementById('fTarget').value);
+    formData.append('collected', document.getElementById('fCollected').value || 0);
     formData.append('deadline', document.getElementById('fDeadline').value);
     formData.append('description', document.getElementById('fDescription').value);
     formData.append('status', campaignState.status);

@@ -70,7 +70,10 @@
       </div>
       <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl shrink-0">
         <button type="button" id="cancelMemberEdit" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
-        <button id="editMemberSubmitBtn" type="submit" class="px-6 py-2 bg-admin-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-admin-700">Simpan Perubahan</button>
+        <button id="editMemberSubmitBtn" type="submit" class="px-6 py-2 bg-admin-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-admin-700 flex items-center gap-2">
+          <span id="editMemberLabel">Simpan Perubahan</span>
+          <svg id="editMemberSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+        </button>
       </div>
     </form>
 </x-admin.modal>
@@ -102,7 +105,10 @@
       </div>
       <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl shrink-0">
         <button type="button" id="cancelMemberAdd" class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Batal</button>
-        <button id="addMemberSubmitBtn" type="submit" class="px-6 py-2 bg-admin-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-admin-700">Simpan Data Baru</button>
+        <button id="addMemberSubmitBtn" type="submit" class="px-6 py-2 bg-admin-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-admin-700 flex items-center gap-2">
+          <span id="addMemberLabel">Simpan Data Baru</span>
+          <svg id="addMemberSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+        </button>
       </div>
     </form>
 </x-admin.modal>
@@ -237,6 +243,12 @@
     e.preventDefault();
     if (memberState.isSubmitting || !memberState.editingId) return;
     memberState.isSubmitting = true;
+    const btn = document.getElementById('editMemberSubmitBtn');
+    const label = document.getElementById('editMemberLabel');
+    const spinner = document.getElementById('editMemberSpinner');
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Menyimpan...';
+    if (spinner) spinner.classList.remove('hidden');
     
     const formData = new FormData();
     formData.append('_method', 'PUT');
@@ -256,6 +268,9 @@
       renderMemberRows();
     } catch (e) { alert(e.message); }
     memberState.isSubmitting = false;
+    if (btn) btn.disabled = false;
+    if (label) label.textContent = 'Simpan Perubahan';
+    if (spinner) spinner.classList.add('hidden');
   });
 
   document.getElementById('closeMemberAdd').addEventListener('click', closeAddMember);
@@ -264,6 +279,12 @@
     e.preventDefault();
     if (memberState.isSubmitting) return;
     memberState.isSubmitting = true;
+    const btn = document.getElementById('addMemberSubmitBtn');
+    const label = document.getElementById('addMemberLabel');
+    const spinner = document.getElementById('addMemberSpinner');
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Menyimpan...';
+    if (spinner) spinner.classList.remove('hidden');
     
     const formData = new FormData();
     formData.append('jabatan', document.getElementById('addJabatan').value);
@@ -282,6 +303,9 @@
       renderMemberRows();
     } catch (e) { alert(e.message); }
     memberState.isSubmitting = false;
+    if (btn) btn.disabled = false;
+    if (label) label.textContent = 'Simpan Data Baru';
+    if (spinner) spinner.classList.add('hidden');
   });
 
   renderMemberRows();

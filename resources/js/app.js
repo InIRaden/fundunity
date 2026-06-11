@@ -6,6 +6,12 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+// PWA: Service Worker + Install Prompt + Offline Detector
+import { initPWA } from './pwa';
+initPWA();
+
+
+
 // Conditional page module loading by data-page attribute
 try {
 	const page = document.body?.dataset?.page;

@@ -148,6 +148,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'force-change-passwo
 // Newsletter Route
 Route::post('/newsletter/subscribe', [LandingController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
 
+// PWA Routes
+Route::get('/manifest.json', [LandingController::class, 'webManifest'])->name('pwa.manifest');
+Route::get('/offline', function () {
+    return response()->file(public_path('offline.html'));
+})->name('pwa.offline');
+
+
+
 // Dashboard Route - Redirect to Admin Dashboard
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');

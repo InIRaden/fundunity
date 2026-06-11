@@ -80,9 +80,10 @@
                 <button
                     type="submit"
                     id="submitBtn"
-                    class="w-full rounded-xl bg-admin-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-admin-200 transition-all active:scale-[0.98] hover:bg-admin-700 mt-4"
+                    class="w-full rounded-xl bg-admin-600 py-4 text-sm font-bold tracking-wide text-white shadow-lg shadow-admin-200 transition-all active:scale-[0.98] hover:bg-admin-700 mt-4 flex items-center justify-center gap-2"
                 >
-                    <i class="ph ph-lock-key mr-2"></i>SIMPAN & MASUK KE DASHBOARD
+                    <span id="forceChangeLabel"><i class="ph ph-lock-key mr-1"></i>SIMPAN &amp; MASUK KE DASHBOARD</span>
+                    <svg id="forceChangeIcon" class="hidden animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
                 </button>
             </form>
 
@@ -96,6 +97,17 @@
 </div>
 
 <script>
+    // Handle form submission loading state
+    document.getElementById('forceChangeForm').addEventListener('submit', function() {
+        const btn = document.getElementById('submitBtn');
+        const label = document.getElementById('forceChangeLabel');
+        const icon = document.getElementById('forceChangeIcon');
+        
+        btn.disabled = true;
+        label.classList.add('opacity-70');
+        icon.classList.remove('hidden');
+    });
+
     // Toggle show/hide password
     const toggleBtn = document.getElementById('togglePassword');
     const passInput = document.getElementById('password');

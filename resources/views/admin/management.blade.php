@@ -129,7 +129,9 @@
                     class="flex-1 px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-50">Batal</button>
                 <button type="submit" id="btnSubmitAdmin"
                     class="flex-1 px-4 py-2.5 bg-admin-600 text-white rounded-xl text-sm font-bold hover:bg-admin-700 flex items-center justify-center gap-2">
-                    <i class="ph ph-plus"></i> Buat Akun
+                    <i class="ph ph-plus"></i>
+                    <span id="btnSubmitAdminLabel">Buat Akun</span>
+                    <svg id="btnSubmitAdminSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
                 </button>
             </div>
         </form>
@@ -218,10 +220,13 @@ document.getElementById('btnTambahAdmin').addEventListener('click', () => {
 document.getElementById('formTambahAdmin').addEventListener('submit', async function (e) {
     e.preventDefault();
     const btn = document.getElementById('btnSubmitAdmin');
+    const label = document.getElementById('btnSubmitAdminLabel');
+    const spinner = document.getElementById('btnSubmitAdminSpinner');
     const err = document.getElementById('formError');
     err.classList.add('hidden');
     btn.disabled = true;
-    btn.textContent = 'Memproses...';
+    if (label) label.textContent = 'Memproses...';
+    if (spinner) spinner.classList.remove('hidden');
 
     try {
         const res = await fetch(endpoints.store, {
@@ -248,7 +253,8 @@ document.getElementById('formTambahAdmin').addEventListener('submit', async func
         err.classList.remove('hidden');
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="ph ph-plus"></i> Buat Akun';
+        if (label) label.textContent = 'Buat Akun';
+        if (spinner) spinner.classList.add('hidden');
     }
 });
 
@@ -276,6 +282,14 @@ function copyKredensial() {
 async function resetPassword(adminId, adminName) {
     if (!confirm(`Reset sandi sementara untuk "${adminName}"? Sandi acak baru akan dibuat.`)) return;
 
+    // Cari button reset milik admin ini dan tampilkan loading
+    const resetBtn = document.querySelector(`#admin-row-${adminId} button[onclick*='resetPassword']`);
+    const originalHtml = resetBtn ? resetBtn.innerHTML : '';
+    if (resetBtn) {
+        resetBtn.disabled = true;
+        resetBtn.innerHTML = '<svg class="animate-spin inline-block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg> Mereset...';
+    }
+
     try {
         const res = await fetch(`/admin/management/${adminId}/reset-password`, {
             method: 'POST',
@@ -286,11 +300,23 @@ async function resetPassword(adminId, adminName) {
         showKredensial(data.admin.name, data.admin.email, data.password);
     } catch {
         alert('Terjadi kesalahan. Coba lagi.');
+    } finally {
+        if (resetBtn) {
+            resetBtn.disabled = false;
+            resetBtn.innerHTML = originalHtml;
+        }
     }
 }
 
 async function deleteAdmin(adminId, adminName) {
     if (!confirm(`Hapus akun admin "${adminName}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+
+    // Tampilkan loading di baris admin
+    const deleteBtn = document.querySelector(`#admin-row-${adminId} button[onclick*='deleteAdmin']`);
+    if (deleteBtn) {
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<svg class="animate-spin inline-block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg> Menghapus...';
+    }
 
     try {
         const res = await fetch(`/admin/management/${adminId}`, {
@@ -300,9 +326,17 @@ async function deleteAdmin(adminId, adminName) {
         const data = await res.json();
         if (!res.ok) { alert(data.message || 'Gagal menghapus akun.'); return; }
         const row = document.getElementById(`admin-row-${adminId}`);
-        row?.remove();
+        if (row) {
+            row.style.transition = 'opacity 0.3s';
+            row.style.opacity = '0';
+            setTimeout(() => row.remove(), 300);
+        }
     } catch {
         alert('Terjadi kesalahan. Coba lagi.');
+        if (deleteBtn) {
+            deleteBtn.disabled = false;
+            deleteBtn.innerHTML = '<i class="ph ph-trash text-sm"></i> Hapus';
+        }
     }
 }
 </script>

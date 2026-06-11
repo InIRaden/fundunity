@@ -82,7 +82,7 @@
 
 <script>
   const sliderStoreUrl = @json(route('admin.imageslider.store'));
-  const sliderBaseUrl = @json(url('/admin/imageslider'));
+  const sliderBaseUrl = @json(url('/admin/image-slider'));
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
   function normalizeSliderItem(raw) {

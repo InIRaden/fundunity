@@ -81,7 +81,10 @@
     <div class="p-6 space-y-4 overflow-y-auto flex-1" id="stakeModalBody"></div>
     <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0 rounded-b-3xl">
       <button id="cancelStakeModal" class="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">Batal</button>
-      <button id="saveStakeModal" class="px-8 py-2.5 bg-admin-600 hover:bg-admin-700 text-white font-bold rounded-xl shadow-lg shadow-admin-600/20 transition-all">Simpan Data</button>
+      <button id="saveStakeModal" class="px-8 py-2.5 bg-admin-600 hover:bg-admin-700 text-white font-bold rounded-xl shadow-lg shadow-admin-600/20 transition-all flex items-center justify-center gap-2 min-w-[140px]">
+        <span id="saveStakeLabel">Simpan Data</span>
+        <svg id="saveStakeSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+      </button>
     </div>
 </x-admin.modal>
 
@@ -191,22 +194,22 @@
 
   function setStakeSubmitLoading(loading) {
     const button = document.getElementById('saveStakeModal');
+    const label = document.getElementById('saveStakeLabel');
+    const spinner = document.getElementById('saveStakeSpinner');
     if (!button) {
       return;
     }
 
+    button.disabled = loading;
+    button.classList.toggle('opacity-70', loading);
+    button.classList.toggle('cursor-not-allowed', loading);
+    
     if (loading) {
-      button.dataset.originalLabel = button.textContent;
-      button.disabled = true;
-      button.classList.add('opacity-70', 'cursor-not-allowed');
-      button.textContent = ds.editingId ? 'Menyimpan...' : 'Menambahkan...';
-      return;
-    }
-
-    button.disabled = false;
-    button.classList.remove('opacity-70', 'cursor-not-allowed');
-    if (button.dataset.originalLabel) {
-      button.textContent = button.dataset.originalLabel;
+      if (label) label.textContent = ds.editingId ? 'Menyimpan...' : 'Menambahkan...';
+      if (spinner) spinner.classList.remove('hidden');
+    } else {
+      if (label) label.textContent = 'Simpan Data';
+      if (spinner) spinner.classList.add('hidden');
     }
   }
 

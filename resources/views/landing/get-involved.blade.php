@@ -96,11 +96,35 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full mt-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2">
-                    Kirim Pendaftaran
+                <button id="getInvolvedSubmitBtn" type="submit" class="w-full mt-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2">
+                    <span id="getInvolvedSubmitLabel">Kirim Pendaftaran</span>
+                    <svg id="getInvolvedSubmitIcon" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 256 256" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"/></svg>
                 </button>
             </form>
         </div>
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action="{{ route('get-involved.store') }}"]');
+        const btn = document.getElementById('getInvolvedSubmitBtn');
+        const label = document.getElementById('getInvolvedSubmitLabel');
+        const icon = document.getElementById('getInvolvedSubmitIcon');
+
+        form?.addEventListener('submit', function () {
+            if (!btn) return;
+            btn.disabled = true;
+            btn.classList.add('cursor-not-allowed', 'opacity-80');
+            btn.classList.remove('hover:bg-emerald-700');
+            if (label) label.textContent = 'Mengirim...';
+            if (icon) icon.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite"/>';
+            // Ganti icon dengan spinner
+            icon.outerHTML = '<svg class="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>';
+        });
+    });
+</script>
+@endpush
+

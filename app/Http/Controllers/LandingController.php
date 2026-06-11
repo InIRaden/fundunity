@@ -491,4 +491,74 @@ class LandingController extends Controller
         ]);
 
         return back()->with('newsletter_success', 'Terima kasih telah berlangganan newsletter kami!');
+    }
+
+    /**
+     * Dynamic Web App Manifest for PWA
+     * Mengambil nama & ikon dari siteSettings (database) agar manifest selalu up-to-date.
+     */
+    public function webManifest()
+    {
+        $settings = $this->loadSiteSettings();
+
+        $appName   = $settings['site_name'] ?? config('app.name', 'Fundunity');
+        $shortName = $settings['site_short_name'] ?? $appName;
+        $logoUrl   = $settings['site_logo'] ?? null;
+        $description = $settings['meta_description'] ?? 'Platform donasi transparan dan dapat dipantau untuk komunitas yang lebih baik.';
+
+        // Resolusi ikon: gunakan logo dari settings jika ada, fallback ke ikon statis
+        $icon192 = asset('images/icon-192.png');
+        $icon512 = asset('images/icon-512.png');
+
+        // Jika logo tersedia dan bukan URL eksternal, gunakan juga sebagai ikon any
+        $icons = [
+            [
+                'src'     => $icon192,
+                'sizes'   => '192x192',
+                'type'    => 'image/png',
+                'purpose' => 'any',
+            ],
+            [
+                'src'     => $icon512,
+                'sizes'   => '512x512',
+                'type'    => 'image/png',
+                'purpose' => 'maskable',
+            ],
+        ];
+
+        $manifest = [
+            'name'             => $appName,
+            'short_name'       => $shortName,
+            'description'      => $description,
+            'start_url'        => '/',
+            'scope'            => '/',
+            'display'          => 'standalone',
+            'orientation'      => 'portrait-primary',
+            'background_color' => '#ffffff',
+            'theme_color'      => '#059669',
+            'lang'             => 'id',
+            'categories'       => ['finance', 'social', 'lifestyle'],
+            'icons'            => $icons,
+            'shortcuts'        => [
+                [
+                    'name'      => 'Program Donasi',
+                    'short_name'=> 'Donasi',
+                    'url'       => '/all-programs',
+                    'icons'     => [['src' => $icon192, 'sizes' => '192x192']],
+                ],
+                [
+                    'name'      => 'Daftar Relawan',
+                    'short_name'=> 'Relawan',
+                    'url'       => '/get-involved',
+                    'icons'     => [['src' => $icon192, 'sizes' => '192x192']],
+                ],
+            ],
+            'screenshots'      => [],
+        ];
+
+        return response()->json($manifest)
+            ->header('Content-Type', 'application/manifest+json')
+            ->header('Cache-Control', 'public, max-age=3600');
+    }
 }
+

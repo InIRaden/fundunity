@@ -136,7 +136,10 @@
     </div>
     <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-3xl">
       <button id="cancelIncomeModal" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors">Batal</button>
-      <button id="saveIncomeModal" class="px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg">Simpan Transaksi</button>
+      <button id="saveIncomeModal" class="px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg flex items-center gap-2 min-w-[140px] justify-center">
+        <span id="saveIncomeLabel">Simpan Transaksi</span>
+        <svg id="saveIncomeSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+      </button>
     </div>
 </x-admin.modal>
 
@@ -346,7 +349,16 @@
           <td class="p-5 text-xs text-slate-500 max-w-[150px] truncate italic">${t.notes || '-'}</td>
           <td class="p-5 text-sm font-bold text-admin-600">${rp(t.amount)}</td>
           <td class="p-5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusClass}">${t.status.toUpperCase()}</span></td>
-          <td class="p-5"><div class="flex items-center gap-2"><button onclick="editIncome(${t.id})" class="px-3 py-1 bg-admin-600 text-white font-bold rounded-md text-[11px] hover:bg-admin-700 transition-colors">Edit</button><button onclick="deleteIncome(${t.id})" class="px-3 py-1 bg-rose-600 text-white font-bold rounded-md text-[11px] hover:bg-rose-700 transition-colors">Hapus</button></div></td>
+          <td class="p-5">
+            <div class="flex items-center gap-2">
+              <select onchange="updateIncomeStatus(${t.id}, this)" class="px-2 py-1 bg-white border border-slate-200 text-slate-700 font-bold rounded-md text-[11px] hover:border-admin-400 focus:ring-2 focus:ring-admin-500/20 outline-none transition-colors">
+                <option value="pending" ${t.status === 'pending' ? 'selected' : ''}>Pending</option>
+                <option value="success" ${t.status === 'berhasil' || t.status === 'success' ? 'selected' : ''}>Berhasil</option>
+                <option value="failed" ${t.status === 'failed' || t.status === 'gagal' ? 'selected' : ''}>Gagal</option>
+              </select>
+              <button onclick="deleteIncome(${t.id})" class="px-3 py-1 bg-rose-600 text-white font-bold rounded-md text-[11px] hover:bg-rose-700 transition-colors">Hapus</button>
+            </div>
+          </td>
         </tr>
       `;
     }).join('');
@@ -370,20 +382,13 @@
     }
   }
 
-  async function editIncome(id) {
+  async function updateIncomeStatus(id, selectEl) {
+    const newStatus = selectEl.value;
     const inc = state.incomes.find(i => i.id === id);
     if (!inc) return;
-    
-    // Only allow editing status for simplicity
-    const newStatus = prompt(`Ubah status donasi (pending/berhasil/gagal) saat ini: ${inc.status}`, inc.status);
-    if (!newStatus || newStatus === inc.status) return;
-    
-    if (!['pending', 'berhasil', 'gagal'].includes(newStatus)) {
-        customAlert('Error', 'Status tidak valid', 'error');
-        return;
-    }
 
     try {
+      selectEl.disabled = true;
       const response = await fetch(`/admin/database-stakeholder/donations/${id}`, {
         method: 'PUT',
         headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json', 'Content-Type': 'application/json' },
@@ -391,11 +396,17 @@
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Gagal mengupdate donasi.');
-      inc.status = newStatus;
+      
+      // Update state local: kita simpan sebagai 'berhasil' untuk UI konsistensi jika 'success'
+      inc.status = newStatus === 'success' ? 'berhasil' : newStatus;
       renderIncomeRows();
       customAlert('Berhasil', result.message);
     } catch (error) {
       customAlert('Kesalahan', error.message, 'error');
+      // Rollback UI dropdown
+      selectEl.value = inc.status === 'berhasil' ? 'success' : inc.status;
+    } finally {
+      selectEl.disabled = false;
     }
   }
 
@@ -499,6 +510,13 @@
       return;
     }
 
+    const btn = document.getElementById('saveIncomeModal');
+    const label = document.getElementById('saveIncomeLabel');
+    const spinner = document.getElementById('saveIncomeSpinner');
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Menyimpan...';
+    if (spinner) spinner.classList.remove('hidden');
+
     try {
       const response = await fetch(manualIncomeStoreUrl, {
         method: 'POST',
@@ -540,6 +558,10 @@
       customAlert('Berhasil', result.message || 'Transaksi manual berhasil disimpan.');
     } catch (error) {
       customAlert('Kesalahan', error.message, 'error');
+    } finally {
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = 'Simpan Transaksi';
+      if (spinner) spinner.classList.add('hidden');
     }
   }
 

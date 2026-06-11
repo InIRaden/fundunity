@@ -1,122 +1,63 @@
-# Illuminate\Database\QueryException - Internal Server Error
-
-SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause' (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: fundinity, SQL: select count(*) as aggregate from `volunteers` where `status` = aktif)
-
-PHP 8.2.4
-Laravel 12.52.0
-127.0.0.1:8000
-
-## Stack Trace
-
-0 - vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
-1 - vendor\laravel\framework\src\Illuminate\Database\Connection.php:794
-2 - vendor\laravel\framework\src\Illuminate\Database\Connection.php:411
-3 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3438
-4 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3423
-5 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:4013
-6 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3422
-7 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3937
-8 - vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3865
-9 - vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:2235
-10 - app\Http\Controllers\LandingController.php:58
-11 - vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
-12 - vendor\laravel\framework\src\Illuminate\Routing\Route.php:265
-13 - vendor\laravel\framework\src\Illuminate\Routing\Route.php:211
-14 - vendor\laravel\framework\src\Illuminate\Routing\Router.php:822
-15 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:180
-16 - app\Http\Middleware\EnsurePublicSiteAvailable.php:24
-17 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-18 - vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php:50
-19 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-20 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken.php:87
-21 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-22 - vendor\laravel\framework\src\Illuminate\View\Middleware\ShareErrorsFromSession.php:48
-23 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-24 - vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php:120
-25 - vendor\laravel\framework\src\Illuminate\Session\Middleware\StartSession.php:63
-26 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-27 - vendor\laravel\framework\src\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse.php:36
-28 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-29 - vendor\laravel\framework\src\Illuminate\Cookie\Middleware\EncryptCookies.php:74
-30 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-31 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:137
-32 - vendor\laravel\framework\src\Illuminate\Routing\Router.php:821
-33 - vendor\laravel\framework\src\Illuminate\Routing\Router.php:800
-34 - vendor\laravel\framework\src\Illuminate\Routing\Router.php:764
-35 - vendor\laravel\framework\src\Illuminate\Routing\Router.php:753
-36 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php:200
-37 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:180
-38 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php:21
-39 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php:31
-40 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-41 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php:21
-42 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php:51
-43 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-44 - vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php:27
-45 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-46 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php:109
-47 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-48 - vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php:61
-49 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-50 - vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php:58
-51 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-52 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php:22
-53 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-54 - vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php:26
-55 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
-56 - vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:137
-57 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php:175
-58 - vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php:144
-59 - vendor\laravel\framework\src\Illuminate\Foundation\Application.php:1220
-60 - public\index.php:20
-61 - vendor\laravel\framework\src\Illuminate\Foundation\resources\server.php:23
-
-## Request
-
-GET /landing
-
-## Headers
-
-* **host**: 127.0.0.1:8000
-* **connection**: keep-alive
-* **cache-control**: max-age=0
-* **sec-ch-ua**: "Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"
-* **sec-ch-ua-mobile**: ?0
-* **sec-ch-ua-platform**: "Windows"
-* **upgrade-insecure-requests**: 1
-* **user-agent**: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36
-* **accept**: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-* **sec-fetch-site**: none
-* **sec-fetch-mode**: navigate
-* **sec-fetch-user**: ?1
-* **sec-fetch-dest**: document
-* **accept-encoding**: gzip, deflate, br, zstd
-* **accept-language**: en-US,en;q=0.9,id;q=0.8
-* **cookie**: locale=eyJpdiI6ImowejdjSFM2NjFKY1Vza0pSVFV5SHc9PSIsInZhbHVlIjoiQTRRQithN1ZGRXJYSlFNYXNuR2luellPcHhvYldBUktvQ1NFVUZibHFDV01ES05ScHdpc254SmdGVXRNdlNjViIsIm1hYyI6Ijc4Mjc4ODZkZjg2MGU1NDkwNmNiYjc1Yzk3MWI4YzBiMzNmMWNiNDAxOTU3ZjNlZDhmMTIwNDljNjllNzU2MjkiLCJ0YWciOiIifQ%3D%3D; XSRF-TOKEN=eyJpdiI6IndHZnN6MjJiUTd5KytnSG9MRk5KWnc9PSIsInZhbHVlIjoic05kdWNpY1prYXBHUFZTODJsVXhsMHV0TUlWS2Z3UnI1K2FQamdTT3hhZndMb2J4eFFDNW11S04xbFNHNGZyRFY0RWFCNXBuUndyWDVxc3crOUQ3dXU4K2ZFYlQ4WnZkM0wvK1RoVGFHSktNOXAwUDJIeExjRFRsc0EvUmNDQ3giLCJtYWMiOiJkMGZjYTI1NzRmMTA4MzA0ZmM1NWE5MGVjYmNjZTUyM2E2YmQ3YzVkNjY2N2Q2OTQyYzk1OTk3M2ZmNzU0NTJlIiwidGFnIjoiIn0%3D; laravel-session=eyJpdiI6IktjQlhFVTluNzBrNFhnMnhKQXZRYmc9PSIsInZhbHVlIjoiSWExSG1zdHVpM2VQeFZLb2ZSck41RU5rMU1GR2tMU091Q0o3aFlGSG5HUlpsSWpYWDhvTWs3b1hIazVPbTRlanlDZWM3TFdKL3c4WTdqYzFHcUxjSllFRHpVQklhZDA0Um0rQlhidG1oWE1nSGxJcWk2LzJKYWdoWEdhOGQxR08iLCJtYWMiOiIzOTQ1NjMzMzFkMzYyYTk1MGE2MDNjNTNiOGJjMWY0MDZiZGI3Yzc4ZjY0NTkwYmRiOTIzMzZkZWUwYWFiYmJjIiwidGFnIjoiIn0%3D
-
-## Route Context
-
-controller: App\Http\Controllers\LandingController@index
-route name: landing.home
-middleware: web
-
-## Route Parameters
-
-No route parameter data available.
-
-## Database Queries
-
-* mysql - select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'site_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists` (2.52 ms)
-* mysql - select `value`, `key` from `site_settings` (0.5 ms)
-* mysql - select * from `sessions` where `id` = 'SuKRxkm61OLneZHw70RLqOUOlKBp15Fw1i0KhFrQ' limit 1 (0.49 ms)
-* mysql - select exists (select 1 from information_schema.tables where table_schema = schema() and table_name = 'site_settings' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED')) as `exists` (0.48 ms)
-* mysql - select `value` from `site_settings` where `key` = 'maintenance_mode' limit 1 (0.35 ms)
-* mysql - select * from `pages` where `slug` = 'home' limit 1 (0.57 ms)
-* mysql - select * from `image_sliders` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 8 (0.43 ms)
-* mysql - select * from `campaigns` where `is_active` = 1 and `status` = 'aktif' order by `deadline` asc, `created_at` desc limit 3 (0.43 ms)
-* mysql - select * from `focus_areas` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 4 (0.32 ms)
-* mysql - select * from `partners` where `is_active` = 1 order by `sort_order` asc, `created_at` desc limit 12 (0.42 ms)
-* mysql - select count(*) as aggregate from `donors` where `is_active` = 1 (0.39 ms)
-* mysql - select sum(`collected`) as aggregate from `campaigns` where `is_active` = 1 (0.24 ms)
-* mysql - select count(*) as aggregate from `campaigns` where `is_active` = 1 and `status` = 'selesai' (0.26 ms)
-* mysql - select * from `users` where `id` = 1 limit 1 (0.69 ms)
+2026-06-09T13:28:25.097047892Z [inf]    2026-06-09 13:28:14 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:28:25.098471271Z [inf]    2026-06-09 13:28:16 /storage/partners/5mgBooyUUBsNdxlzgIRKAXPpCTJa16RiLqcRj1cS.jpg  ~ 2s
+2026-06-09T13:28:25.098484663Z [inf]    2026-06-09 13:28:18 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:30:11.761295796Z [inf]    2026-06-09 13:30:05 /login ........................................... ~ 2s
+2026-06-09T13:30:11.761302724Z [inf]    2026-06-09 13:30:08 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:30:18.743257660Z [inf]    2026-06-09 13:30:15 /login ........................................... ~ 2s
+2026-06-09T13:30:23.040388627Z [inf]    2026-06-09 13:30:20 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:30:26.183275367Z [inf]    2026-06-09 13:30:22 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:31:07.621740705Z [inf]    2026-06-09 13:30:52 /login ........................................... ~ 4s
+2026-06-09T13:31:07.621748263Z [inf]    2026-06-09 13:30:57 /home ............................................ ~ 3s
+2026-06-09T13:31:07.621757740Z [inf]    2026-06-09 13:31:00 /admin/dashboard ................................. ~ 6s
+2026-06-09T13:31:09.183063598Z [inf]    2026-06-09 13:31:06 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:31:29.723293814Z [inf]    2026-06-09 13:31:08 /admin/api/donation-trend ....................... ~ 10s
+2026-06-09T13:31:29.723302974Z [inf]    2026-06-09 13:31:19 /admin/management ................................ ~ 3s
+2026-06-09T13:31:29.723404211Z [inf]    2026-06-09 13:31:19 /admin/management ................................ ~ 6s
+2026-06-09T13:31:29.723411147Z [inf]    2026-06-09 13:31:24 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:31:50.249066951Z [inf]    2026-06-09 13:31:40 /admin/imageslider ............................... ~ 3s
+2026-06-09T13:31:50.249075921Z [inf]    2026-06-09 13:31:43 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:32:11.047703963Z [inf]    2026-06-09 13:32:01 /admin/imageslider ............................... ~ 3s
+2026-06-09T13:32:11.047719320Z [inf]    2026-06-09 13:32:04 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:32:11.047727259Z [inf]    2026-06-09 13:32:07 /admin/imageslider ............................... ~ 2s
+2026-06-09T13:32:14.612715888Z [inf]    2026-06-09 13:32:10 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:32:22.361672667Z [inf]    2026-06-09 13:32:18 /admin/settings .................................. ~ 3s
+2026-06-09T13:32:24.212039740Z [inf]    2026-06-09 13:32:21 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:32:29.282475897Z [inf]    2026-06-09 13:32:25 /admin/management ................................ ~ 3s
+2026-06-09T13:32:30.955592480Z [inf]    2026-06-09 13:32:28 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:33:01.134884594Z [inf]    2026-06-09 13:32:56 /admin/legal ..................................... ~ 3s
+2026-06-09T13:33:02.230839583Z [inf]    2026-06-09 13:32:59 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:33:08.437336621Z [inf]    2026-06-09 13:33:01 /admin/dashboard ................................. ~ 6s
+2026-06-09T13:33:11.125807923Z [inf]    2026-06-09 13:33:07 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:33:20.638466378Z [inf]    2026-06-09 13:33:09 /admin/api/donation-trend ....................... ~ 10s
+2026-06-09T13:33:24.086222628Z [inf]    2026-06-09 13:33:09 /admin/campaign ................................. ~ 13s
+2026-06-09T13:33:28.151659439Z [inf]    2026-06-09 13:33:19 /admin/campaign .................................. ~ 6s
+2026-06-09T13:33:30.128853372Z [inf]    2026-06-09 13:33:25 /admin/legal ..................................... ~ 2s
+2026-06-09T13:33:31.842470728Z [inf]    2026-06-09 13:33:28 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:33:37.888083225Z [inf]    2026-06-09 13:33:32 /admin/messages .................................. ~ 3s
+2026-06-09T13:33:42.588578925Z [inf]    2026-06-09 13:33:36 /admin/dashboard ................................. ~ 5s
+2026-06-09T13:33:44.254578427Z [inf]    2026-06-09 13:33:41 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:34:04.634213674Z [inf]    2026-06-09 13:33:43 /admin/api/donation-trend ....................... ~ 10s
+2026-06-09T13:34:04.634221678Z [inf]    2026-06-09 13:33:54 /admin/management ................................ ~ 3s
+2026-06-09T13:34:04.634232046Z [inf]    2026-06-09 13:33:57 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 1s
+2026-06-09T13:34:14.361689543Z [inf]    2026-06-09 13:34:10 /admin/management/1 .............................. ~ 3s
+2026-06-09T13:34:20.286472263Z [inf]    2026-06-09 13:34:15 /admin/management ................................ ~ 3s
+2026-06-09T13:34:21.454539483Z [inf]    2026-06-09 13:34:18 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:34:26.408363027Z [inf]    2026-06-09 13:34:22 /login ........................................... ~ 2s
+2026-06-09T13:34:27.986596250Z [inf]    2026-06-09 13:34:25 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:34:35.315173212Z [inf]    2026-06-09 13:34:32 /forgot-password ................................. ~ 2s
+2026-06-09T13:34:37.912873398Z [inf]    2026-06-09 13:34:35 /storage/settings/site-logo/ly81l0ZdaYIKFaNbkxUTXqaw8EkePMTIc2HTqtFc.png  ~ 2s
+2026-06-09T13:34:37.912882046Z [inf]    2026-06-09 13:34:36 /favicon.ico ................................. ~ 0.10ms
+2026-06-09T13:35:51.844052068Z [inf]    2026-06-09 13:34:39 /forgot-password .............................. ~ 1m 4s
+2026-06-09T13:35:51.844060607Z [inf]    2026-06-09 13:35:44 /favicon.ico ................................. ~ 0.08ms
+2026-06-09T13:35:51.844087429Z [inf]    PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /app/vendor/symfony/mailer/Transport/Smtp/Stream/SocketStream.php on line 154
+2026-06-09T13:35:51.844096367Z [inf]    production.ERROR: Maximum execution time of 30 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 30 seconds exceeded at /app/vendor/symfony/mailer/Transport/Smtp/Stream/SocketStream.php:154)
+2026-06-09T13:35:51.844102313Z [inf]    [stacktrace]
+2026-06-09T13:35:51.844115378Z [inf]    #0 {main}
+2026-06-09T13:35:51.844123564Z [inf]    "}
+2026-06-09T13:37:05.822628670Z [inf]    PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /app/vendor/symfony/mailer/Transport/Smtp/Stream/SocketStream.php on line 154
+2026-06-09T13:37:05.822636233Z [inf]    production.ERROR: Maximum execution time of 30 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 30 seconds exceeded at /app/vendor/symfony/mailer/Transport/Smtp/Stream/SocketStream.php:154)
+2026-06-09T13:37:05.822643643Z [inf]    [stacktrace]
+2026-06-09T13:37:05.822650629Z [inf]    #0 {main}
+2026-06-09T13:37:05.822657073Z [inf]    "}
+2026-06-09T13:37:05.822681109Z [inf]    2026-06-09 13:35:53 /forgot-password .............................. ~ 1m 3s
+2026-06-09T13:37:05.822689977Z [inf]    2026-06-09 13:36:57 /favicon.ico ................................. ~ 0.11ms
