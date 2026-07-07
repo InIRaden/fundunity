@@ -1,7 +1,8 @@
 @props(['class' => 'h-10 w-10', 'iconClass' => 'text-xl', 'containerClass' => 'bg-emerald-100/80 text-emerald-600 rounded-xl'])
 
 @php
-    $logoUrl = $siteSettings['site_logo'] ?? null;
+    $rawLogo = $siteSettings['site_logo'] ?? null;
+    $logoUrl = filled($rawLogo) ? (str_starts_with($rawLogo, 'http') ? $rawLogo : asset($rawLogo)) : null;
     $hasLogo = filled($logoUrl);
 @endphp
 

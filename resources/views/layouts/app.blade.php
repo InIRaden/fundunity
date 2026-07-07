@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $siteSettings['site_name'] ?? 'FundUnity' }}</title>
 
         @if(!empty($siteSettings['site_logo']))
             <link rel="icon" href="{{ $siteSettings['site_logo'] }}" type="image/png">

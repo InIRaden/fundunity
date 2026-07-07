@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'FundUnity') }} - Lupa Kata Sandi</title>
+    <title>{{ $siteSettings['site_name'] ?? 'FundUnity' }} - Lupa Kata Sandi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

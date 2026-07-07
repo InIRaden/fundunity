@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'FundUnity') }}</title>
+    <title>{{ $siteSettings['site_name'] ?? 'FundUnity' }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|sora:600,700,800&display=swap" rel="stylesheet" />
@@ -38,7 +38,7 @@
             <div class="w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
                 <div class="border-b border-slate-100 px-8 py-6 text-center">
                     <a href="{{ route('landing.home') }}" class="font-display text-2xl font-extrabold tracking-tight text-slate-900">
-                        {{ config('app.name', 'FundUnity') }}<span class="text-emerald-500">.</span>
+                        {{ $siteSettings['site_name'] ?? 'FundUnity' }}<span class="text-emerald-500">.</span>
                     </a>
                 </div>
 
