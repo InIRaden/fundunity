@@ -35,8 +35,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Jalankan instalasi vendor Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Berikan izin akses untuk folder cache dan storage
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Install Node.js dan NPM untuk membuild Vite (CSS/JS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# Install NPM packages dan jalankan build
+RUN npm install
+RUN npm run build
+
+# Berikan izin akses untuk folder cache, storage, dan build
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
 
 # Render membutuhkan expose port
 EXPOSE 80
